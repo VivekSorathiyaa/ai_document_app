@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-// import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
   runApp(const MyApp());
