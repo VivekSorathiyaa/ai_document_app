@@ -18,6 +18,9 @@ class ConditionalRouteWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? currentRoute = ModalRoute.of(context)?.settings.name;
+    if (currentRoute == null) {
+      return child;
+    }
 
     if ((routes != null && routes!.contains(currentRoute)) ||
         (routesExcluded != null && !routesExcluded!.contains(currentRoute))) {

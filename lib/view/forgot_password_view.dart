@@ -1,11 +1,11 @@
+import 'package:ai_document_app/view/widget/forgot_password_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'widget/branding_widget.dart';
-import 'widget/login_widget.dart';
 
-class LoginView extends StatelessWidget {
-  static const String name = 'login';
+class ForgotPasswordView extends StatelessWidget {
+  static const String name = 'forgot_password';
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class LoginView extends StatelessWidget {
               children: [
                 if (ResponsiveBreakpoints.of(context).isDesktop)
                   BrandingWidget(constraints: constraints, context: context),
-                LoginWidget(context),
+                ForgotPasswordWidget(context),
               ],
             ),
           );

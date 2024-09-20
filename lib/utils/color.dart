@@ -5,6 +5,8 @@ const Color orangeColor = Color(0xffF66A4B);
 const Color purpleColor = Color(0xff6B53EE);
 const Color blueColor = Color(0xff3E66DF);
 const Color greyColor = Color(0xff868686);
+const Color hintGreyColor = Color(0xFFBFBFBF);
+const Color dividerColor = Color(0xFF4D4D4D);
 
 const MaterialColor primaryBlack = MaterialColor(
   _blackPrimaryValue,

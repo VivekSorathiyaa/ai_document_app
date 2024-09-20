@@ -1,13 +1,22 @@
+import 'package:ai_document_app/router.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
+import 'package:ai_document_app/view/forgot_password_view.dart';
 import 'package:ai_document_app/view/home_view.dart';
 import 'package:ai_document_app/view/login_view.dart';
+import 'package:ai_document_app/view/signup_view.dart';
+import 'package:ai_document_app/view/verification_otp_view.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (kIsWeb) {
+    // usePathUrlStrategy();
+  }
   runApp(const MyApp());
 }
 
@@ -16,10 +25,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp.router(
-      routerDelegate: _router.routerDelegate,
-      routeInformationParser: _router.routeInformationParser,
-      routeInformationProvider: _router.routeInformationProvider,
+    return MaterialApp(
       builder: (context, child) => ResponsiveBreakpoints.builder(
         child: child!,
         breakpoints: [
@@ -29,13 +35,25 @@ class MyApp extends StatelessWidget {
           const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
         ],
       ),
+      initialRoute: '/',
+      onGenerateInitialRoutes: (initialRoute) {
+        final Uri uri = Uri.parse(initialRoute);
+        return [
+          buildPage(path: uri.path, queryParams: uri.queryParameters),
+        ];
+      },
+      onGenerateRoute: (RouteSettings settings) {
+        final Uri uri = Uri.parse(settings.name ?? '/');
+        return buildPage(path: uri.path, queryParams: uri.queryParameters);
+      },
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: primaryBlack,
         hintColor: primaryBlack,
-        iconTheme: IconThemeData(color: primaryBlack, size: 24),
+        iconTheme: const IconThemeData(color: primaryBlack, size: 24),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               fontSize: 16, // Larger font size for TextButton
               fontWeight: FontWeight.w600, // Semi-bold text
             ),
@@ -44,7 +62,7 @@ class MyApp extends StatelessWidget {
         dialogTheme: DialogTheme(
           backgroundColor: Colors.white, // Set dialog background color
           titleTextStyle: AppTextStyle.normalBold18, // Set title color
-          contentTextStyle: TextStyle(
+          contentTextStyle: const TextStyle(
             color: Colors.black54,
             fontSize: 16,
           ), // Set content color
@@ -52,7 +70,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: MaterialColor(
             primaryBlack.value,
-            {
+            const {
               50: primaryBlack,
               100: primaryBlack,
               200: primaryBlack,
@@ -87,10 +105,10 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(
         primaryColor: primaryBlack,
         hintColor: primaryBlack,
-        iconTheme: IconThemeData(color: primaryBlack, size: 24),
+        iconTheme: const IconThemeData(color: primaryBlack, size: 24),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               fontSize: 16, // Larger font size for TextButton
               fontWeight: FontWeight.w600, // Semi-bold text
             ),
@@ -99,7 +117,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: MaterialColor(
             primaryBlack.value,
-            {
+            const {
               50: primaryBlack,
               100: primaryBlack,
               200: primaryBlack,
@@ -117,7 +135,7 @@ class MyApp extends StatelessWidget {
         dialogTheme: DialogTheme(
           backgroundColor: Colors.white, // Set dialog background color
           titleTextStyle: AppTextStyle.normalBold18, // Set title color
-          contentTextStyle: TextStyle(
+          contentTextStyle: const TextStyle(
             color: Colors.black54,
             fontSize: 16,
           ), // Set content color
@@ -140,20 +158,55 @@ class MyApp extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-final GoRouter _router = GoRouter(
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => HomeView(),
-    ),
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginView(),
-    ),
-  ],
-);
+// onGenerateRoute route switcher.
+// Navigate using the page name, `Navigator.pushNamed(context, ListPage.name)`.
+Route<dynamic> buildPage(
+    {required String path, Map<String, String> queryParams = const {}}) {
+  return Routes.noAnimation(
+      settings: RouteSettings(
+          name: (path.startsWith('/') == false) ? '/$path' : path),
+      builder: (context) {
+        String pathName =
+            path != '/' && path.startsWith('/') ? path.substring(1) : path;
+        return switch (pathName) {
+          '/' || LoginView.name => LoginView(),
+          HomeView.name =>
+            // Breakpoints can be nested.
+            // Here's an example of custom "per-page" breakpoints.
+            const ResponsiveBreakpoints(breakpoints: [
+              Breakpoint(start: 0, end: 480, name: MOBILE),
+              Breakpoint(start: 481, end: 1200, name: TABLET),
+              Breakpoint(start: 1201, end: double.infinity, name: DESKTOP),
+            ], child: HomeView()),
+          ForgotPasswordView.name => ForgotPasswordView(),
+          SignupView.name => SignupView(),
+          VerificationOtpView.name => VerificationOtpView(),
+          _ => const SizedBox.shrink(),
+        };
+      });
+}
+
+// Navigate to a named route
+void navigateTo(BuildContext context, String routeName) {
+  Navigator.pushNamed(context, routeName);
+}
+
+// Navigate to a named route and remove the current route from the stack
+void navigateAndRemove(BuildContext context, String routeName) {
+  Navigator.pushNamedAndRemoveUntil(context, routeName, (route) => false);
+}
+
+// Go back to the previous route
+void navigateBack(BuildContext context) {
+  Navigator.pop(context);
+}
+
+// Navigate to a route and pass arguments
+void navigateWithArguments(
+    BuildContext context, String routeName, Object arguments) {
+  Navigator.pushNamed(context, routeName, arguments: arguments);
+}
