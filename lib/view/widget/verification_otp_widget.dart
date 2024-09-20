@@ -3,17 +3,17 @@ import 'package:ai_document_app/utils/gradient_border_widget.dart';
 import 'package:ai_document_app/view/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pinput/pinput.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../utils/app_text_style.dart';
 import '../../utils/color.dart';
-import '../../utils/input_text_field_widget.dart';
 import '../../utils/primary_text_button.dart';
 import '../../utils/static_decoration.dart';
 import 'links_footer_widget.dart';
 
 ResponsiveRowColumnItem VerificationOtpWidget(BuildContext context) {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController pinController = TextEditingController();
   return ResponsiveRowColumnItem(
     rowFlex: 1,
     child: Center(
@@ -60,16 +60,24 @@ ResponsiveRowColumnItem VerificationOtpWidget(BuildContext context) {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  TextFormFieldWidget(
-                    hintText: 'Email',
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
+                  Container(
+                    color: primaryBlack,
+                    child: Pinput(
+                      controller: pinController,
+                      // focusNode: focusNode,
+                      // defaultPinTheme: defaultPinTheme,
+                      separatorBuilder: (index) => const SizedBox(width: 8),
+                      validator: (value) {
+                        return value == '2222' ? null : 'Pin is incorrect';
+                      },
+                      hapticFeedbackType: HapticFeedbackType.lightImpact,
+                      onCompleted: (pin) {
+                        debugPrint('onCompleted: $pin');
+                      },
+                      onChanged: (value) {
+                        debugPrint('onChanged: $value');
+                      },
+                    ),
                   ),
                   const SizedBox(height: 44),
                   PrimaryTextButton(

@@ -1,4 +1,4 @@
-import 'package:ai_document_app/view/widget/signup_widget.dart';
+import 'package:ai_document_app/view/widget/verification_otp_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -26,7 +26,7 @@ class VerificationOtpView extends StatelessWidget {
               children: [
                 if (ResponsiveBreakpoints.of(context).isDesktop)
                   BrandingWidget(constraints: constraints, context: context),
-                SignUpWidget(context),
+                VerificationOtpWidget(context),
               ],
             ),
           );
