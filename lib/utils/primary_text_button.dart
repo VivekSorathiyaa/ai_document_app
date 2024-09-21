@@ -5,15 +5,13 @@ import 'color.dart';
 
 class PrimaryTextButton extends StatelessWidget {
   final String? title;
-  final String? prefixIcon;
-  final String? trailIcon;
   final VoidCallback onPressed;
   final List<Color>? gradientColors; // List of colors for the gradient
   final Color? textColor;
-  final Color? iconColor;
+  // final Color? textColor;
   final double? width;
   final double? height;
-  final Widget? prefixIconWidget;
+  final double? fontSize;
   final BorderSide? border;
   final bool autofocus;
   final BorderRadiusGeometry? borderRadius;
@@ -24,12 +22,9 @@ class PrimaryTextButton extends StatelessWidget {
     required this.onPressed,
     this.gradientColors, // Initialize with required gradientColors
     this.textColor,
-    this.iconColor,
-    this.prefixIcon,
-    this.prefixIconWidget,
-    this.trailIcon,
     this.border,
     this.width,
+    this.fontSize,
     this.height,
     this.borderRadius,
     this.autofocus = true,
@@ -59,9 +54,9 @@ class PrimaryTextButton extends StatelessWidget {
                   title ?? '',
                   softWrap: true,
                   textAlign: TextAlign.center,
-                  style: AppTextStyle.normalBold18.copyWith(
-                    color: textColor ?? primaryWhite,
-                  ),
+                  style: AppTextStyle.normalSemiBold18.copyWith(
+                      color: textColor ?? primaryWhite,
+                      fontSize: fontSize ?? 18),
                 ),
               ),
             ),

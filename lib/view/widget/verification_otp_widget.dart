@@ -1,5 +1,6 @@
 import 'package:ai_document_app/main.dart';
 import 'package:ai_document_app/utils/gradient_border_widget.dart';
+import 'package:ai_document_app/view/add_new_password_view.dart';
 import 'package:ai_document_app/view/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +15,7 @@ import 'links_footer_widget.dart';
 
 ResponsiveRowColumnItem VerificationOtpWidget(BuildContext context) {
   final TextEditingController pinController = TextEditingController();
+
   return ResponsiveRowColumnItem(
     rowFlex: 1,
     child: Center(
@@ -60,25 +62,49 @@ ResponsiveRowColumnItem VerificationOtpWidget(BuildContext context) {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  Container(
-                    color: primaryBlack,
-                    child: Pinput(
-                      controller: pinController,
-                      // focusNode: focusNode,
-                      // defaultPinTheme: defaultPinTheme,
-                      separatorBuilder: (index) => const SizedBox(width: 8),
-                      validator: (value) {
-                        return value == '2222' ? null : 'Pin is incorrect';
-                      },
-                      hapticFeedbackType: HapticFeedbackType.lightImpact,
-                      onCompleted: (pin) {
-                        debugPrint('onCompleted: $pin');
-                      },
-                      onChanged: (value) {
-                        debugPrint('onChanged: $value');
-                      },
+                  Center(
+                      child: Pinput(
+                    length: 4,
+                    controller: pinController,
+                    scrollPadding: EdgeInsets.zero,
+                    focusNode: FocusNode(),
+                    autofocus: true,
+                    pinContentAlignment:
+                        Alignment.center, // Center the content within each box
+                    defaultPinTheme: PinTheme(
+                      width: 63,
+                      height: 50,
+                      padding: EdgeInsets.zero,
+                      textStyle: AppTextStyle.normalRegular24.copyWith(
+                        height: 1.0, // Ensure text is centered vertically
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: hintGreyColor),
+                      ),
                     ),
-                  ),
+                    separatorBuilder: (vds) {
+                      return SizedBox(width: 16);
+                    }, // Adds spacing between the pin boxes
+                    preFilledWidget: Center(
+                      child: Text(
+                        "0",
+                        style: AppTextStyle.normalRegular24.copyWith(
+                          color: primaryWhite.withOpacity(.2),
+                          height:
+                              1.0, // Ensure pre-filled text is centered vertically
+                        ),
+                      ),
+                    ),
+                    hapticFeedbackType: HapticFeedbackType.lightImpact,
+                    onCompleted: (pin) {
+                      debugPrint('onCompleted: $pin');
+                      navigateAndRemove(context, AddNewPasswordView.name);
+                    },
+                    onChanged: (value) {
+                      debugPrint('onChanged: $value');
+                    },
+                  )),
                   const SizedBox(height: 44),
                   PrimaryTextButton(
                     title: 'Reset Password',

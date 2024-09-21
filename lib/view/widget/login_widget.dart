@@ -1,6 +1,7 @@
 import 'package:ai_document_app/main.dart';
 import 'package:ai_document_app/utils/gradient_border_widget.dart';
 import 'package:ai_document_app/view/forgot_password_view.dart';
+import 'package:ai_document_app/view/home_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -159,7 +160,9 @@ ResponsiveRowColumnItem LoginWidget(BuildContext context) {
                   const SizedBox(height: 32),
                   PrimaryTextButton(
                     title: 'Log in',
-                    onPressed: () {},
+                    onPressed: () {
+                      navigateTo(context, HomeView.name);
+                    },
                   ),
                   const SizedBox(height: 32),
                   Row(

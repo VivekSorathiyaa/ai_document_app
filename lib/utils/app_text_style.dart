@@ -106,6 +106,11 @@ class AppTextStyle {
     fontWeight: FontWeight.w400, // Regular
     color: primaryWhite,
   );
+  static final normalRegular24 = GoogleFonts.notoSans(
+    fontSize: 24,
+    fontWeight: FontWeight.w400, // Regular
+    color: primaryWhite,
+  );
 
   static final italicRegular15 = GoogleFonts.notoSans(
     fontSize: 15,
@@ -128,6 +133,11 @@ class AppTextStyle {
 
   static final normalSemiBold16 = GoogleFonts.notoSans(
     fontSize: 16,
+    fontWeight: FontWeight.w600, // Semi-bold
+    color: primaryWhite,
+  );
+  static final normalSemiBold34 = GoogleFonts.notoSans(
+    fontSize: 34,
     fontWeight: FontWeight.w600, // Semi-bold
     color: primaryWhite,
   );

@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'view/add_new_password_view.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -177,14 +179,15 @@ Route<dynamic> buildPage(
           HomeView.name =>
             // Breakpoints can be nested.
             // Here's an example of custom "per-page" breakpoints.
-            const ResponsiveBreakpoints(breakpoints: [
-              Breakpoint(start: 0, end: 480, name: MOBILE),
-              Breakpoint(start: 481, end: 1200, name: TABLET),
-              Breakpoint(start: 1201, end: double.infinity, name: DESKTOP),
+            ResponsiveBreakpoints(breakpoints: [
+              Breakpoint(
+                  start: 0, end: 600, name: MOBILE), // Mobile devices (0-600px)
+              Breakpoint(start: 601, end: double.infinity, name: DESKTOP),
             ], child: HomeView()),
           ForgotPasswordView.name => ForgotPasswordView(),
           SignupView.name => SignupView(),
           VerificationOtpView.name => VerificationOtpView(),
+          AddNewPasswordView.name => AddNewPasswordView(),
           _ => const SizedBox.shrink(),
         };
       });
