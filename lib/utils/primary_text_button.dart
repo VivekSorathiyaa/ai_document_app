@@ -36,27 +36,34 @@ class PrimaryTextButton extends StatelessWidget {
       child: SizedBox(
         width: width ?? MediaQuery.of(context).size.width,
         height: height ?? 50,
-        child: GestureDetector(
-          onTap: onPressed,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: gradientColors ?? [orangeColor, purpleColor],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+        child: Material(
+          borderRadius: borderRadius ?? BorderRadius.circular(12),
+          color: primaryBlack,
+          child: InkWell(
+            onTap: onPressed,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: gradientColors ?? [orangeColor, purpleColor],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: borderRadius ?? BorderRadius.circular(12),
               ),
-              borderRadius: borderRadius ?? BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  title ?? '',
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyle.normalSemiBold18.copyWith(
-                      color: textColor ?? primaryWhite,
-                      fontSize: fontSize ?? 18),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      title ?? '',
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.normalSemiBold18.copyWith(
+                          color: textColor ?? primaryWhite,
+                          fontSize: fontSize ?? 18),
+                    ),
+                  ),
                 ),
               ),
             ),

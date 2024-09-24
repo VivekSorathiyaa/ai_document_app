@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:ai_document_app/router.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
@@ -8,6 +10,7 @@ import 'package:ai_document_app/view/signup_view.dart';
 import 'package:ai_document_app/view/verification_otp_view.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -27,7 +30,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      scrollBehavior: MyCustomScrollBehavior(),
       builder: (context, child) => ResponsiveBreakpoints.builder(
         child: child!,
         breakpoints: [
@@ -176,14 +180,7 @@ Route<dynamic> buildPage(
             path != '/' && path.startsWith('/') ? path.substring(1) : path;
         return switch (pathName) {
           '/' || LoginView.name => LoginView(),
-          HomeView.name =>
-            // Breakpoints can be nested.
-            // Here's an example of custom "per-page" breakpoints.
-            ResponsiveBreakpoints(breakpoints: [
-              Breakpoint(
-                  start: 0, end: 600, name: MOBILE), // Mobile devices (0-600px)
-              Breakpoint(start: 601, end: double.infinity, name: DESKTOP),
-            ], child: HomeView()),
+          HomeView.name => HomeView(),
           ForgotPasswordView.name => ForgotPasswordView(),
           SignupView.name => SignupView(),
           VerificationOtpView.name => VerificationOtpView(),
@@ -212,4 +209,13 @@ void navigateBack(BuildContext context) {
 void navigateWithArguments(
     BuildContext context, String routeName, Object arguments) {
   Navigator.pushNamed(context, routeName, arguments: arguments);
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }

@@ -227,6 +227,7 @@ TextFormField textFormField({
     enabled: enabled,
     validator: validator,
     maxLength: maxLength,
+    minLines: 1,
     textInputAction: textInputAction,
     inputFormatters: inputFormatters,
     onTap: onTap,
