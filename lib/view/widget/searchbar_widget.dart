@@ -1,6 +1,7 @@
 import 'package:ai_document_app/controllers/home_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../utils/app_text_style.dart';
@@ -15,7 +16,8 @@ class SearchbarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
 
-    return TextFormFieldWidget(
+    return Obx(
+      () => TextFormFieldWidget(
         hintText: "Search",
         maxLines: 1,
         prefixIcon: const Padding(
@@ -26,16 +28,18 @@ class SearchbarWidget extends StatelessWidget {
             size: 20,
           ),
         ),
-        suffixIcon: IconButton(
-          onPressed: () {
-            homeController.isSearchOpen.value = false;
-          },
-          icon: const Icon(
-            Icons.close,
-            color: primaryWhite,
-            size: 20,
-          ),
-        ),
+        suffixIcon: homeController.isSearchOpen.value
+            ? IconButton(
+                onPressed: () {
+                  homeController.isSearchOpen.value = false;
+                },
+                icon: const Icon(
+                  Icons.close,
+                  color: primaryWhite,
+                  size: 20,
+                ),
+              )
+            : const SizedBox.shrink(),
         hintStyle: AppTextStyle.normalRegular14,
         filledColor: isDesktop ? primaryBlack : bgBlackColor,
         borderColor: primaryBlack,
@@ -43,6 +47,8 @@ class SearchbarWidget extends StatelessWidget {
         onChanged: (value) {
           homeController.isSearchOpen.value = true;
         },
-        controller: TextEditingController());
+        controller: TextEditingController(),
+      ),
+    );
   }
 }

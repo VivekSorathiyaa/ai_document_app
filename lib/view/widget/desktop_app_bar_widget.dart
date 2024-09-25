@@ -1,6 +1,7 @@
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 import '../../controllers/home_controller.dart';
 import 'searchbar_widget.dart';
@@ -21,12 +22,14 @@ class DesktopAppBarWidget extends StatelessWidget {
           children: [
             Expanded(
               flex: 7,
-              child: Text(
-                'Chat AI',
-                style: AppTextStyle.normalSemiBold26,
-                textAlign: TextAlign.start,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              child: Obx(
+                () => Text(
+                  homeController.selectedMenuModel.value.name,
+                  style: AppTextStyle.normalSemiBold26,
+                  textAlign: TextAlign.start,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             Expanded(

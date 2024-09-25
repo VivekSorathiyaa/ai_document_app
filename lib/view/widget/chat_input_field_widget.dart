@@ -17,55 +17,58 @@ class ChatInputFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 908.0),
-      child: Column(
-        children: [
-          SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      width16,
-                      Row(
-                          children: homeController.suggestionList.value
-                              .map((element) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              right: 16, bottom: 16, top: 16),
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    orangeColor.withOpacity(.1),
-                                    purpleColor.withOpacity(.2)
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  AppAsset.aiAvatar,
-                                  height: 16,
-                                  width: 16,
-                                  fit: BoxFit.scaleDown,
-                                ),
-                                width10,
-                                Text(element.name,
-                                    style: AppTextStyle.normalRegular12),
-                              ],
-                            ),
+    return Column(
+      children: [
+        SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    width16,
+                    Row(
+                        children:
+                            homeController.suggestionList.value.map((element) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          right: 20,
+                          bottom: 20,
+                          top: 20,
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  orangeColor.withOpacity(.1),
+                                  purpleColor.withOpacity(.2)
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                AppAsset.aiAvatar,
+                                height: 16,
+                                width: 16,
+                                fit: BoxFit.scaleDown,
+                              ),
+                              width10,
+                              Text(element.name,
+                                  style: AppTextStyle.normalRegular12),
+                            ],
                           ),
-                        );
-                      }).toList()),
-                    ],
-                  ))),
-          // TextFormField and Submit button
-          Padding(
+                        ),
+                      );
+                    }).toList()),
+                  ],
+                ))),
+        // TextFormField and Submit button
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 908.0),
+          child: Padding(
             padding: isDesktop
                 ? const EdgeInsets.only(left: 16, right: 16, bottom: 16)
                 : const EdgeInsets.only(left: 12, right: 12, bottom: 16),
@@ -133,8 +136,8 @@ class ChatInputFieldWidget extends StatelessWidget {
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

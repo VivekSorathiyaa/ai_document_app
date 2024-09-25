@@ -49,7 +49,7 @@ class MobileAppBarWidget extends StatelessWidget
           children: [
             Obx(
               () => homeController.isSearchOpen.value
-                  ? SizedBox.shrink()
+                  ? const SizedBox.shrink()
                   : IconButton(
                       onPressed: () {
                         homeController.isSearchOpen.value = true;
@@ -60,15 +60,17 @@ class MobileAppBarWidget extends StatelessWidget
                       ),
                     ),
             ),
-            IconButton(
-              onPressed: () {
-                showHistoryDialog();
-              },
-              icon: const Icon(
-                Icons.history,
-                color: primaryWhite,
-              ),
-            ),
+            Obx(() => homeController.selectedMenuModel.value.id == 0
+                ? IconButton(
+                    onPressed: () {
+                      showHistoryDialog();
+                    },
+                    icon: const Icon(
+                      Icons.history,
+                      color: primaryWhite,
+                    ),
+                  )
+                : const SizedBox.shrink()),
           ],
         )
       ],

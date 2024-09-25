@@ -19,4 +19,5 @@ class AppAsset {
   static const refresh = 'assets/images/refresh.svg';
   static const like = 'assets/images/like.svg';
   static const dislike = 'assets/images/dislike.svg';
+  static const sort = 'assets/images/sort.svg';
 }

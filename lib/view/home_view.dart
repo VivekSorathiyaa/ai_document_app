@@ -1,7 +1,9 @@
+import 'package:ai_document_app/controllers/documents_controller.dart';
+import 'package:ai_document_app/view/documents_view.dart';
 import 'package:ai_document_app/view/widget/desktop_app_bar_widget.dart';
-import 'package:ai_document_app/view/widget/desktop_menu_widget.dart';
 import 'package:ai_document_app/view/widget/drawer_widget.dart';
 import 'package:ai_document_app/view/widget/empty_chat_widget.dart';
+import 'package:ai_document_app/view/widget/sf_data_pager_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -10,39 +12,37 @@ import '../controllers/home_controller.dart';
 import '../utils/color.dart';
 import 'widget/chat_input_field_widget.dart';
 import 'widget/chat_room_widget.dart';
+import 'widget/desktop_menu_widget.dart';
 import 'widget/mobile_app_bar_widget.dart';
-import 'widget/mobile_menu_widget.dart';
 
 class HomeView extends StatelessWidget {
   static const String name = 'home';
   final HomeController homeController = Get.put(HomeController());
+  final DocumentsController documentsController =
+      Get.put(DocumentsController());
 
   HomeView({super.key});
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return ResponsiveBreakpoints.of(context).isDesktop
-            ? DeskTopHomeView(
-                homeController: homeController, constraints: constraints)
-            : SizedBox(
-                height: 100,
-                child: MobileHomeView(
-                    homeController: homeController, constraints: constraints),
-              );
-      },
-    );
+    return ResponsiveBreakpoints.of(context).isDesktop
+        ? DeskTopHomeView(
+            homeController: homeController,
+          )
+        : MobileHomeView(
+            homeController: homeController,
+            documentsController: documentsController,
+          );
   }
 }
 
 class MobileHomeView extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeController homeController;
-  BoxConstraints constraints;
+  DocumentsController documentsController;
   MobileHomeView({
     super.key,
     required this.homeController,
-    required this.constraints,
+    required this.documentsController,
   });
 
   @override
@@ -72,47 +72,58 @@ class MobileHomeView extends StatelessWidget {
             }
           },
           child: Container(
-            color: primaryBlack,
-            child: Column(
-              children: [
-                MobileMenuWidget(
-                  homeController: homeController,
-                ),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: bgBlackColor,
-                        borderRadius: BorderRadius.circular(18)),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Obx(
-                          () => homeController.chatRoomList.value.isEmpty
-                              ? EmptyChatWidget()
-                              : ChatRoomWidget(
-                                  homeController: homeController,
-                                ),
-                        )
-                      ],
+              color: primaryBlack,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DocumentsView(
+                          documentsController: documentsController),
                     ),
                   ),
-                ),
-                ChatInputFieldWidget(homeController: homeController),
-              ],
-            ),
-          )),
+                  SfDataPagerWidget(documentsController: documentsController)
+                ],
+              )
+
+              //
+              // Column(
+              //   children: [
+              //     MobileMenuWidget(
+              //       homeController: homeController,
+              //     ),
+              //     Expanded(
+              //       child: Container(
+              //         decoration: BoxDecoration(
+              //             color: bgBlackColor,
+              //             borderRadius: BorderRadius.circular(18)),
+              //         child: Stack(
+              //           alignment: Alignment.center,
+              //           children: [
+              //             Obx(() => homeController.chatRoomList.value.isEmpty
+              //                 ? EmptyChatWidget()
+              //                 : ChatRoomWidget(
+              //                     homeController: homeController,
+              //                   ))
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //     ChatInputFieldWidget(homeController: homeController),
+              //   ],
+              // ),
+              )),
     );
   }
 }
 
 class DeskTopHomeView extends StatelessWidget {
   HomeController homeController;
-  BoxConstraints constraints;
   DeskTopHomeView({
-    super.key,
+    Key? key,
     required this.homeController,
-    required this.constraints,
-  });
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,44 +136,25 @@ class DeskTopHomeView extends StatelessWidget {
               DrawerWidget(homeController: homeController),
             Expanded(
               child: CustomScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 slivers: [
-                  SliverToBoxAdapter(
-                    child: DesktopAppBarWidget(
+                  SliverAppBar(
+                    elevation: 0,
+                    pinned: true,
+                    floating: false,
+                    snap: false,
+                    stretch: true,
+                    automaticallyImplyLeading: false,
+                    backgroundColor: Colors.transparent,
+                    expandedHeight: 70,
+                    flexibleSpace: FlexibleSpaceBar(
+                        background: DesktopAppBarWidget(
                       homeController: homeController,
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        // You can replace this with your actual data source
-                        return Container(
-                          margin: const EdgeInsets.only(top: 16),
-                          decoration: BoxDecoration(
-                            color: bgBlackColor,
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: DeskTopMenuWidget(
-                                    homeController: homeController),
-                              ),
-                              // List items
-                              ListTile(
-                                title: Text("Item ${index + 1}"),
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      // childCount: 10, // Adjust this count as needed
-                    ),
+                    )),
                   ),
                   SliverFillRemaining(
-                    hasScrollBody: false,
+                    hasScrollBody: true,
                     child: Container(
                       margin: const EdgeInsets.only(top: 16),
                       decoration: BoxDecoration(
@@ -170,17 +162,40 @@ class DeskTopHomeView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          // const Spacer(),
-                          // Obx(
-                          //   () => homeController.chatRoomList.value.isEmpty
-                          //       ? EmptyChatWidget()
-                          //       : ChatRoomWidget(
-                          //           homeController: homeController,
-                          //         ),
-                          // ),
-                          // const Spacer(),
-                          // ChatInputFieldWidget(homeController: homeController),
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: DeskTopMenuWidget(
+                                  homeController: homeController),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                  color: bgContainColor,
+                                  border: Border.all(color: darkDividerColor),
+                                  borderRadius: BorderRadius.circular(9)),
+                              child: Center(
+                                child: Obx(
+                                  () =>
+                                      homeController.chatRoomList.value.isEmpty
+                                          ? EmptyChatWidget()
+                                          : ChatRoomWidget(
+                                              homeController: homeController,
+                                            ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          ChatInputFieldWidget(
+                            homeController: homeController,
+                          ),
                         ],
                       ),
                     ),

@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 const Color lightBlackColor = Color(0xff2B2C33);
 const Color bgBlackColor = Color(0xff191C21);
+const Color tableHeaderColor = Color(0xff1D2026);
+const Color tableRowColor = Color(0xff292D34);
+const Color tableBorderColor = Color(0xff414752);
+const Color tableTextColor = Color(0xffE2E2E2);
 const Color orangeColor = Color(0xffF66A4B);
 const Color purpleColor = Color(0xff6B53EE);
+const Color primaryColor = Color(0xff6B53EE);
 const Color purpleBorderColor = Color(0xff6E4CF7);
 const Color blueColor = Color(0xff3E66DF);
 const Color greyColor = Color(0xff868686);
@@ -12,6 +17,7 @@ const Color textGreyColor = Color(0xFF828282);
 const Color dividerColor = Color(0xFF4D4D4D);
 const Color darkDividerColor = Color(0xFF282F3A);
 const Color yellowColor = Color(0xFFFFC700);
+const Color bgContainColor = Color(0xFF292D34);
 
 const MaterialColor primaryBlack = MaterialColor(
   _blackPrimaryValue,

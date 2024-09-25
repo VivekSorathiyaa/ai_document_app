@@ -10,7 +10,8 @@ import '../model/suggestion_model.dart';
 
 class HomeController extends GetxController {
   Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(
-    MenuModel(name: 'Chat', icon: AppAsset.chat, subTitle: "200 credits"),
+    MenuModel(
+        name: 'Chat', icon: AppAsset.chat, subTitle: "200 credits", id: 0),
   );
   RxBool isSearchOpen = false.obs;
 
@@ -61,15 +62,19 @@ class HomeController extends GetxController {
   RxList<LanguageListModel> selectedLanguageList = <LanguageListModel>[].obs;
 
   RxList<MenuModel> menuList = <MenuModel>[
-    MenuModel(name: 'Chat', icon: AppAsset.chat, subTitle: "200 credits"),
-    MenuModel(name: 'Documents', icon: AppAsset.clipboard, subTitle: '5 PDFs'),
+    MenuModel(
+        name: 'Chat', icon: AppAsset.chat, subTitle: "200 credits", id: 0),
+    MenuModel(
+        name: 'Documents', icon: AppAsset.clipboard, subTitle: '5 PDFs', id: 1),
     MenuModel(
       name: 'User Management',
       icon: AppAsset.users,
+      id: 2,
     ),
     MenuModel(
       name: 'Settings',
       icon: AppAsset.setting,
+      id: 3,
     ),
   ].obs;
 
@@ -78,6 +83,7 @@ class HomeController extends GetxController {
     super.onInit();
     selectedMenuModel.value = menuList.first;
     selectedMenuModel.refresh();
+    Future.delayed(Duration(seconds: 5));
     chatRoomList.value = dummyChatRooms;
     chatRoomList.refresh();
   }
