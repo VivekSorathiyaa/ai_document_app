@@ -11,15 +11,20 @@ class DocumentsController extends GetxController {
     // Dummy data
     documentDataList.addAll(List.generate(100, (index) {
       return DocumentModel(
-        status: index % 2 == 0 ? 'Completed' : 'Pending',
-        uploadedBy: 'User $index',
+        status: index % 2 == 0 ? 'Uploaded' : 'Pending',
+        uploadedBy: 'Yuvraj Rathod',
         size: (index + 10) * 1.5,
-        date: '2024-09-${index % 30 + 1}',
+        date: '31 July 2022',
         actions: 'Action $index',
         id: index.toString(),
-        name: 'Document $index',
+        name: 'PDF0$index',
       );
     }));
+  }
+  void paginateData() {
+    final start = currentPage.value * rowsPerPage.value;
+    final end = (start + rowsPerPage.value).clamp(0, documentDataList.length);
+    paginatedData.assignAll(documentDataList.sublist(start, end));
   }
 
   // Sort the table data by column

@@ -20,4 +20,8 @@ class AppAsset {
   static const like = 'assets/images/like.svg';
   static const dislike = 'assets/images/dislike.svg';
   static const sort = 'assets/images/sort.svg';
+  static const delete = 'assets/images/delete.svg';
+  static const reset = 'assets/images/reset.svg';
+  static const plus = 'assets/images/plus.svg';
+  static const filter = 'assets/images/filter.svg';
 }

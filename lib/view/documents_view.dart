@@ -2,35 +2,28 @@ import 'package:ai_document_app/controllers/documents_controller.dart';
 import 'package:ai_document_app/model/document_model.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
+import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../utils/app_asset.dart';
 
 class DocumentsView extends StatelessWidget {
   DocumentsController documentsController;
+
   DocumentsView({super.key, required this.documentsController});
 
   @override
   Widget build(BuildContext context) {
-    bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
     return Obx(() {
-      return Container(
-        clipBehavior: Clip.antiAlias,
-        height: 400,
-        width: 700,
-        decoration: BoxDecoration(
-          border: Border.all(color: darkDividerColor, width: 2),
-          borderRadius: BorderRadius.circular(8),
-          color: tableHeaderColor,
-        ),
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(9),
         child: SfDataGrid(
           source: TableDataSource(documentsController.paginatedData),
           allowSorting: false,
-          rowsPerPage: 15,
+          rowsPerPage: 10,
           headerGridLinesVisibility: GridLinesVisibility.none,
           gridLinesVisibility: GridLinesVisibility.none,
           columnWidthMode: ColumnWidthMode.fill,
@@ -42,11 +35,6 @@ class DocumentsView extends StatelessWidget {
             ),
             GridColumn(
               allowSorting: true,
-              columnName: 'Status',
-              label: buildHeader(title: 'Status', context: context),
-            ),
-            GridColumn(
-              allowSorting: true,
               columnName: 'Uploaded By',
               label: buildHeader(title: 'Uploaded By', context: context),
             ),
@@ -54,6 +42,11 @@ class DocumentsView extends StatelessWidget {
               allowSorting: true,
               columnName: 'Size',
               label: buildHeader(title: 'Size', context: context),
+            ),
+            GridColumn(
+              allowSorting: true,
+              columnName: 'Status',
+              label: buildHeader(title: 'Status', context: context),
             ),
             GridColumn(
               allowSorting: true,
@@ -71,10 +64,7 @@ class DocumentsView extends StatelessWidget {
     });
   }
 
-  // Helper to build the column headers with sorting functionality
   Widget buildHeader({required String title, required BuildContext context}) {
-    bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
-
     return InkWell(
       onTap: () {
         final ascending =
@@ -82,38 +72,46 @@ class DocumentsView extends StatelessWidget {
         documentsController.sortByColumn(title, ascending);
       },
       child: Container(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-            color: tableHeaderColor,
-            border: Border.all(color: tableBorderColor, width: .5)),
+          color: tableHeaderColor,
+          borderRadius: title == "Name"
+              ? BorderRadius.only(topLeft: Radius.circular(9))
+              : title == "Actions"
+                  ? BorderRadius.only(topRight: Radius.circular(9))
+                  : null,
+          border: Border.all(color: tableBorderColor, width: 0.5),
+        ),
         alignment: Alignment.centerLeft,
-        child: Row(
-          children: [
-            Expanded(
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
                 child: Padding(
-              padding: const EdgeInsets.only(right: 2),
-              child: Text(
-                title,
-                style: isDesktop
-                    ? AppTextStyle.normalBold18
-                    : AppTextStyle.normalBold12,
-                overflow: TextOverflow.clip,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-              ),
-            )),
-            if (title != "Actions")
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: SvgPicture.asset(
-                  AppAsset.sort,
-                  fit: BoxFit.scaleDown,
-                  width: isDesktop ? 22 : 18,
-                  height: isDesktop ? 22 : 18,
-                  color: primaryWhite,
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Text(
+                    title,
+                    style: AppTextStyle.normalBold14,
+                    overflow:
+                        TextOverflow.ellipsis, // Use ellipsis for overflow
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                  ),
                 ),
-              )
-          ],
+              ),
+              if (title != "Actions")
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SvgPicture.asset(
+                    AppAsset.sort,
+                    width: 22,
+                    height: 22,
+                    color: primaryWhite,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -136,10 +134,10 @@ class TableDataSource extends DataGridSource {
     _dataGridRows = tableData
         .map((data) => DataGridRow(cells: [
               DataGridCell<String>(columnName: 'Name', value: data.name),
-              DataGridCell<String>(columnName: 'Status', value: data.status),
               DataGridCell<String>(
                   columnName: 'Uploaded By', value: data.uploadedBy),
               DataGridCell<double>(columnName: 'Size', value: data.size),
+              DataGridCell<String>(columnName: 'Status', value: data.status),
               DataGridCell<String>(columnName: 'Date', value: data.date),
               DataGridCell<String>(columnName: 'Actions', value: data.actions),
             ]))
@@ -153,20 +151,195 @@ class TableDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((dataGridCell) {
-        return Container(
+        switch (dataGridCell.columnName) {
+          case 'Name':
+            return _buildNameCell(dataGridCell);
+          case 'Status':
+            return _buildStatusCell(dataGridCell);
+          case 'Uploaded By':
+            return _buildUploadedByCell(dataGridCell);
+          case 'Size':
+            return _buildSizeCell(dataGridCell);
+          case 'Date':
+            return _buildDateCell(dataGridCell);
+          case 'Actions':
+            return _buildActionsCell(dataGridCell, row);
+          default:
+            return _buildDefaultCell(dataGridCell);
+        }
+      }).toList(),
+    );
+  }
 
-          decoration:
-              BoxDecoration(    color: tableRowColor,border: Border.all(color: tableBorderColor, width: .5)),
-          child: Center(
-            child: Text(
-              dataGridCell.value.toString(),
-              overflow: TextOverflow.fade,
-              style:
-                  AppTextStyle.normalRegular12.copyWith(color: tableTextColor),
+  Widget _buildNameCell(DataGridCell cell) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: tableRowColor,
+        border: Border.all(color: tableBorderColor, width: 0.5),
+      ),
+      child: Center(
+        child: Text(
+          cell.value,
+          style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatusCell(DataGridCell cell) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: tableRowColor,
+        border: Border.all(color: tableBorderColor, width: 0.5),
+      ),
+      child: Center(
+        child: Container(
+          constraints: const BoxConstraints(
+            maxWidth: 107,
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30), color: tableButtonColor),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
+            child: Center(
+              child: Text(
+                cell.value,
+                style: AppTextStyle.normalRegular14
+                    .copyWith(color: tableTextColor),
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.start,
+              ),
             ),
           ),
-        );
-      }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUploadedByCell(DataGridCell cell) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: tableRowColor,
+        border: Border.all(color: tableBorderColor, width: 0.5),
+      ),
+      child: Center(
+        child: Text(
+          cell.value,
+          style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSizeCell(DataGridCell cell) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: tableRowColor,
+        border: Border.all(color: tableBorderColor, width: 0.5),
+      ),
+      child: Center(
+        child: Text(
+          '${cell.value.toStringAsFixed(2)} MB',
+          style: AppTextStyle.normalRegular12.copyWith(color: tableTextColor),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateCell(DataGridCell cell) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: tableRowColor,
+        border: Border.all(color: tableBorderColor, width: 0.5),
+      ),
+      child: Center(
+        child: Text(
+          cell.value,
+          style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionsCell(DataGridCell cell, DataGridRow row) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: tableRowColor,
+        border: Border.all(color: tableBorderColor, width: 0.5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: tableButtonColor),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    AppAsset.delete,
+                    height: 24,
+                    width: 24,
+                    fit: BoxFit.scaleDown,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          customWidth(12),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: tableButtonColor),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    AppAsset.reset,
+                    height: 24,
+                    width: 24,
+                    fit: BoxFit.scaleDown,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDefaultCell(DataGridCell cell) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: tableRowColor,
+        border: Border.all(color: tableBorderColor, width: 0.5),
+      ),
+      child: Center(
+        child: Text(
+          cell.value.toString(),
+          style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
+          overflow: TextOverflow.fade,
+        ),
+      ),
     );
   }
 }

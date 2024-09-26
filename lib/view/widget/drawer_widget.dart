@@ -53,7 +53,7 @@ class DrawerWidget extends StatelessWidget {
                   const SizedBox(height: 40),
                   Obx(
                     () => Column(
-                      children: homeController.menuList.value.map((element) {
+                      children: menuList.value.map((element) {
                         return MenuTileWidget(
                           model: element,
                           onTap: () {

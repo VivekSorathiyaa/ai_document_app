@@ -9,10 +9,7 @@ import '../model/menu_model.dart';
 import '../model/suggestion_model.dart';
 
 class HomeController extends GetxController {
-  Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(
-    MenuModel(
-        name: 'Chat', icon: AppAsset.chat, subTitle: "200 credits", id: 0),
-  );
+  Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(menuList.value[1]);
   RxBool isSearchOpen = false.obs;
 
   RxList<ChatRoomModel> chatRoomList = <ChatRoomModel>[].obs;
@@ -61,30 +58,27 @@ class HomeController extends GetxController {
   RxList<DocumentListModel> selectedDocumentList = <DocumentListModel>[].obs;
   RxList<LanguageListModel> selectedLanguageList = <LanguageListModel>[].obs;
 
-  RxList<MenuModel> menuList = <MenuModel>[
-    MenuModel(
-        name: 'Chat', icon: AppAsset.chat, subTitle: "200 credits", id: 0),
-    MenuModel(
-        name: 'Documents', icon: AppAsset.clipboard, subTitle: '5 PDFs', id: 1),
-    MenuModel(
-      name: 'User Management',
-      icon: AppAsset.users,
-      id: 2,
-    ),
-    MenuModel(
-      name: 'Settings',
-      icon: AppAsset.setting,
-      id: 3,
-    ),
-  ].obs;
-
   @override
   void onInit() {
     super.onInit();
-    selectedMenuModel.value = menuList.first;
-    selectedMenuModel.refresh();
     Future.delayed(Duration(seconds: 5));
     chatRoomList.value = dummyChatRooms;
     chatRoomList.refresh();
   }
 }
+
+RxList<MenuModel> menuList = <MenuModel>[
+  MenuModel(name: 'Chat', icon: AppAsset.chat, subTitle: "200 credits", id: 0),
+  MenuModel(
+      name: 'Documents', icon: AppAsset.clipboard, subTitle: '5 PDFs', id: 1),
+  MenuModel(
+    name: 'User Management',
+    icon: AppAsset.users,
+    id: 2,
+  ),
+  MenuModel(
+    name: 'Settings',
+    icon: AppAsset.setting,
+    id: 3,
+  ),
+].obs;

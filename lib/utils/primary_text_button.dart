@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'app_text_style.dart';
 import 'color.dart';
@@ -8,7 +9,7 @@ class PrimaryTextButton extends StatelessWidget {
   final VoidCallback onPressed;
   final List<Color>? gradientColors; // List of colors for the gradient
   final Color? textColor;
-  // final Color? textColor;
+  final String? icon;
   final double? width;
   final double? height;
   final double? fontSize;
@@ -22,6 +23,7 @@ class PrimaryTextButton extends StatelessWidget {
     required this.onPressed,
     this.gradientColors, // Initialize with required gradientColors
     this.textColor,
+    this.icon,
     this.border,
     this.width,
     this.fontSize,
@@ -34,7 +36,7 @@ class PrimaryTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: width ?? MediaQuery.of(context).size.width,
+        width: width ?? MediaQuery.of(context).size.width, // Set default width
         height: height ?? 50,
         child: Material(
           borderRadius: borderRadius ?? BorderRadius.circular(12),
@@ -53,16 +55,35 @@ class PrimaryTextButton extends StatelessWidget {
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      title ?? '',
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.normalSemiBold18.copyWith(
-                          color: textColor ?? primaryWhite,
-                          fontSize: fontSize ?? 18),
-                    ),
+                  child: Row(
+                    mainAxisSize:
+                        MainAxisSize.min, // Row only takes required space
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (icon != null)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: SvgPicture.asset(
+                            icon!,
+                            height: 24,
+                            width: 24,
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ),
+                      Flexible(
+                        child: Text(
+                          title ?? '',
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.normalSemiBold18.copyWith(
+                              color: textColor ?? primaryWhite,
+                              fontSize: fontSize ?? 18),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis, // Avoid overflow
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
