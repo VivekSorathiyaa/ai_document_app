@@ -4,12 +4,12 @@ import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/documents_controller.dart';
+import '../../../controllers/documents_controller.dart';
 
-class PaginationFooterWidget extends StatelessWidget {
+class DocumentFooterWidget extends StatelessWidget {
   final DocumentsController documentsController;
 
-  const PaginationFooterWidget({
+  const DocumentFooterWidget({
     super.key,
     required this.documentsController,
   });

@@ -24,4 +24,7 @@ class AppAsset {
   static const reset = 'assets/images/reset.svg';
   static const plus = 'assets/images/plus.svg';
   static const filter = 'assets/images/filter.svg';
+  static const pdf = 'assets/images/pdf.svg';
+  static const pdfGreen = 'assets/images/pdf_green.svg';
+  static const date = 'assets/images/date.svg';
 }

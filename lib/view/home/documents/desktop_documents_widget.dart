@@ -8,12 +8,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../utils/app_asset.dart';
+import '../../../utils/app_asset.dart';
 
-class DocumentsView extends StatelessWidget {
+class DesktopDocumentsWidget extends StatelessWidget {
   DocumentsController documentsController;
 
-  DocumentsView({super.key, required this.documentsController});
+  DesktopDocumentsWidget({super.key, required this.documentsController});
 
   @override
   Widget build(BuildContext context) {

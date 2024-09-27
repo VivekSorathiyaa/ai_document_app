@@ -5,12 +5,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../model/menu_model.dart';
-import '../../utils/app_asset.dart';
-import '../../utils/app_text_style.dart';
-import '../../utils/color.dart';
-import '../../utils/network_image_widget.dart';
-import '../../utils/primary_text_button.dart';
+import '../../../model/menu_model.dart';
+import '../../../utils/app_asset.dart';
+import '../../../utils/app_text_style.dart';
+import '../../../utils/color.dart';
+import '../../../utils/network_image_widget.dart';
+import '../../../utils/primary_text_button.dart';
 
 class DrawerWidget extends StatelessWidget {
   HomeController homeController;

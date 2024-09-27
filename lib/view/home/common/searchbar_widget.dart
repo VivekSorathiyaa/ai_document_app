@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../utils/app_text_style.dart';
-import '../../utils/color.dart';
-import '../../utils/input_text_field_widget.dart';
+import '../../../utils/app_text_style.dart';
+import '../../../utils/color.dart';
+import '../../../utils/input_text_field_widget.dart';
 
 class SearchbarWidget extends StatelessWidget {
   HomeController homeController;

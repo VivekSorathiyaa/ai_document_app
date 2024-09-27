@@ -3,24 +3,24 @@ import 'dart:ui';
 import 'package:ai_document_app/router.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
-import 'package:ai_document_app/view/forgot_password_view.dart';
-import 'package:ai_document_app/view/home_view.dart';
-import 'package:ai_document_app/view/login_view.dart';
-import 'package:ai_document_app/view/signup_view.dart';
-import 'package:ai_document_app/view/verification_otp_view.dart';
+import 'package:ai_document_app/view/auth/forgot_password_view.dart';
+import 'package:ai_document_app/view/auth/login_view.dart';
+import 'package:ai_document_app/view/auth/signup_view.dart';
+import 'package:ai_document_app/view/auth/verification_otp_view.dart';
+import 'package:ai_document_app/view/home/home_view.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
-// import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import 'view/add_new_password_view.dart';
+import 'view/auth/add_new_password_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (kIsWeb) {
-    // usePathUrlStrategy();
+    usePathUrlStrategy();
   }
   runApp(const MyApp());
 }

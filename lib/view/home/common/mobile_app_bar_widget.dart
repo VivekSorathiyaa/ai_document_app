@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../utils/app_text_style.dart';
-import '../../utils/common_dialog.dart';
+import '../../../utils/app_text_style.dart';
+import '../../../utils/common_dialog.dart';
 import 'searchbar_widget.dart';
 
 class MobileAppBarWidget extends StatelessWidget

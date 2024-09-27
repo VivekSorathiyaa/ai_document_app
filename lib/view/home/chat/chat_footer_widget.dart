@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../utils/app_asset.dart';
-import '../../utils/app_text_style.dart';
-import '../../utils/color.dart';
-import '../../utils/input_text_field_widget.dart';
-import '../../utils/primary_text_button.dart';
-import '../../utils/static_decoration.dart';
+import '../../../utils/app_asset.dart';
+import '../../../utils/app_text_style.dart';
+import '../../../utils/color.dart';
+import '../../../utils/input_text_field_widget.dart';
+import '../../../utils/primary_text_button.dart';
+import '../../../utils/static_decoration.dart';
 
-class ChatInputFieldWidget extends StatelessWidget {
+class ChatFooterWidget extends StatelessWidget {
   HomeController homeController;
-  ChatInputFieldWidget({super.key, required this.homeController});
+  ChatFooterWidget({super.key, required this.homeController});
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/home_controller.dart';
-import '../../model/chat_list_model.dart';
-import '../../model/document_list_model.dart';
-import '../../model/language_list_model.dart';
-import '../../utils/custom_dropdown_widget.dart';
+import '../../../controllers/home_controller.dart';
+import '../../../model/chat_list_model.dart';
+import '../../../model/document_list_model.dart';
+import '../../../model/language_list_model.dart';
+import '../../../utils/custom_dropdown_widget.dart';
 
-class DeskTopMenuWidget extends StatelessWidget {
+class DesktopChatHeaderWidget extends StatelessWidget {
   HomeController homeController;
-  DeskTopMenuWidget({super.key, required this.homeController});
+  DesktopChatHeaderWidget({super.key, required this.homeController});
 
   @override
   Widget build(BuildContext context) {

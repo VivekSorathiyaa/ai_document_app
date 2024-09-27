@@ -3,7 +3,7 @@ import 'package:ai_document_app/utils/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/home_controller.dart';
+import '../../../controllers/home_controller.dart';
 import 'searchbar_widget.dart';
 
 class DesktopAppBarWidget extends StatelessWidget {

@@ -19,6 +19,7 @@ const Color dividerColor = Color(0xFF4D4D4D);
 const Color darkDividerColor = Color(0xFF282F3A);
 const Color yellowColor = Color(0xFFFFC700);
 const Color bgContainColor = Color(0xFF292D34);
+const Color greenColor = Color(0xFF49C02B);
 
 const MaterialColor primaryBlack = MaterialColor(
   _blackPrimaryValue,

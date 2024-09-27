@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../utils/app_text_style.dart';
-import '../../utils/color.dart';
+import '../../../utils/app_text_style.dart';
+import '../../../utils/color.dart';
 
-Widget LinkFooterWidget(context) {
+Widget AuthFooterWidget(context) {
   return ResponsiveBreakpoints.of(context).isDesktop
       ? Padding(
           padding: const EdgeInsets.only(top: 60),

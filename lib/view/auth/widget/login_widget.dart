@@ -1,7 +1,7 @@
 import 'package:ai_document_app/main.dart';
 import 'package:ai_document_app/utils/gradient_border_widget.dart';
-import 'package:ai_document_app/view/forgot_password_view.dart';
-import 'package:ai_document_app/view/home_view.dart';
+import 'package:ai_document_app/view/auth/forgot_password_view.dart';
+import 'package:ai_document_app/view/home/home_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,23 +10,24 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../utils/app_asset.dart';
-import '../../utils/app_text_style.dart';
-import '../../utils/color.dart';
-import '../../utils/input_text_field_widget.dart';
-import '../../utils/primary_text_button.dart';
-import '../../utils/static_decoration.dart';
+import '../../../utils/app_asset.dart';
+import '../../../utils/app_text_style.dart';
+import '../../../utils/color.dart';
+import '../../../utils/input_text_field_widget.dart';
+import '../../../utils/primary_text_button.dart';
+import '../../../utils/static_decoration.dart';
 import '../signup_view.dart';
-import 'links_footer_widget.dart';
+import 'auth_footer_widget.dart';
 
-ResponsiveRowColumnItem LoginWidget(BuildContext context) {
+class LoginWidget extends StatelessWidget {
+  LoginWidget({super.key});
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final RxBool isCheck = false.obs;
-  return ResponsiveRowColumnItem(
-    rowFlex: 1,
-    child: Center(
-      // Center the entire column
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: ResponsiveBreakpoints.of(context).isDesktop ? 40.0 : 0.0,
@@ -251,13 +252,13 @@ ResponsiveRowColumnItem LoginWidget(BuildContext context) {
                       ),
                     ],
                   ),
-                  LinkFooterWidget(context),
+                  AuthFooterWidget(context),
                 ],
               ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

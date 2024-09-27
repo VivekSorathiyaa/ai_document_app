@@ -2,14 +2,14 @@ import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/home_controller.dart';
-import '../../model/document_list_model.dart';
-import '../../model/language_list_model.dart';
-import '../../utils/custom_dropdown_widget.dart';
+import '../../../controllers/home_controller.dart';
+import '../../../model/document_list_model.dart';
+import '../../../model/language_list_model.dart';
+import '../../../utils/custom_dropdown_widget.dart';
 
-class MobileMenuWidget extends StatelessWidget {
+class MobileChatHeaderWidget extends StatelessWidget {
   HomeController homeController;
-  MobileMenuWidget({super.key, required this.homeController});
+  MobileChatHeaderWidget({super.key, required this.homeController});
 
   @override
   Widget build(BuildContext context) {

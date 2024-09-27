@@ -5,13 +5,13 @@ import 'package:responsive_framework/responsive_framework.dart';
 class GradientBorderWidget extends StatelessWidget {
   Widget child;
 
-  GradientBorderWidget({Key? key, required this.child}) : super(key: key);
+  GradientBorderWidget({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return ResponsiveBreakpoints.of(context).isDesktop
         ? Container(
-            padding: EdgeInsets.all(1),
+            padding: const EdgeInsets.all(1),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Colors.grey, Colors.grey.withOpacity(.3)],
