@@ -29,98 +29,100 @@ class ForgotPasswordWidget extends StatelessWidget {
                 ResponsiveBreakpoints.of(context).isDesktop ? 40.0 : 0.0,
             vertical: 40.0,
           ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 480.0,
-            ),
-            child: GradientBorderWidget(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal:
-                      ResponsiveBreakpoints.of(context).isDesktop ? 40 : 20,
-                  vertical: 20,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'Forgot Password',
-                        style: GoogleFonts.notoSans(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 36,
-                          color: primaryWhite,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'Please enter your email',
-                        style: GoogleFonts.notoSans(
-                          fontSize: 16,
-                          color: hintGreyColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    TextFormFieldWidget(
-                      hintText: 'Email',
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 44),
-                    PrimaryTextButton(
-                      title: 'Get OTP',
-                      onPressed: () {
-                        navigateTo(context, VerificationOtpView.name);
-                      },
-                    ),
-                    const SizedBox(height: 32),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          child: Text(
-                            'Back to',
-                            style: AppTextStyle.normalRegular16,
-                            // maxLines: 1,
-                            // overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: 480.0,
+              ),
+              child: GradientBorderWidget(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal:
+                        ResponsiveBreakpoints.of(context).isDesktop ? 40 : 20,
+                    vertical: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Forgot Password',
+                          style: GoogleFonts.notoSans(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 36,
+                            color: primaryWhite,
                           ),
                         ),
-                        width10,
-                        Flexible(
-                          child: GestureDetector(
-                            onTap: () {
-                              navigateAndRemove(context, LoginView.name);
-                            },
+                      ),
+                      const SizedBox(height: 8),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Please enter your email',
+                          style: GoogleFonts.notoSans(
+                            fontSize: 16,
+                            color: hintGreyColor,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      TextFormFieldWidget(
+                        hintText: 'Email',
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 44),
+                      PrimaryTextButton(
+                        title: 'Get OTP',
+                        onPressed: () {
+                          navigateTo(context, VerificationOtpView.name);
+                        },
+                      ),
+                      const SizedBox(height: 32),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            flex: 2,
                             child: Text(
-                              'Login',
-                              style: AppTextStyle.normalSemiBold16.copyWith(
-                                color: purpleColor,
-                                decoration: TextDecoration.underline,
-                                decorationColor: purpleColor,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.start,
+                              'Back to',
+                              style: AppTextStyle.normalRegular16,
+                              // maxLines: 1,
+                              // overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.end,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    AuthFooterWidget(context),
-                  ],
+                          width10,
+                          Flexible(
+                            child: GestureDetector(
+                              onTap: () {
+                                navigateAndRemove(context, LoginView.name);
+                              },
+                              child: Text(
+                                'Login',
+                                style: AppTextStyle.normalSemiBold16.copyWith(
+                                  color: purpleColor,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: purpleColor,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      AuthFooterWidget(context),
+                    ],
+                  ),
                 ),
               ),
             ),

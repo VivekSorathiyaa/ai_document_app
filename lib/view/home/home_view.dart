@@ -1,4 +1,5 @@
 import 'package:ai_document_app/controllers/documents_controller.dart';
+import 'package:ai_document_app/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -12,6 +13,7 @@ class HomeView extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
   final DocumentsController documentsController =
       Get.put(DocumentsController());
+  final UserController userController = Get.put(UserController());
 
   HomeView({super.key});
   @override
@@ -20,10 +22,10 @@ class HomeView extends StatelessWidget {
         ? DeskTopHomeView(
             homeController: homeController,
             documentsController: documentsController,
-          )
+            userController: userController)
         : MobileHomeView(
             homeController: homeController,
             documentsController: documentsController,
-          );
+            userController: userController);
   }
 }

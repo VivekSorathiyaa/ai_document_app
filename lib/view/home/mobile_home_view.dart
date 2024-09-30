@@ -1,9 +1,12 @@
 import 'package:ai_document_app/view/home/common/mobile_app_bar_widget.dart';
+import 'package:ai_document_app/view/home/user/mobile_user_widget.dart';
+import 'package:ai_document_app/view/home/user/user_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/documents_controller.dart';
 import '../../controllers/home_controller.dart';
+import '../../controllers/user_controller.dart';
 import '../../utils/color.dart';
 import 'chat/chat_body_widget.dart';
 import 'chat/chat_footer_widget.dart';
@@ -17,10 +20,12 @@ class MobileHomeView extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   HomeController homeController;
   DocumentsController documentsController;
+  UserController userController;
   MobileHomeView({
     super.key,
     required this.homeController,
     required this.documentsController,
+    required this.userController,
   });
 
   @override
@@ -59,7 +64,11 @@ class MobileHomeView extends StatelessWidget {
                     ? DocumentsHeaderWidget(
                         documentsController: documentsController,
                       )
-                    : const SizedBox()),
+                    : homeController.selectedMenuModel.value.id == 2
+                        ? UserHeaderWidget(
+                            userController: userController,
+                          )
+                        : const SizedBox()),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -72,13 +81,15 @@ class MobileHomeView extends StatelessWidget {
                       : homeController.selectedMenuModel.value.id == 1
                           ? MobileDocumentsWidget(
                               documentsController: documentsController)
-                          : NoDataWiget())
+                          : homeController.selectedMenuModel.value.id == 1
+                              ? MobileUserWidget(userController: userController)
+                              : NoDataWiget())
                 ]),
               ),
             ),
             Obx(() => homeController.selectedMenuModel.value.id == 0
                 ? ChatFooterWidget(homeController: homeController)
-                : SizedBox()),
+                : const SizedBox()),
           ],
         ),
       ),

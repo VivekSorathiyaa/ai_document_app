@@ -1,3 +1,7 @@
+import 'package:ai_document_app/controllers/user_controller.dart';
+import 'package:ai_document_app/view/home/user/desktop_user_widget.dart';
+import 'package:ai_document_app/view/home/user/user_footer_widget.dart';
+import 'package:ai_document_app/view/home/user/user_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -6,19 +10,24 @@ import '../../controllers/documents_controller.dart';
 import '../../controllers/home_controller.dart';
 import '../../utils/color.dart';
 import 'chat/chat_body_widget.dart';
+import 'chat/chat_footer_widget.dart';
 import 'chat/desktop_chat_header_widget.dart';
+import 'common/desktop_app_bar_widget.dart';
 import 'common/drawer_widget.dart';
 import 'common/no_data_widget.dart';
 import 'documents/desktop_documents_widget.dart';
+import 'documents/documents_footer_widget.dart';
 import 'documents/documents_header_widget.dart';
 
 class DeskTopHomeView extends StatelessWidget {
   HomeController homeController;
   DocumentsController documentsController;
+  UserController userController;
   DeskTopHomeView({
     Key? key,
     required this.homeController,
     required this.documentsController,
+    required this.userController,
   }) : super(key: key);
 
   @override
@@ -36,20 +45,20 @@ class DeskTopHomeView extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 slivers: [
-                  // SliverAppBar(
-                  //   elevation: 0,
-                  //   // pinned: true,
-                  //   // floating: false,
-                  //   // snap: false,
-                  //   // stretch: true,
-                  //   automaticallyImplyLeading: false,
-                  //   backgroundColor: Colors.transparent,
-                  //   expandedHeight: 70,
-                  //   flexibleSpace: FlexibleSpaceBar(
-                  //       background: DesktopAppBarWidget(
-                  //     homeController: homeController,
-                  //   )),
-                  // ),
+                  SliverAppBar(
+                    elevation: 0,
+                    // pinned: true,
+                    // floating: false,
+                    // snap: false,
+                    // stretch: true,
+                    automaticallyImplyLeading: false,
+                    backgroundColor: Colors.transparent,
+                    expandedHeight: 70,
+                    flexibleSpace: FlexibleSpaceBar(
+                        background: DesktopAppBarWidget(
+                      homeController: homeController,
+                    )),
+                  ),
                   SliverFillRemaining(
                     hasScrollBody: true,
                     child: Container(
@@ -75,7 +84,12 @@ class DeskTopHomeView extends StatelessWidget {
                                           documentsController:
                                               documentsController,
                                         )
-                                      : const SizedBox.shrink(),
+                                      : homeController
+                                                  .selectedMenuModel.value.id ==
+                                              2
+                                          ? UserHeaderWidget(
+                                              userController: userController)
+                                          : const SizedBox.shrink(),
                             ),
                           ),
                           Expanded(
@@ -103,21 +117,32 @@ class DeskTopHomeView extends StatelessWidget {
                                           ? DesktopDocumentsWidget(
                                               documentsController:
                                                   documentsController)
-                                          : NoDataWiget(),
+                                          : homeController.selectedMenuModel
+                                                      .value.id ==
+                                                  2
+                                              ? DesktopUserWidget(
+                                                  userController:
+                                                      userController)
+                                              : NoDataWiget(),
                                 ),
                               ),
                             ),
                           ),
-                          // Obx(() => homeController.selectedMenuModel.value.id ==
-                          //         0
-                          //     ? ChatFooterWidget(
-                          //         homeController: homeController,
-                          //       )
-                          //     : homeController.selectedMenuModel.value.id == 1
-                          //         ? DocumentFooterWidget(
-                          //             documentsController: documentsController,
-                          //           )
-                          //         : const SizedBox()),
+                          Obx(() => homeController.selectedMenuModel.value.id ==
+                                  0
+                              ? ChatFooterWidget(
+                                  homeController: homeController,
+                                )
+                              : homeController.selectedMenuModel.value.id == 1
+                                  ? DocumentFooterWidget(
+                                      documentsController: documentsController,
+                                    )
+                                  : homeController.selectedMenuModel.value.id ==
+                                          2
+                                      ? UserFooterWidget(
+                                          userController: userController,
+                                        )
+                                      : const SizedBox()),
                         ],
                       ),
                     ),

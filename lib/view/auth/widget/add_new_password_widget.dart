@@ -26,65 +26,67 @@ class AddNewPasswordWidget extends StatelessWidget {
                 ResponsiveBreakpoints.of(context).isDesktop ? 40.0 : 0.0,
             vertical: 40.0,
           ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 480.0,
-            ),
-            child: GradientBorderWidget(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal:
-                      ResponsiveBreakpoints.of(context).isDesktop ? 40 : 20,
-                  vertical: 20,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'Add New Password',
-                        style: GoogleFonts.notoSans(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 36,
-                          color: primaryWhite,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            'Please enter your new password and continue your wonderful journey',
-                            style: GoogleFonts.notoSans(
-                              fontSize: 16,
-                              color: hintGreyColor,
-                            ),
-                            maxLines: 2,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: 480.0,
+              ),
+              child: GradientBorderWidget(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal:
+                        ResponsiveBreakpoints.of(context).isDesktop ? 40 : 20,
+                    vertical: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Add New Password',
+                          style: GoogleFonts.notoSans(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 36,
+                            color: primaryWhite,
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-                    PasswordWidget(
-                      hintText: 'Password',
-                      controller: passwordController,
-                    ),
-                    const SizedBox(height: 24),
-                    PasswordWidget(
-                      hintText: 'Confirm Password',
-                      controller: confirmPasswordController,
-                    ),
-                    const SizedBox(height: 32),
-                    PrimaryTextButton(
-                      title: 'Continue',
-                      onPressed: () {
-                        navigateAndRemove(context, LoginView.name);
-                      },
-                    ),
-                    AuthFooterWidget(context),
-                  ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              'Please enter your new password and continue your wonderful journey',
+                              style: GoogleFonts.notoSans(
+                                fontSize: 16,
+                                color: hintGreyColor,
+                              ),
+                              maxLines: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 32),
+                      PasswordWidget(
+                        hintText: 'Password',
+                        controller: passwordController,
+                      ),
+                      const SizedBox(height: 24),
+                      PasswordWidget(
+                        hintText: 'Confirm Password',
+                        controller: confirmPasswordController,
+                      ),
+                      const SizedBox(height: 32),
+                      PrimaryTextButton(
+                        title: 'Continue',
+                        onPressed: () {
+                          navigateAndRemove(context, LoginView.name);
+                        },
+                      ),
+                      AuthFooterWidget(context),
+                    ],
+                  ),
                 ),
               ),
             ),

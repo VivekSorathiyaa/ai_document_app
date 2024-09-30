@@ -4,7 +4,7 @@ import '../model/document_model.dart';
 
 class DocumentsController extends GetxController {
   final RxList<DocumentModel> documentDataList = <DocumentModel>[].obs;
-  final RxInt rowsPerPage = 15.obs;
+  final RxInt rowsPerPage = 10.obs;
   final RxInt currentPage = 0.obs;
 
   DocumentsController() {
