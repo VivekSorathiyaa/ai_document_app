@@ -61,7 +61,8 @@ class DocumentsHeaderWidget extends StatelessWidget {
                         context,
                         defaultValue: 45.0,
                         conditionalValues: [
-                          Condition.smallerThan(name: DESKTOP, value: 40.0),
+                          const Condition.smallerThan(
+                              name: DESKTOP, value: 40.0),
                         ],
                       ).value!,
                       icon: AppAsset.filter,
@@ -72,7 +73,7 @@ class DocumentsHeaderWidget extends StatelessWidget {
                       context,
                       defaultValue: 24.0,
                       conditionalValues: [
-                        Condition.smallerThan(name: DESKTOP, value: 16.0),
+                        const Condition.smallerThan(name: DESKTOP, value: 16.0),
                       ],
                     ).value!,
                   ),
@@ -88,7 +89,8 @@ class DocumentsHeaderWidget extends StatelessWidget {
                         context,
                         defaultValue: 45.0,
                         conditionalValues: [
-                          Condition.smallerThan(name: DESKTOP, value: 40.0),
+                          const Condition.smallerThan(
+                              name: DESKTOP, value: 40.0),
                         ],
                       ).value!,
                       icon: AppAsset.plus,

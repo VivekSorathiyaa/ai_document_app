@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../model/user_model.dart';
 import '../../../utils/app_asset.dart';
+import '../../../utils/custom_dropdown_widget.dart';
 import '../../../utils/static_decoration.dart';
 
 class DesktopUserWidget extends StatelessWidget {
@@ -28,6 +29,12 @@ class DesktopUserWidget extends StatelessWidget {
           gridLinesVisibility: GridLinesVisibility.none,
           columnWidthMode: ColumnWidthMode.fill,
           columns: <GridColumn>[
+            GridColumn(
+              columnName: 'id', // ID column
+              label: const Text(
+                  'User ID'), // You can set this to any title you want
+              width: 0, // Set width to 0 to hide the column
+            ),
             GridColumn(
               allowSorting: true,
               columnName: 'Name',
@@ -76,9 +83,9 @@ class DesktopUserWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: tableHeaderColor,
           borderRadius: title == "Name"
-              ? BorderRadius.only(topLeft: Radius.circular(9))
+              ? const BorderRadius.only(topLeft: Radius.circular(9))
               : title == "Actions"
-                  ? BorderRadius.only(topRight: Radius.circular(9))
+                  ? const BorderRadius.only(topRight: Radius.circular(9))
                   : null,
           border: Border.all(color: tableBorderColor, width: 0.5),
         ),
@@ -93,8 +100,7 @@ class DesktopUserWidget extends StatelessWidget {
                   child: Text(
                     title,
                     style: AppTextStyle.normalBold14,
-                    overflow:
-                        TextOverflow.ellipsis, // Use ellipsis for overflow
+                    overflow: TextOverflow.clip, // Use ellipsis for overflow
                     textAlign: TextAlign.center,
                     maxLines: 1,
                   ),
@@ -121,6 +127,7 @@ class DesktopUserWidget extends StatelessWidget {
 class TableDataSource extends DataGridSource {
   final List<UserModel> tableData;
 
+  var userController = Get.put(UserController());
   TableDataSource(this.tableData) {
     buildDataGridRows();
   }
@@ -130,6 +137,7 @@ class TableDataSource extends DataGridSource {
   void buildDataGridRows() {
     _dataGridRows = tableData
         .map((data) => DataGridRow(cells: [
+              DataGridCell<String>(columnName: 'id', value: data.id),
               DataGridCell<String>(columnName: 'Name', value: data.name),
               DataGridCell<String>(columnName: 'Email', value: data.email),
               DataGridCell<String>(
@@ -154,11 +162,11 @@ class TableDataSource extends DataGridSource {
           case 'Email':
             return _buildNameCell(dataGridCell);
           case 'Permissions':
-            return _buildPermisionCell(dataGridCell);
+            return _buildPermisionCell(dataGridCell, row);
           case 'Date':
             return _buildDateCell(dataGridCell);
           case 'Access':
-            return _buildAcccessCell(dataGridCell, row);
+            return _buildAccessCell(dataGridCell, row);
           case 'Actions':
             return _buildActionsCell(dataGridCell, row);
           default:
@@ -179,7 +187,9 @@ class TableDataSource extends DataGridSource {
         child: Text(
           cell.value,
           style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
-          overflow: TextOverflow.ellipsis,
+          overflow: TextOverflow.clip, // Use ellipsis for overflow
+          textAlign: TextAlign.center,
+          maxLines: 1,
         ),
       ),
     );
@@ -196,12 +206,16 @@ class TableDataSource extends DataGridSource {
         child: Text(
           cell.value,
           style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
+          maxLines: 1,
+          overflow: TextOverflow.clip,
+          textAlign: TextAlign.center,
         ),
       ),
     );
   }
 
-  Widget _buildPermisionCell(DataGridCell cell) {
+  Widget _buildPermisionCell(DataGridCell cell, DataGridRow row) {
+    String userId = row.getCells()[0].value;
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -209,21 +223,29 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableBorderColor, width: 0.5),
       ),
       child: Center(
-        child: Container(
-          constraints: const BoxConstraints(
-            maxWidth: 107,
-          ),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30), color: tableButtonColor),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
-            child: Center(
-              child: Text(
-                cell.value,
-                style: AppTextStyle.normalRegular14
-                    .copyWith(color: tableTextColor),
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.start,
+        child: GestureDetector(
+          onTap: () {
+            userController.updatePermission(userId);
+          },
+          child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: 107,
+            ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: tableButtonColor),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
+              child: Center(
+                child: Text(
+                  cell.value,
+                  style: AppTextStyle.normalRegular14
+                      .copyWith(color: tableTextColor),
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                ),
               ),
             ),
           ),
@@ -232,43 +254,28 @@ class TableDataSource extends DataGridSource {
     );
   }
 
-  Widget _buildAcccessCell(DataGridCell cell, DataGridRow row) {
-    var controller = Get.put(UserController());
+  Widget _buildAccessCell(DataGridCell cell, DataGridRow row) {
+    String userId = row.getCells()[0].value;
+    String currentValue = cell.value;
+
+    if (!userController.accessLevels.contains(currentValue)) {
+      currentValue = userController.accessLevels.first;
+    }
+
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: tableRowColor,
         border: Border.all(color: tableBorderColor, width: 0.5),
       ),
-      child: Center(
-        child: DropdownButton<String>(
-          value: cell.value, // Current access level
-          icon: const Icon(Icons.arrow_drop_down),
-          iconSize: 24,
-          elevation: 16,
-          style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
-          underline: Container(
-            height: 2,
-            color: Colors.grey,
-          ),
-          onChanged: (String? newValue) {
-            // Update the access level in the user model
-            int index = row
-                .getCells()[0]
-                .value; // Assuming the first cell contains the unique identifier
-            if (newValue != null) {
-              controller.updateAccessLevel(
-                  index, newValue); // Implement this method in your controller
-            }
-          },
-          items: controller.accessLevels.value
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
+      child: AccessDropdown(
+        currentValue: currentValue,
+        userId: userId,
+        accessLevels: userController.accessLevels.value,
+        onAccessLevelChanged: (String newAccessLevel) {
+          // Update the access level in the controller
+          userController.updateAccessLevel(userId, newAccessLevel);
+        },
       ),
     );
   }

@@ -1,4 +1,6 @@
+import 'package:ai_document_app/controllers/settings_controller.dart';
 import 'package:ai_document_app/view/home/common/mobile_app_bar_widget.dart';
+import 'package:ai_document_app/view/home/settings/settings_widget.dart';
 import 'package:ai_document_app/view/home/user/mobile_user_widget.dart';
 import 'package:ai_document_app/view/home/user/user_header_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,14 +20,17 @@ import 'documents/mobile_documents_widget.dart';
 
 class MobileHomeView extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  HomeController homeController;
-  DocumentsController documentsController;
-  UserController userController;
+  final HomeController homeController;
+  final DocumentsController documentsController;
+  final UserController userController;
+  final SettingsController settingsController;
+
   MobileHomeView({
     super.key,
     required this.homeController,
     required this.documentsController,
     required this.userController,
+    required this.settingsController,
   });
 
   @override
@@ -39,15 +44,7 @@ class MobileHomeView extends StatelessWidget {
           _scaffoldKey.currentState?.openDrawer();
         },
       ),
-      drawer: Drawer(
-        elevation: 8,
-        backgroundColor: bgBlackColor,
-        child: SafeArea(
-          child: DrawerWidget(
-            homeController: homeController,
-          ),
-        ),
-      ),
+      drawer: _buildDrawer(),
       body: GestureDetector(
         onHorizontalDragUpdate: (details) {
           if (details.delta.dx > 0) {
@@ -56,43 +53,83 @@ class MobileHomeView extends StatelessWidget {
         },
         child: Column(
           children: [
-            Obx(() => homeController.selectedMenuModel.value.id == 0
-                ? MobileChatHeaderWidget(
-                    homeController: homeController,
-                  )
-                : homeController.selectedMenuModel.value.id == 1
-                    ? DocumentsHeaderWidget(
-                        documentsController: documentsController,
-                      )
-                    : homeController.selectedMenuModel.value.id == 2
-                        ? UserHeaderWidget(
-                            userController: userController,
-                          )
-                        : const SizedBox()),
+            _buildHeader(),
             Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: bgBlackColor,
-                    borderRadius: BorderRadius.circular(18)),
-                child: Stack(alignment: Alignment.center, children: [
-                  Obx(() => homeController.selectedMenuModel.value.id == 0 &&
-                          homeController.chatRoomList.value.isNotEmpty
-                      ? ChatBodyWidget(homeController: homeController)
-                      : homeController.selectedMenuModel.value.id == 1
-                          ? MobileDocumentsWidget(
-                              documentsController: documentsController)
-                          : homeController.selectedMenuModel.value.id == 1
-                              ? MobileUserWidget(userController: userController)
-                              : NoDataWiget())
-                ]),
-              ),
+              child: _buildBody(),
             ),
-            Obx(() => homeController.selectedMenuModel.value.id == 0
-                ? ChatFooterWidget(homeController: homeController)
-                : const SizedBox()),
+            _buildFooter(),
           ],
         ),
       ),
     );
+  }
+
+  Drawer _buildDrawer() {
+    return Drawer(
+      elevation: 8,
+      backgroundColor: bgBlackColor,
+      child: SafeArea(
+        child: DrawerWidget(
+          homeController: homeController,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Obx(() {
+      switch (homeController.selectedMenuModel.value.id) {
+        case 0:
+          return MobileChatHeaderWidget(homeController: homeController);
+        case 1:
+          return DocumentsHeaderWidget(
+              documentsController: documentsController);
+        case 2:
+          return UserHeaderWidget(userController: userController);
+
+        default:
+          return const SizedBox();
+      }
+    });
+  }
+
+  Widget _buildBody() {
+    return Container(
+      decoration: BoxDecoration(
+        color: bgBlackColor,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Obx(() {
+            switch (homeController.selectedMenuModel.value.id) {
+              case 0:
+                return homeController.chatRoomList.value.isNotEmpty
+                    ? ChatBodyWidget(homeController: homeController)
+                    : NoDataWiget();
+              case 1:
+                return MobileDocumentsWidget(
+                    documentsController: documentsController);
+              case 2:
+                return MobileUserWidget(userController: userController);
+              case 3:
+                return SettingsWidget(settingsController: settingsController);
+              default:
+                return NoDataWiget();
+            }
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooter() {
+    return Obx(() {
+      if (homeController.selectedMenuModel.value.id == 0) {
+        return ChatFooterWidget(homeController: homeController);
+      }
+      return const SizedBox();
+    });
   }
 }

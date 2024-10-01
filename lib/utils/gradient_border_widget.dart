@@ -4,8 +4,9 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 class GradientBorderWidget extends StatelessWidget {
   Widget child;
+  List<Color>? colors;
 
-  GradientBorderWidget({super.key, required this.child});
+  GradientBorderWidget({super.key, required this.child, this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class GradientBorderWidget extends StatelessWidget {
             padding: const EdgeInsets.all(1),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.grey, Colors.grey.withOpacity(.3)],
+                colors: colors ?? [Colors.grey, Colors.grey.withOpacity(.3)],
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
               ),

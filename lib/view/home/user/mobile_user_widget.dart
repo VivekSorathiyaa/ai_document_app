@@ -2,11 +2,13 @@ import 'package:ai_document_app/controllers/user_controller.dart';
 import 'package:ai_document_app/model/user_model.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/app_asset.dart';
+import '../../../utils/custom_dropdown_widget.dart';
 
 class MobileUserWidget extends StatelessWidget {
   final UserController userController;
@@ -43,7 +45,7 @@ class MobileUserWidget extends StatelessWidget {
           ),
         ],
       ),
-      height: 80, // Keep the height compact (between 50-100 px)
+      // height: 80, // Keep the height compact (between 50-100 px)
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
@@ -61,18 +63,15 @@ class MobileUserWidget extends StatelessWidget {
   Widget _buildDocumentDetails(UserModel user) {
     return Row(
       children: [
-        SvgPicture.asset(
-          user.permissions == "Uploaded"
-              ? AppAsset.pdfGreen
-              : AppAsset.pdf, // Use a document icon for visual appeal
-          width: 40,
-          height: 40,
-          fit: BoxFit.scaleDown,
+        Icon(
+          CupertinoIcons.profile_circled,
+          color: Colors.white70,
+          size: 40,
         ),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               user.name,
@@ -82,12 +81,55 @@ class MobileUserWidget extends StatelessWidget {
               ),
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 10),
             Row(
               children: [
-                _buildIconWithText(AppAsset.clipboard, '${user.email}'),
+                _buildIconWithText(CupertinoIcons.mail, '${user.email}'),
                 const SizedBox(width: 12),
-                _buildIconWithText(AppAsset.date, user.date),
+                _buildIconWithText(CupertinoIcons.calendar, user.date),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Container(
+                  width: Get.width / 4,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: tableButtonColor,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: tableBorderColor, width: 0.5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      user.permissions,
+                      style: AppTextStyle.normalRegular14
+                          .copyWith(color: tableTextColor),
+                      overflow: TextOverflow.clip,
+                      textAlign: TextAlign.start,
+                      maxLines: 1,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  width: Get.width / 3,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: tableRowColor,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: tableBorderColor, width: 0.5),
+                  ),
+                  child: AccessDropdown(
+                    currentValue: user.access,
+                    userId: user.id,
+                    accessLevels: userController.accessLevels.value,
+                    onAccessLevelChanged: (String newAccessLevel) {
+                      // Update the access level in the controller
+                      userController.updateAccessLevel(user.id, newAccessLevel);
+                    },
+                  ),
+                )
               ],
             ),
           ],
@@ -97,15 +139,12 @@ class MobileUserWidget extends StatelessWidget {
   }
 
   /// Builds a compact icon with a small text
-  Widget _buildIconWithText(String iconPath, String text) {
+  Widget _buildIconWithText(IconData icon, String text) {
     return Row(
       children: [
-        SvgPicture.asset(
-          iconPath,
-          width: 16,
-          height: 16,
+        Icon(
+          icon,
           color: Colors.white70,
-          fit: BoxFit.scaleDown,
         ),
         const SizedBox(width: 4),
         Text(
@@ -127,9 +166,9 @@ class MobileUserWidget extends StatelessWidget {
           // documentsController.deleteDocument(document);
         }),
         const SizedBox(width: 8),
-        _buildFancyIconButton(AppAsset.reset, 'Reset', onPressed: () {
-          // documentsController.resetDocument(document);
-        }),
+        // _buildFancyIconButton(AppAsset.reset, 'Reset', onPressed: () {
+        //   // documentsController.resetDocument(document);
+        // }),
       ],
     );
   }

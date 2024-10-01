@@ -9,7 +9,7 @@ import '../model/menu_model.dart';
 import '../model/suggestion_model.dart';
 
 class HomeController extends GetxController {
-  Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(menuList.value[2]);
+  Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(menuList.value[3]);
   RxBool isSearchOpen = false.obs;
 
   RxList<ChatRoomModel> chatRoomList = <ChatRoomModel>[].obs;

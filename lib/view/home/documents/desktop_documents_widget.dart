@@ -76,9 +76,9 @@ class DesktopDocumentsWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: tableHeaderColor,
           borderRadius: title == "Name"
-              ? BorderRadius.only(topLeft: Radius.circular(9))
+              ? const BorderRadius.only(topLeft: Radius.circular(9))
               : title == "Actions"
-                  ? BorderRadius.only(topRight: Radius.circular(9))
+                  ? const BorderRadius.only(topRight: Radius.circular(9))
                   : null,
           border: Border.all(color: tableBorderColor, width: 0.5),
         ),
@@ -263,6 +263,8 @@ class TableDataSource extends DataGridSource {
         child: Text(
           cell.value,
           style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
+          maxLines: 1,
+          overflow: TextOverflow.clip,
         ),
       ),
     );

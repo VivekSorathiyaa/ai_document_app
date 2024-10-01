@@ -34,7 +34,7 @@ class UserHeaderWidget extends StatelessWidget {
                       ? 20
                       : 0),
               child: Text(
-                "Uploaded PDFs",
+                "All Users",
                 style: AppTextStyle.normalSemiBold18,
                 overflow: TextOverflow.ellipsis, // Handle overflow gracefully
               ),
@@ -56,12 +56,15 @@ class UserHeaderWidget extends StatelessWidget {
                         : 2,
                     child: PrimaryTextButton(
                       title: "Filters",
-                      onPressed: () {},
+                      onPressed: () {
+                        userController.showFilterDialog();
+                      },
                       height: ResponsiveValue<double>(
                         context,
                         defaultValue: 45.0,
                         conditionalValues: [
-                          Condition.smallerThan(name: DESKTOP, value: 40.0),
+                          const Condition.smallerThan(
+                              name: DESKTOP, value: 40.0),
                         ],
                       ).value!,
                       icon: AppAsset.filter,
@@ -72,7 +75,7 @@ class UserHeaderWidget extends StatelessWidget {
                       context,
                       defaultValue: 24.0,
                       conditionalValues: [
-                        Condition.smallerThan(name: DESKTOP, value: 16.0),
+                        const Condition.smallerThan(name: DESKTOP, value: 16.0),
                       ],
                     ).value!,
                   ),
@@ -82,13 +85,14 @@ class UserHeaderWidget extends StatelessWidget {
                         ? 5
                         : 3,
                     child: PrimaryTextButton(
-                      title: "Upload New Documents",
+                      title: "Add New",
                       onPressed: () {},
                       height: ResponsiveValue<double>(
                         context,
                         defaultValue: 45.0,
                         conditionalValues: [
-                          Condition.smallerThan(name: DESKTOP, value: 40.0),
+                          const Condition.smallerThan(
+                              name: DESKTOP, value: 40.0),
                         ],
                       ).value!,
                       icon: AppAsset.plus,
