@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../utils/app_asset.dart';
 import '../../../utils/custom_dropdown_widget.dart';
@@ -17,16 +18,71 @@ class MobileUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-        itemCount: userController.paginatedData.length,
-        itemBuilder: (context, index) {
-          final user = userController.paginatedData[index];
-          return _buildDocumentTile(user);
-        },
-      );
-    });
+    bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
+
+    return Stack(
+      clipBehavior: Clip.hardEdge,
+      children: [
+        Obx(() {
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            itemCount: userController.paginatedData.length,
+            itemBuilder: (context, index) {
+              final user = userController.paginatedData[index];
+              return _buildDocumentTile(user);
+            },
+          );
+        }),
+        if (isDesktop == false)
+          Positioned(
+            top: 0,
+            right: 0,
+            left: 0,
+            child: AbsorbPointer(
+              absorbing: true,
+              child: Container(
+                width: Get.width,
+                height: 40,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      primaryBlack,
+                      primaryBlack.withOpacity(.5),
+                      Colors.transparent
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (isDesktop == false)
+          Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: AbsorbPointer(
+              absorbing: true,
+              child: Container(
+                width: Get.width,
+                height: 40,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      primaryBlack.withOpacity(.5),
+                      primaryBlack
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   /// Builds a fancy, compact tile for each document
@@ -35,7 +91,8 @@ class MobileUserWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: bgContainColor,
+        color: bgBlackColor,
+        border: Border.all(color: darkDividerColor),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -47,91 +104,81 @@ class MobileUserWidget extends StatelessWidget {
       ),
       // height: 80, // Keep the height compact (between 50-100 px)
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildDocumentDetails(user),
-            _buildActionsRow(user),
-          ],
-        ),
+        padding: const EdgeInsets.all(16),
+        child: _buildDocumentDetails(user),
       ),
     );
   }
 
   /// Builds the compact document details with icons and reduced text size
   Widget _buildDocumentDetails(UserModel user) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Icon(
-          CupertinoIcons.profile_circled,
-          color: Colors.white70,
-          size: 40,
+        Text(
+          user.name,
+          style: AppTextStyle.normalSemiBold14.copyWith(
+            color: Colors.white,
+            fontSize: 14,
+          ),
+          overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+        const SizedBox(height: 10),
+        Row(
           children: [
-            Text(
-              user.name,
-              style: AppTextStyle.normalSemiBold14.copyWith(
-                color: Colors.white,
-                fontSize: 14,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                _buildIconWithText(CupertinoIcons.mail, '${user.email}'),
-                const SizedBox(width: 12),
-                _buildIconWithText(CupertinoIcons.calendar, user.date),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Container(
-                  width: Get.width / 4,
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: tableButtonColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: tableBorderColor, width: 0.5),
-                  ),
-                  child: Center(
-                    child: Text(
-                      user.permissions,
-                      style: AppTextStyle.normalRegular14
-                          .copyWith(color: tableTextColor),
-                      overflow: TextOverflow.clip,
-                      textAlign: TextAlign.start,
-                      maxLines: 1,
-                    ),
+            _buildIconWithText(CupertinoIcons.mail, '${user.email}'),
+            const SizedBox(width: 12),
+            _buildIconWithText(CupertinoIcons.calendar, user.date),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: tableRowColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: darkDividerColor, width: 0.5),
+                ),
+                child: Center(
+                  child: Text(
+                    user.permissions,
+                    style: AppTextStyle.normalRegular14
+                        .copyWith(color: tableTextColor),
+                    overflow: TextOverflow.clip,
+                    textAlign: TextAlign.start,
+                    maxLines: 1,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Container(
-                  width: Get.width / 3,
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: tableRowColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: tableBorderColor, width: 0.5),
-                  ),
-                  child: AccessDropdown(
-                    currentValue: user.access,
-                    userId: user.id,
-                    accessLevels: userController.accessLevels.value,
-                    onAccessLevelChanged: (String newAccessLevel) {
-                      // Update the access level in the controller
-                      userController.updateAccessLevel(user.id, newAccessLevel);
-                    },
-                  ),
-                )
-              ],
+              ),
             ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: tableRowColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: darkDividerColor, width: 0.5),
+                ),
+                child: AccessDropdown(
+                  currentValue: user.access,
+                  userId: user.id,
+                  accessLevels: userController.accessLevels.value,
+                  onAccessLevelChanged: (String newAccessLevel) {
+                    // Update the access level in the controller
+                    userController.updateAccessLevel(user.id, newAccessLevel);
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            _buildFancyIconButton(AppAsset.delete, 'Delete', onPressed: () {
+              // documentsController.deleteDocument(document);
+            }),
           ],
         ),
       ],
@@ -158,21 +205,6 @@ class MobileUserWidget extends StatelessWidget {
     );
   }
 
-  /// Builds the action buttons (delete and reset) with icons only for a fancy look
-  Widget _buildActionsRow(UserModel user) {
-    return Row(
-      children: [
-        _buildFancyIconButton(AppAsset.delete, 'Delete', onPressed: () {
-          // documentsController.deleteDocument(document);
-        }),
-        const SizedBox(width: 8),
-        // _buildFancyIconButton(AppAsset.reset, 'Reset', onPressed: () {
-        //   // documentsController.resetDocument(document);
-        // }),
-      ],
-    );
-  }
-
   /// Builds a circular button with shadow for icons
   Widget _buildFancyIconButton(String iconPath, String label,
       {required VoidCallback onPressed}) {
@@ -191,11 +223,15 @@ class MobileUserWidget extends StatelessWidget {
             ),
           ],
         ),
-        child: SvgPicture.asset(
-          iconPath,
-          width: 20,
-          height: 20,
-          color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: SvgPicture.asset(
+            iconPath,
+            width: 20,
+            height: 20,
+            fit: BoxFit.scaleDown,
+            color: Colors.white70,
+          ),
         ),
       ),
     );

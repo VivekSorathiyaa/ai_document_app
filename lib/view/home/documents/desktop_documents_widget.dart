@@ -80,7 +80,7 @@ class DesktopDocumentsWidget extends StatelessWidget {
               : title == "Actions"
                   ? const BorderRadius.only(topRight: Radius.circular(9))
                   : null,
-          border: Border.all(color: tableBorderColor, width: 0.5),
+          border: Border.all(color: tableButtonColor, width: 0.5),
         ),
         alignment: Alignment.centerLeft,
         child: Center(
@@ -176,7 +176,7 @@ class TableDataSource extends DataGridSource {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: tableRowColor,
-        border: Border.all(color: tableBorderColor, width: 0.5),
+        border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
         child: Text(
@@ -193,7 +193,7 @@ class TableDataSource extends DataGridSource {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: tableRowColor,
-        border: Border.all(color: tableBorderColor, width: 0.5),
+        border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
         child: Container(
@@ -224,7 +224,7 @@ class TableDataSource extends DataGridSource {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: tableRowColor,
-        border: Border.all(color: tableBorderColor, width: 0.5),
+        border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
         child: Text(
@@ -241,7 +241,7 @@ class TableDataSource extends DataGridSource {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: tableRowColor,
-        border: Border.all(color: tableBorderColor, width: 0.5),
+        border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
         child: Text(
@@ -257,7 +257,7 @@ class TableDataSource extends DataGridSource {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: tableRowColor,
-        border: Border.all(color: tableBorderColor, width: 0.5),
+        border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
         child: Text(
@@ -275,7 +275,7 @@ class TableDataSource extends DataGridSource {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: tableRowColor,
-        border: Border.all(color: tableBorderColor, width: 0.5),
+        border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -333,7 +333,7 @@ class TableDataSource extends DataGridSource {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: tableRowColor,
-        border: Border.all(color: tableBorderColor, width: 0.5),
+        border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
         child: Text(

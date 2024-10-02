@@ -15,7 +15,7 @@ class UserHeaderWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
           bottom:
-              ResponsiveBreakpoints.of(context).smallerThan(DESKTOP) ? 20 : 40,
+              ResponsiveBreakpoints.of(context).smallerThan(DESKTOP) ? 0 : 40,
           top: 4),
       child: ResponsiveRowColumn(
         layout: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
@@ -35,7 +35,11 @@ class UserHeaderWidget extends StatelessWidget {
                       : 0),
               child: Text(
                 "All Users",
-                style: AppTextStyle.normalSemiBold18,
+                style: AppTextStyle.normalSemiBold18.copyWith(
+                    fontSize:
+                        ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
+                            ? 16
+                            : 18),
                 overflow: TextOverflow.ellipsis, // Handle overflow gracefully
               ),
             ),

@@ -20,17 +20,25 @@ class HomeView extends StatelessWidget {
   HomeView({super.key});
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBreakpoints.of(context).isDesktop
-        ? DeskTopHomeView(
-            homeController: homeController,
-            documentsController: documentsController,
-            userController: userController,
-            settingsController: settingsController,
-          )
-        : MobileHomeView(
-            homeController: homeController,
-            documentsController: documentsController,
-            userController: userController,
-            settingsController: settingsController);
+    return WillPopScope(
+      onWillPop: () async {
+        if (settingsController.selectedSettingMenuModel.value != null) {
+          settingsController.refreshSettingMenuModel(null);
+        }
+        return await false;
+      },
+      child: ResponsiveBreakpoints.of(context).isDesktop
+          ? DeskTopHomeView(
+              homeController: homeController,
+              documentsController: documentsController,
+              userController: userController,
+              settingsController: settingsController,
+            )
+          : MobileHomeView(
+              homeController: homeController,
+              documentsController: documentsController,
+              userController: userController,
+              settingsController: settingsController),
+    );
   }
 }

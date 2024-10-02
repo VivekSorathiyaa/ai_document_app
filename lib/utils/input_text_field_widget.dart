@@ -2,11 +2,22 @@ import 'package:ai_document_app/utils/validators.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'app_text_style.dart';
 import 'color.dart';
 
-class PasswordWidget extends StatefulWidget {
+class PasswordController extends GetxController {
+  // Observable for controlling password visibility
+  var obscureText = true.obs;
+
+  // Method to toggle the visibility of the password
+  void toggleObscureText() {
+    obscureText.value = !obscureText.value;
+  }
+}
+
+class PasswordWidget extends StatelessWidget {
   final Key? fieldKey;
   final int? maxLength;
   final String? hintText;
@@ -16,7 +27,29 @@ class PasswordWidget extends StatefulWidget {
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
 
-  const PasswordWidget({
+  final EdgeInsets? scropadding;
+  final bool? readonly;
+  final String? labelText;
+  final TextStyle? textStyle;
+  final TextStyle? hintStyle;
+  final Color? borderColor;
+  final Color? filledColor;
+  final ValueChanged<String?>? onFieldSubmitted;
+  final ValueChanged<String?>? onChanged;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final GestureTapCallback? onTap;
+  final int? maxLines;
+  final TextInputType? keyboardType;
+  final TextAlign textAlign;
+  final bool? enabled;
+  final double? borderRadius;
+  final Color? focusedBorderColor;
+  final Color? enabledBorderColor;
+  final Color? errorBorderColor;
+  final EdgeInsetsGeometry? contentPadding;
+
+  PasswordWidget({
     Key? key,
     required this.controller,
     this.fieldKey,
@@ -25,41 +58,92 @@ class PasswordWidget extends StatefulWidget {
     this.validator,
     this.focusNode,
     this.textInputAction,
+    this.textStyle,
+    this.hintStyle,
+    this.labelText,
+    this.prefixIcon,
+    this.maxLines,
+    this.suffixIcon,
+    this.onTap,
+    this.onChanged,
+    this.onFieldSubmitted,
+    this.keyboardType,
+    this.borderColor,
+    this.filledColor,
+    this.enabled,
+    this.readonly,
+    this.borderRadius,
+    this.focusedBorderColor,
+    this.enabledBorderColor,
+    this.errorBorderColor,
+    this.scropadding,
+    this.textAlign = TextAlign.left,
+    this.contentPadding,
   }) : super(key: key);
 
-  @override
-  _PasswordWidgetState createState() => _PasswordWidgetState();
-}
+  final PasswordController _passwordController = Get.put(PasswordController());
 
-class _PasswordWidgetState extends State<PasswordWidget> {
-  bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
-    return textFormField(
-        fieldKey: widget.fieldKey,
-        hintText: widget.hintText,
-        obscureText: _obscureText,
-        focusNode: widget.focusNode,
-        controller: widget.controller,
-        textInputAction: widget.textInputAction,
-        maxLength: widget.maxLength,
-        maxLines: 1,
-        // prefixIcon: UiInterface.prefixTextFieldIcon(AppAsset.icLock),
-        suffixIcon: GestureDetector(
-          onTap: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          child: Icon(
-            _obscureText ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
-            color: hintGreyColor,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (labelText != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              labelText ?? "",
+              style:
+                  AppTextStyle.normalRegular16.copyWith(color: tableTextColor),
+            ),
           ),
-        ),
-        validator: widget.validator ??
-            (value) => Validators.validateRequired(value!.trim(), 'Password')
-        // (value) => Validators.validatePassword(value!.trim()),
-        );
+        Obx(() => textFormField(
+            fieldKey: fieldKey,
+            hintText: hintText,
+            obscureText: _passwordController.obscureText.value,
+            focusNode: focusNode,
+            controller: controller,
+            textInputAction: textInputAction,
+            maxLength: maxLength,
+            maxLines: 1,
+            suffixIcon: GestureDetector(
+              onTap: () {
+                _passwordController.toggleObscureText();
+              },
+              child: Obx(
+                () => Icon(
+                  _passwordController.obscureText.value
+                      ? CupertinoIcons.eye
+                      : CupertinoIcons.eye_slash,
+                  size: 20,
+                  color: hintGreyColor,
+                ),
+              ),
+            ),
+            validator: validator ??
+                (value) =>
+                    Validators.validateRequired(value!.trim(), 'Password'),
+            labelText: labelText,
+            keyboardType: keyboardType ?? TextInputType.text,
+            prefixIcon: prefixIcon,
+            borderRadius: borderRadius,
+            enabled: enabled ?? true,
+            textAlign: textAlign,
+            onTap: onTap,
+            onFieldSubmitted: onFieldSubmitted,
+            onChanged: onChanged,
+            textStyle: textStyle,
+            hintStyle: hintStyle,
+            borderColor: borderColor,
+            contentPadding:
+                contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
+            filledColor: filledColor,
+            enabledBorderColor: enabledBorderColor,
+            focusedBorderColor: focusedBorderColor,
+            errorBorderColor: errorBorderColor)),
+      ],
+    );
   }
 }
 
@@ -132,10 +216,11 @@ class TextFormFieldWidget extends StatelessWidget {
       children: [
         if (labelText != null)
           Padding(
-            padding: EdgeInsets.only(bottom: 6),
+            padding: const EdgeInsets.only(bottom: 10),
             child: Text(
               labelText ?? "",
-              style: AppTextStyle.normalRegular16,
+              style:
+                  AppTextStyle.normalRegular16.copyWith(color: tableTextColor),
             ),
           ),
         textFormField(
@@ -143,9 +228,7 @@ class TextFormFieldWidget extends StatelessWidget {
             focusNode: focusNode,
             hintText: hintText,
             labelText: labelText,
-            // scropadding: scropadding,
             controller: controller,
-            // borderRaduis: 10,
             keyboardType: keyboardType ?? TextInputType.text,
             validator: validator,
             prefixIcon: prefixIcon,
@@ -159,7 +242,8 @@ class TextFormFieldWidget extends StatelessWidget {
             onTap: onTap,
             onFieldSubmitted: onFieldSubmitted,
             onChanged: onChanged,
-            contentPadding: contentPadding,
+            contentPadding:
+                contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
             textStyle: textStyle,
             hintStyle: hintStyle,
             borderColor: borderColor,

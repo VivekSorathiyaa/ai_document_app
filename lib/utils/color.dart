@@ -4,7 +4,6 @@ const Color lightBlackColor = Color(0xff2B2C33);
 const Color bgBlackColor = Color(0xff191C21);
 const Color tableHeaderColor = Color(0xff1D2026);
 const Color tableRowColor = Color(0xff292D34);
-const Color tableBorderColor = Color(0xff414752);
 const Color tableButtonColor = Color(0xff414752);
 const Color tableTextColor = Color(0xffE2E2E2);
 const Color orangeColor = Color(0xffF66A4B);

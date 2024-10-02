@@ -5,6 +5,7 @@ import 'package:ai_document_app/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../utils/app_asset.dart';
 
@@ -15,16 +16,73 @@ class MobileDocumentsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-        itemCount: documentsController.paginatedData.length,
-        itemBuilder: (context, index) {
-          final document = documentsController.paginatedData[index];
-          return _buildDocumentTile(document);
-        },
-      );
-    });
+    bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
+
+    return Stack(
+      clipBehavior: Clip.hardEdge,
+      children: [
+        Obx(
+          () {
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              itemCount: documentsController.paginatedData.length,
+              itemBuilder: (context, index) {
+                final document = documentsController.paginatedData[index];
+                return _buildDocumentTile(document);
+              },
+            );
+          },
+        ),
+        if (isDesktop == false)
+          Positioned(
+            top: 0,
+            right: 0,
+            left: 0,
+            child: AbsorbPointer(
+              absorbing: true,
+              child: Container(
+                width: Get.width,
+                height: 40,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      primaryBlack,
+                      primaryBlack.withOpacity(.5),
+                      Colors.transparent
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (isDesktop == false)
+          Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: AbsorbPointer(
+              absorbing: true,
+              child: Container(
+                width: Get.width,
+                height: 40,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      primaryBlack.withOpacity(.5),
+                      primaryBlack
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   /// Builds a fancy, compact tile for each document
@@ -33,7 +91,8 @@ class MobileDocumentsWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: bgContainColor,
+        color: bgBlackColor,
+        border: Border.all(color: darkDividerColor),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),

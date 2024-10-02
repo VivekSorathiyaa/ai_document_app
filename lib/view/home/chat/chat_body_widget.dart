@@ -5,6 +5,7 @@ import 'package:ai_document_app/utils/color.dart';
 import 'package:ai_document_app/utils/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../model/chatroom_model.dart';
@@ -23,24 +24,79 @@ class ChatBodyWidget extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 860.0),
-      child: ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: isDesktop ? 16 : 16),
-        itemCount: chatRoom.messages.length,
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          final message = chatRoom.messages[index];
-          return message.isUser
-              ? Padding(
-                  padding: EdgeInsets.only(top: index == 0 ? 20 : 0),
-                  child: UserWidget(message: message, isDesktop: isDesktop),
-                )
-              : Padding(
-                  padding: EdgeInsets.only(
-                      bottom: index == chatRoom.messages.length - 1 ? 50 : 0),
-                  child: AiBotWidget(message: message, isDesktop: isDesktop),
-                );
-        },
+      child: Stack(
+        clipBehavior: Clip.hardEdge,
+        children: [
+          ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: isDesktop ? 16 : 0),
+            itemCount: chatRoom.messages.length,
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              final message = chatRoom.messages[index];
+              return message.isUser
+                  ? Padding(
+                      padding: EdgeInsets.only(top: index == 0 ? 20 : 0),
+                      child: UserWidget(message: message, isDesktop: isDesktop),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          bottom:
+                              index == chatRoom.messages.length - 1 ? 50 : 0),
+                      child:
+                          AiBotWidget(message: message, isDesktop: isDesktop),
+                    );
+            },
+          ),
+          if (isDesktop == false)
+            Positioned(
+              top: 0,
+              right: 0,
+              left: 0,
+              child: AbsorbPointer(
+                absorbing: true,
+                child: Container(
+                  width: Get.width,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        primaryBlack,
+                        primaryBlack.withOpacity(.6),
+                        Colors.transparent
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          if (isDesktop == false)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: AbsorbPointer(
+                absorbing: true,
+                child: Container(
+                  width: Get.width,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.transparent,
+                        primaryBlack.withOpacity(.6),
+                        primaryBlack
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

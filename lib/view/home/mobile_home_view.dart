@@ -1,5 +1,6 @@
 import 'package:ai_document_app/controllers/settings_controller.dart';
 import 'package:ai_document_app/view/home/common/mobile_app_bar_widget.dart';
+import 'package:ai_document_app/view/home/settings/settings_header_widget.dart';
 import 'package:ai_document_app/view/home/settings/settings_widget.dart';
 import 'package:ai_document_app/view/home/user/mobile_user_widget.dart';
 import 'package:ai_document_app/view/home/user/user_header_widget.dart';
@@ -53,9 +54,15 @@ class MobileHomeView extends StatelessWidget {
         },
         child: Column(
           children: [
-            _buildHeader(),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+              child: _buildHeader(),
+            ),
             Expanded(
-              child: _buildBody(),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: _buildBody(),
+              ),
             ),
             _buildFooter(),
           ],
@@ -86,6 +93,8 @@ class MobileHomeView extends StatelessWidget {
               documentsController: documentsController);
         case 2:
           return UserHeaderWidget(userController: userController);
+        case 3:
+          return SettingsHeaderWidget(settingsController: settingsController);
 
         default:
           return const SizedBox();
@@ -95,10 +104,10 @@ class MobileHomeView extends StatelessWidget {
 
   Widget _buildBody() {
     return Container(
-      decoration: BoxDecoration(
-        color: bgBlackColor,
-        borderRadius: BorderRadius.circular(18),
-      ),
+      // decoration: BoxDecoration(
+      //   color: bgBlackColor,
+      //   borderRadius: BorderRadius.circular(18),
+      // ),
       child: Stack(
         alignment: Alignment.center,
         children: [

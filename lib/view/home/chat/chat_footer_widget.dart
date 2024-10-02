@@ -30,10 +30,10 @@ class ChatFooterWidget extends StatelessWidget {
                         children:
                             homeController.suggestionList.value.map((element) {
                       return Padding(
-                        padding: const EdgeInsets.only(
+                        padding: EdgeInsets.only(
                           right: 20,
-                          bottom: 20,
-                          top: 20,
+                          bottom: isDesktop ? 20 : 12,
+                          top: isDesktop ? 20 : 0,
                         ),
                         child: Container(
                           padding: const EdgeInsets.all(10),
@@ -69,9 +69,7 @@ class ChatFooterWidget extends StatelessWidget {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 908.0),
           child: Padding(
-            padding: isDesktop
-                ? const EdgeInsets.only(left: 16, right: 16, bottom: 16)
-                : const EdgeInsets.only(left: 12, right: 12, bottom: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             child: Row(
               children: [
                 Expanded(

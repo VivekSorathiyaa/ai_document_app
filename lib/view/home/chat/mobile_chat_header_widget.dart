@@ -13,47 +13,40 @@ class MobileChatHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-        bottom: 16,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Obx(
-              () => CustomDropdown(
-                items: homeController.documentList.value,
-                selectedValues: homeController.selectedDocumentList.value,
-                hintText: 'Select PDF',
-                onChanged: (newValues) {
-                  homeController.selectedDocumentList.value =
-                      newValues.cast<DocumentListModel>();
-                },
-                displayItem: (item) => item.name,
-                selectionMode: SelectionMode.multi,
-              ),
+    return Row(
+      children: [
+        Expanded(
+          child: Obx(
+            () => CustomDropdown(
+              items: homeController.documentList.value,
+              selectedValues: homeController.selectedDocumentList.value,
+              hintText: 'Select PDF',
+              onChanged: (newValues) {
+                homeController.selectedDocumentList.value =
+                    newValues.cast<DocumentListModel>();
+              },
+              displayItem: (item) => item.name,
+              selectionMode: SelectionMode.multi,
             ),
           ),
-          width16,
-          Expanded(
-            child: Obx(
-              () => CustomDropdown(
-                items: homeController.languageList.value,
-                selectedValues: homeController.selectedLanguageList.value,
-                hintText: 'Select Language',
-                onChanged: (newValues) {
-                  homeController.selectedLanguageList.value =
-                      newValues.cast<LanguageListModel>();
-                },
-                displayItem: (item) => item.name,
-                selectionMode: SelectionMode.single,
-              ),
+        ),
+        width16,
+        Expanded(
+          child: Obx(
+            () => CustomDropdown(
+              items: homeController.languageList.value,
+              selectedValues: homeController.selectedLanguageList.value,
+              hintText: 'Select Language',
+              onChanged: (newValues) {
+                homeController.selectedLanguageList.value =
+                    newValues.cast<LanguageListModel>();
+              },
+              displayItem: (item) => item.name,
+              selectionMode: SelectionMode.single,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

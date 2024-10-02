@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 
-class SettingsModel {
+class SettingsMenuModel {
   int id;
   IconData icon;
   String title;
   String subTitle;
-  SettingsModel(
+  SettingsMenuModel(
       {required this.id,
       required this.icon,
       required this.title,

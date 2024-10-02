@@ -25,7 +25,7 @@ class CommonMarkdownWidget extends StatelessWidget {
     bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
 
     Color textColor = primaryWhite;
-    Color backgroundColor = isDesktop ? bgContainColor : bgBlackColor;
+    Color backgroundColor = isDesktop ? bgContainColor : Colors.transparent;
 
     return Align(
       alignment: Alignment.centerLeft,
@@ -47,17 +47,17 @@ class CommonMarkdownWidget extends StatelessWidget {
                 color: primaryBlack,
                 height: 1.5,
               ),
-              h1: AppTextStyle.normalBold26.copyWith(color: textColor),
+              h1: AppTextStyle.normalBold20.copyWith(color: textColor),
               h1Padding: const EdgeInsets.only(bottom: 12),
-              h2: AppTextStyle.normalBold24.copyWith(color: textColor),
+              h2: AppTextStyle.normalBold18.copyWith(color: textColor),
               h2Padding: const EdgeInsets.only(bottom: 10),
-              h3: AppTextStyle.normalBold20.copyWith(color: textColor),
+              h3: AppTextStyle.normalBold16.copyWith(color: textColor),
               h3Padding: const EdgeInsets.only(bottom: 8),
-              h4: AppTextStyle.normalBold18.copyWith(color: textColor),
+              h4: AppTextStyle.normalBold14.copyWith(color: textColor),
               h4Padding: const EdgeInsets.only(bottom: 6),
-              h5: AppTextStyle.normalBold16.copyWith(color: textColor),
+              h5: AppTextStyle.normalBold12.copyWith(color: textColor),
               h5Padding: const EdgeInsets.only(bottom: 4),
-              h6: AppTextStyle.normalBold14.copyWith(color: textColor),
+              h6: AppTextStyle.normalBold10.copyWith(color: textColor),
               h6Padding: const EdgeInsets.only(bottom: 2),
               em: AppTextStyle.italicRegular15.copyWith(color: textColor),
               strong: AppTextStyle.normalBold14.copyWith(color: textColor),
