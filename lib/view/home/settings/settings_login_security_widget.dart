@@ -2,6 +2,7 @@ import 'package:ai_document_app/controllers/settings_controller.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
 import 'package:ai_document_app/utils/input_text_field_widget.dart';
+import 'package:ai_document_app/utils/primary_text_button.dart';
 import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +23,46 @@ class SettingsLoginSecurityWidget extends StatelessWidget {
       children: [
         _buildPasswordWidget(context),
         _buildSessionWidget(context),
-        customHeight(200)
+        _buildSaveWidget(context),
+        customHeight(200),
       ],
     );
   }
+}
+
+Widget _buildSaveWidget(BuildContext context) {
+  bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
+  return Column(
+    children: [
+      customHeight(32),
+      const Divider(
+        color: tableButtonColor,
+        height: 1,
+      ),
+      height20,
+      Align(
+        alignment: Alignment.centerRight,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: isDesktop ? 288.0 : Get.width),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: PrimaryTextButton(
+                    title: "Cancel",
+                    gradientColors: [primaryWhite, primaryWhite],
+                    textColor: primaryBlack,
+                    onPressed: () {}),
+              ),
+              customWidth(12),
+              Expanded(
+                  child: PrimaryTextButton(title: "Save", onPressed: () {})),
+            ],
+          ),
+        ),
+      )
+    ],
+  );
 }
 
 Widget _buildPasswordWidget(BuildContext context) {
@@ -163,7 +200,7 @@ Widget _buildSessionWidget(BuildContext context) {
               children: [
                 if (isDesktop == false)
                   Padding(
-                    padding: EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.only(bottom: 16),
                     child: _sessionLableWidget(),
                   ),
                 ...List.generate(3, (index) {

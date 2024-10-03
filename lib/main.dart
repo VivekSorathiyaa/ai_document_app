@@ -8,6 +8,7 @@ import 'package:ai_document_app/view/auth/login_view.dart';
 import 'package:ai_document_app/view/auth/signup_view.dart';
 import 'package:ai_document_app/view/auth/verification_otp_view.dart';
 import 'package:ai_document_app/view/home/home_view.dart';
+import 'package:ai_document_app/view/home/plans_pricing_view.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
@@ -35,10 +36,8 @@ class MyApp extends StatelessWidget {
       builder: (context, child) => ResponsiveBreakpoints.builder(
         child: child!,
         breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          const Breakpoint(start: 0, end: 600, name: MOBILE),
+          const Breakpoint(start: 601, end: double.infinity, name: DESKTOP),
         ],
       ),
       initialRoute: '/',
@@ -185,6 +184,7 @@ Route<dynamic> buildPage(
           SignupView.name => SignupView(),
           VerificationOtpView.name => VerificationOtpView(),
           AddNewPasswordView.name => AddNewPasswordView(),
+          PlansPricingView.name => PlansPricingView(),
           _ => const SizedBox.shrink(),
         };
       });

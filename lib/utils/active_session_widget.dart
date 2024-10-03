@@ -28,14 +28,42 @@ class ActiveSessionWidget extends StatelessWidget {
                       Flexible(
                         child: Text(
                           "2018 Macbook Pro 15-inch",
-                          style: AppTextStyle.normalRegular16
+                          style: AppTextStyle.normalBold16
                               .copyWith(color: tableTextColor),
                           maxLines: 1,
                           overflow: TextOverflow.clip,
                         ),
                       ),
+                      width08,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: primaryWhite,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 7, vertical: 3),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 6,
+                                width: 6,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle, color: greenColor),
+                              ),
+                              width05,
+                              Text(
+                                "Active Now",
+                                style: AppTextStyle.normalSemiBold12
+                                    .copyWith(color: primaryBlack),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
+                  customHeight(5),
                   Row(
                     children: [
                       Flexible(

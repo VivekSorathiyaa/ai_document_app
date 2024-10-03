@@ -165,6 +165,7 @@ class TextFormFieldWidget extends StatelessWidget {
     this.onTap,
     this.onChanged,
     this.onFieldSubmitted,
+    this.minLines,
     this.textInputAction,
     this.keyboardType,
     this.borderColor,
@@ -198,6 +199,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final GestureTapCallback? onTap;
   final int? maxLines;
   final int? maxLength;
+  final int? minLines;
   final TextInputAction? textInputAction;
   final TextInputType? keyboardType;
   final TextAlign textAlign;
@@ -229,6 +231,7 @@ class TextFormFieldWidget extends StatelessWidget {
             hintText: hintText,
             labelText: labelText,
             controller: controller,
+            minLines: minLines,
             keyboardType: keyboardType ?? TextInputType.text,
             validator: validator,
             prefixIcon: prefixIcon,
@@ -265,6 +268,7 @@ TextFormField textFormField({
   final int? errorMaxLines,
   final int? maxLines,
   final int? maxLength,
+  final int? minLines,
   final double? borderRadius,
   final bool? enabled,
   final bool autofocus = false,
@@ -311,7 +315,7 @@ TextFormField textFormField({
     enabled: enabled,
     validator: validator,
     maxLength: maxLength,
-    minLines: 1,
+    minLines: minLines ?? 1,
     textInputAction: textInputAction,
     inputFormatters: inputFormatters,
     onTap: onTap,

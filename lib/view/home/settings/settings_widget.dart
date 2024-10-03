@@ -1,6 +1,9 @@
 import 'package:ai_document_app/model/settings_model.dart';
+import 'package:ai_document_app/view/home/settings/settings_custom_questions_widget.dart';
 import 'package:ai_document_app/view/home/settings/settings_login_security_widget.dart';
+import 'package:ai_document_app/view/home/settings/settings_payments_payouts_widget.dart';
 import 'package:ai_document_app/view/home/settings/settings_personal_info_widget.dart';
+import 'package:ai_document_app/view/home/settings/settings_referral_credit_coupon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -107,11 +110,11 @@ class SettingsWidget extends StatelessWidget {
       case 1:
         return SettingsLoginSecurityWidget();
       case 2:
-        return NoDataWiget();
+        return SettingsPaymentsPayoutsWidget();
       case 3:
-        return NoDataWiget();
+        return SettingsReferralCreditCouponWidget();
       case 4:
-        return NoDataWiget();
+        return SettingsCustomQuestionsWidget();
       case 5:
         return NoDataWiget();
       default:

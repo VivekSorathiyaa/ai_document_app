@@ -9,7 +9,9 @@ import '../model/menu_model.dart';
 import '../model/suggestion_model.dart';
 
 class HomeController extends GetxController {
-  Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(menuList.value[3]);
+  Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(menuList.value[0]);
+
+  RxBool isDrawerExpand = true.obs;
   RxBool isSearchOpen = false.obs;
 
   RxList<ChatRoomModel> chatRoomList = <ChatRoomModel>[].obs;

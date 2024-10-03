@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class SettingsController extends GetxController {
   Rx<SettingsMenuModel?> selectedSettingMenuModel =
-      Rx<SettingsMenuModel?>(settingMenuList[1]);
+      Rx<SettingsMenuModel?>(null);
 
   Future refreshSettingMenuModel(SettingsMenuModel? model) async {
     selectedSettingMenuModel.value = model;
