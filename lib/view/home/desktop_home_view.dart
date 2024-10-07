@@ -11,6 +11,7 @@ import '../../controllers/home_controller.dart';
 import '../../controllers/settings_controller.dart';
 import '../../controllers/user_controller.dart';
 import '../../utils/color.dart';
+import '../../utils/pdf_view_widget.dart';
 import 'chat/chat_body_widget.dart';
 import 'chat/chat_footer_widget.dart';
 import 'chat/desktop_chat_header_widget.dart';
@@ -148,7 +149,15 @@ class DeskTopHomeView extends StatelessWidget {
       case 0:
         return homeController.chatRoomList.value.isEmpty
             ? NoDataWiget()
-            : ChatBodyWidget(homeController: homeController);
+            : Row(
+                children: [
+                  Expanded(
+                    child: PinchPage(),
+                  ),
+                  Expanded(
+                      child: ChatBodyWidget(homeController: homeController)),
+                ],
+              );
       case 1:
         return DesktopDocumentsWidget(documentsController: documentsController);
       case 2:

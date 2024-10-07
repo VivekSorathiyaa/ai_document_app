@@ -108,7 +108,7 @@ class MobileDocumentsWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildDocumentDetails(document),
+            Expanded(child: _buildDocumentDetails(document)),
             _buildActionsRow(document),
           ],
         ),

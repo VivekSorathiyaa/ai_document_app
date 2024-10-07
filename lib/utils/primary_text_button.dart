@@ -9,6 +9,7 @@ class PrimaryTextButton extends StatelessWidget {
   final VoidCallback onPressed;
   final List<Color>? gradientColors; // List of colors for the gradient
   final Color? textColor;
+  final TextStyle? textStyle;
   final String? icon;
   final double? width;
   final double? height;
@@ -23,6 +24,7 @@ class PrimaryTextButton extends StatelessWidget {
     required this.onPressed,
     this.gradientColors, // Initialize with required gradientColors
     this.textColor,
+    this.textStyle,
     this.icon,
     this.border,
     this.width,
@@ -66,8 +68,8 @@ class PrimaryTextButton extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 8.0),
                           child: SvgPicture.asset(
                             icon!,
-                            height: 24,
-                            width: 24,
+                            height: fontSize ?? 24,
+                            width: fontSize ?? 24,
                             fit: BoxFit.scaleDown,
                           ),
                         ),
@@ -76,9 +78,10 @@ class PrimaryTextButton extends StatelessWidget {
                           title ?? '',
                           softWrap: true,
                           textAlign: TextAlign.center,
-                          style: AppTextStyle.normalSemiBold18.copyWith(
-                              color: textColor ?? primaryWhite,
-                              fontSize: fontSize ?? 18),
+                          style: textStyle ??
+                              AppTextStyle.normalSemiBold18.copyWith(
+                                  color: textColor ?? primaryWhite,
+                                  fontSize: fontSize ?? 18),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis, // Avoid overflow
                         ),

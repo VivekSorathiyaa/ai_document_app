@@ -205,7 +205,7 @@ class CodeElementBuilder extends MarkdownElementBuilder {
           padding: const EdgeInsets.all(14),
 
           // Specify text style
-          textStyle: GoogleFonts.gabarito(height: 1.7, fontSize: 14),
+          textStyle: GoogleFonts.notoSans(height: 1.7, fontSize: 14),
         ),
       ),
     );

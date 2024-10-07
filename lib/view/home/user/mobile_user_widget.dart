@@ -139,7 +139,7 @@ class MobileUserWidget extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: tableRowColor,
+                  color: bgContainColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: darkDividerColor, width: 0.5),
                 ),
@@ -160,7 +160,7 @@ class MobileUserWidget extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: tableRowColor,
+                  color: bgContainColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: darkDividerColor, width: 0.5),
                 ),

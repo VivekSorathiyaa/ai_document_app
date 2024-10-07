@@ -12,6 +12,8 @@ class DocumentsHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
+
     return Padding(
       padding: EdgeInsets.only(
           bottom:
@@ -38,7 +40,7 @@ class DocumentsHeaderWidget extends StatelessWidget {
                 style: AppTextStyle.normalSemiBold18.copyWith(
                     fontSize:
                         ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
-                            ? 16
+                            ? 14
                             : 18),
                 overflow: TextOverflow.ellipsis, // Handle overflow gracefully
               ),
@@ -61,6 +63,7 @@ class DocumentsHeaderWidget extends StatelessWidget {
                     child: PrimaryTextButton(
                       title: "Filters",
                       onPressed: () {},
+                      fontSize: isDesktop ? null : 14,
                       height: ResponsiveValue<double>(
                         context,
                         defaultValue: 45.0,
@@ -89,6 +92,7 @@ class DocumentsHeaderWidget extends StatelessWidget {
                     child: PrimaryTextButton(
                       title: "Upload New Documents",
                       onPressed: () {},
+                      fontSize: isDesktop ? null : 14,
                       height: ResponsiveValue<double>(
                         context,
                         defaultValue: 45.0,

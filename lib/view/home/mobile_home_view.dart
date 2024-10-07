@@ -55,7 +55,7 @@ class MobileHomeView extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
               child: _buildHeader(),
             ),
             Expanded(

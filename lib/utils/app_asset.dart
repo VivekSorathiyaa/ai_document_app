@@ -28,4 +28,5 @@ class AppAsset {
   static const pdfGreen = 'assets/images/pdf_green.svg';
   static const date = 'assets/images/date.svg';
   static const cloud = 'assets/images/cloud.svg';
+  static const check = 'assets/images/check.svg';
 }

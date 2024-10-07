@@ -41,10 +41,10 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   animations: ^2.0.11
-  google_fonts: ^6.2.1
-  flutter_svg: ^2.0.10+1
-  cached_network_image: ^3.4.1
-  lottie: ^3.1.2
+  google_fonts:
+  flutter_svg:
+  cached_network_image:
+  lottie:
   pinput: ^5.0.0
   dropdown_button2: ^2.3.9
   url_launcher: ^6.3.0
@@ -56,6 +56,8 @@ dependencies:
   flutter_dropzone: ^4.0.3
   file_picker: ^8.1.2
   dotted_border: ^2.1.0
+  pdfx: ^2.8.0
+  internet_file: ^1.2.0
 
 dev_dependencies:
   flutter_test:

@@ -200,6 +200,16 @@ class AppTextStyle {
       fontWeight: FontWeight.w600, // Semi-bold
       color: primaryWhite,
       height: 1.5);
+  static final normalSemiBold28 = GoogleFonts.notoSans(
+      fontSize: 28,
+      fontWeight: FontWeight.w600, // Semi-bold
+      color: primaryWhite,
+      height: 1.5);
+  static final normalSemiBold36 = GoogleFonts.notoSans(
+      fontSize: 36,
+      fontWeight: FontWeight.w600, // Semi-bold
+      color: primaryWhite,
+      height: 1.5);
 
   static final normalBold26 = GoogleFonts.notoSans(
       fontSize: 26,

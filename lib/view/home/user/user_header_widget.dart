@@ -12,6 +12,8 @@ class UserHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
+
     return Padding(
       padding: EdgeInsets.only(
           bottom:
@@ -38,7 +40,7 @@ class UserHeaderWidget extends StatelessWidget {
                 style: AppTextStyle.normalSemiBold18.copyWith(
                     fontSize:
                         ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
-                            ? 16
+                            ? 14
                             : 18),
                 overflow: TextOverflow.ellipsis, // Handle overflow gracefully
               ),
@@ -60,6 +62,7 @@ class UserHeaderWidget extends StatelessWidget {
                         : 2,
                     child: PrimaryTextButton(
                       title: "Filters",
+                      fontSize: isDesktop ? null : 14,
                       onPressed: () {
                         userController.showFilterDialog();
                       },
@@ -90,6 +93,7 @@ class UserHeaderWidget extends StatelessWidget {
                         : 3,
                     child: PrimaryTextButton(
                       title: "Add New",
+                      fontSize: isDesktop ? null : 14,
                       onPressed: () {},
                       height: ResponsiveValue<double>(
                         context,
