@@ -11,7 +11,7 @@ import 'package:ai_document_app/view/home/home_view.dart';
 import 'package:ai_document_app/view/home/plans_pricing_view.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-// import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -21,7 +21,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (kIsWeb) {
-    // usePathUrlStrategy();
+    usePathUrlStrategy();
   }
   runApp(const MyApp());
 }

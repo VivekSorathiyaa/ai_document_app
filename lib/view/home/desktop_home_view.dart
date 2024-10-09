@@ -151,9 +151,9 @@ class DeskTopHomeView extends StatelessWidget {
             ? NoDataWiget()
             : Row(
                 children: [
-                  Expanded(
-                    child: PinchPage(),
-                  ),
+                  // Expanded(
+                  //   child: PinchPage(),
+                  // ),
                   Expanded(
                       child: ChatBodyWidget(homeController: homeController)),
                 ],
