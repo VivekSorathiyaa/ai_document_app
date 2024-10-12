@@ -9,17 +9,41 @@ import 'package:ai_document_app/view/auth/signup_view.dart';
 import 'package:ai_document_app/view/auth/verification_otp_view.dart';
 import 'package:ai_document_app/view/home/home_view.dart';
 import 'package:ai_document_app/view/home/plans_pricing_view.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'view/auth/add_new_password_view.dart';
 
-void main() {
+Future<void> main() async {
+  BindingBase.debugZoneErrorsAreFatal = true;
   WidgetsFlutterBinding.ensureInitialized();
-
+  try {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyD7HwzX1WCfv5Vu_Qcx3rdcC3y_lTezdmk",
+        authDomain: "answer-pdf.firebaseapp.com",
+        projectId: "answer-pdf",
+        storageBucket: "answer-pdf.appspot.com",
+        messagingSenderId: "862240061332",
+        appId: "1:862240061332:android:a982299cb146c2d36bc181",
+      ),
+    );
+    print("Firebase initialized successfully");
+  } catch (e, stackTrace) {
+    print("Firebase initialization failed: $e");
+    print("Stack trace: $stackTrace");
+  }
+  SystemChannels.lifecycle.setMessageHandler((msg) async {
+    print('SystemChannels.lifecycle received: $msg');
+    return;
+  });
+  BindingBase.debugZoneErrorsAreFatal = false;
   if (kIsWeb) {
     usePathUrlStrategy();
   }
@@ -169,40 +193,60 @@ class MyApp extends StatelessWidget {
 
 // onGenerateRoute route switcher.
 // Navigate using the page name, `Navigator.pushNamed(context, ListPage.name)`.
-Route<dynamic> buildPage(
-    {required String path, Map<String, String> queryParams = const {}}) {
+Route<dynamic> buildPage({
+  required String path,
+  Map<String, String> queryParams = const {},
+}) {
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+  bool isLoggedIn = currentUser != null;
+
   return Routes.noAnimation(
-      settings: RouteSettings(
-          name: (path.startsWith('/') == false) ? '/$path' : path),
-      builder: (context) {
-        String pathName =
-            path != '/' && path.startsWith('/') ? path.substring(1) : path;
-        return switch (pathName) {
-          '/' || LoginView.name => LoginView(),
-          HomeView.name => HomeView(),
-          ForgotPasswordView.name => ForgotPasswordView(),
-          SignupView.name => SignupView(),
-          VerificationOtpView.name => VerificationOtpView(),
-          AddNewPasswordView.name => AddNewPasswordView(),
-          PlansPricingView.name => PlansPricingView(),
-          _ => const SizedBox.shrink(),
-        };
-      });
+    settings: RouteSettings(
+      name: (path.startsWith('/') == false) ? '/$path' : path,
+    ),
+    builder: (context) {
+      String pathName =
+          path != '/' && path.startsWith('/') ? path.substring(1) : path;
+
+      if (!isLoggedIn) {
+        return LoginView();
+      } else if (pathName == '/' || pathName == LoginView.name) {
+        return HomeView();
+      } else if (pathName == HomeView.name) {
+        return HomeView();
+      } else if (pathName == ForgotPasswordView.name) {
+        return ForgotPasswordView();
+      } else if (pathName == SignupView.name) {
+        return SignupView();
+      } else if (pathName == VerificationOtpView.name) {
+        return VerificationOtpView();
+      } else if (pathName == AddNewPasswordView.name) {
+        return AddNewPasswordView();
+      } else if (pathName == PlansPricingView.name) {
+        return PlansPricingView();
+      } else {
+        return const SizedBox
+            .shrink(); // Default empty widget for unknown routes
+      }
+    },
+  );
 }
 
 // Navigate to a named route
-void navigateTo(BuildContext context, String routeName) {
-  Navigator.pushNamed(context, routeName);
+void navigateTo(BuildContext context, String routeName, {Object? arguments}) {
+  Navigator.pushNamed(context, routeName, arguments: arguments);
 }
 
 // Navigate to a named route and remove the current route from the stack
-void navigateAndRemove(BuildContext context, String routeName) {
-  Navigator.pushNamedAndRemoveUntil(context, routeName, (route) => false);
+void navigateAndRemove(BuildContext context, String routeName,
+    {Object? arguments}) {
+  Navigator.pushNamedAndRemoveUntil(context, routeName, (route) => false,
+      arguments: arguments);
 }
 
 // Go back to the previous route
-void navigateBack(BuildContext context) {
-  Navigator.pop(context);
+void navigateBack(BuildContext context, {Object? arguments}) {
+  Navigator.pop(context, arguments);
 }
 
 // Navigate to a route and pass arguments

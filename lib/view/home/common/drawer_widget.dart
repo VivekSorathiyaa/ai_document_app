@@ -1,5 +1,6 @@
 import 'package:ai_document_app/controllers/home_controller.dart';
 import 'package:ai_document_app/main.dart';
+import 'package:ai_document_app/utils/common_method.dart';
 import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:ai_document_app/view/home/plans_pricing_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -272,9 +273,14 @@ class DrawerWidget extends StatelessWidget {
                                 ),
                               ),
                               Flexible(
-                                child: SvgPicture.asset(
-                                  AppAsset.logout,
-                                  fit: BoxFit.scaleDown,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    CommonMethod.showLogoutDialog(context);
+                                  },
+                                  child: SvgPicture.asset(
+                                    AppAsset.logout,
+                                    fit: BoxFit.scaleDown,
+                                  ),
                                 ),
                               ),
                             ],

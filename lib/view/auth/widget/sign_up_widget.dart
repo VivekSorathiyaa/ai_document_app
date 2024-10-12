@@ -3,10 +3,11 @@ import 'package:ai_document_app/utils/gradient_border_widget.dart';
 import 'package:ai_document_app/view/auth/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import '../../../controllers/sign_up_controller.dart';
 import '../../../utils/app_asset.dart';
 import '../../../utils/app_text_style.dart';
 import '../../../utils/color.dart';
@@ -17,12 +18,9 @@ import 'auth_footer_widget.dart';
 
 class SignUpWidget extends StatelessWidget {
   SignUpWidget({super.key});
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
-  final RxBool isCheck = false.obs;
+
+  var controller = Get.put(SignUpController());
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -73,31 +71,67 @@ class SignUpWidget extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 32),
-                      TextFormFieldWidget(
-                        hintText: 'Full Name',
-                        controller: nameController,
-                        keyboardType: TextInputType.text,
-                      ),
-                      const SizedBox(height: 24),
-                      TextFormFieldWidget(
-                        hintText: 'Email',
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: 24),
-                      PasswordWidget(
-                        hintText: 'Password',
-                        controller: passwordController,
-                      ),
-                      const SizedBox(height: 24),
-                      PasswordWidget(
-                        hintText: 'Confirm Password',
-                        controller: confirmPasswordController,
+                      AutofillGroup(
+                        child: Column(
+                          children: [
+                            TextFormFieldWidget(
+                              hintText: 'Full Name',
+                              controller: controller.nameController,
+                              autofillHints: [AutofillHints.username],
+                              keyboardType: TextInputType.text,
+                            ),
+                            const SizedBox(height: 24),
+                            TextFormFieldWidget(
+                              hintText: 'Email',
+                              controller: controller.emailController,
+                              autofillHints: [AutofillHints.email],
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const SizedBox(height: 24),
+                            PasswordWidget(
+                              hintText: 'Password',
+                              controller: controller.passwordController,
+                              autofillHints: [AutofillHints.password],
+                              keyboardType: TextInputType.visiblePassword,
+                            ),
+                            const SizedBox(height: 24),
+                            PasswordWidget(
+                              hintText: 'Confirm Password',
+                              controller: controller.confirmPasswordController,
+                              autofillHints: [AutofillHints.password],
+                              keyboardType: TextInputType.visiblePassword,
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 32),
-                      PrimaryTextButton(
-                        title: 'Sign up',
-                        onPressed: () {},
+                      Obx(() {
+                        if (controller.errorMessage.value.isNotEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Text(
+                              controller.errorMessage.value,
+                              style: AppTextStyle.normalRegular14
+                                  .copyWith(color: orangeColor),
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      }),
+                      Obx(
+                        () => controller.isLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: primaryWhite,
+                                ),
+                              )
+                            : PrimaryTextButton(
+                                title: 'Sign up',
+                                onPressed: () {
+                                  controller
+                                      .registerWithEmailAndPassword(context);
+                                },
+                              ),
                       ),
                       const SizedBox(height: 32),
                       Row(
@@ -160,8 +194,6 @@ class SignUpWidget extends StatelessWidget {
                             child: Text(
                               'Already Registered?',
                               style: AppTextStyle.normalRegular16,
-                              // maxLines: 1,
-                              // overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                             ),
                           ),

@@ -3,82 +3,43 @@
 <head>
   <base href="/">
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-  <script src="assets/packages/pdfx/assets/pdfjs/pdf.js"></script>
-  <script src="assets/packages/pdfx/assets/pdfjs/pdf.worker.js"></script>
+  <title>Answer PDF</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="ai_document_app">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js"></script>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js"></script>
+  <script src="pdfjs_interop.js"></script>
+  <!-- Preload Roboto font to ensure it's loaded before use -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf" as="font"
+        type="font/ttf" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-  <title>ai_document_app</title>
+  <!-- Your Firebase configuration -->
+  <script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyD7HwzX1WCfv5Vu_Qcx3rdcC3y_lTezdmk",
+        authDomain: "answer-pdf.firebaseapp.com",
+        projectId: "answer-pdf",
+        storageBucket: "answer-pdf.appspot.com",
+        messagingSenderId: "862240061332",
+        appId: "1:862240061332:android:a982299cb146c2d36bc181",
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
 
-  <link rel="manifest" href="manifest.json">
+  <!-- Main Dart script -->
+  <script defer src="main.dart.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      background-color: #000000; /* Background color */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh; /* Full height */
-      overflow: hidden; /* Hide overflow */
-    }
-    .splash-screen {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-    .logo {
-      width: 150px; /* Adjust logo size */
-      height: auto;
-      filter: brightness(0) invert(1); /* Makes the logo appear white */
-    }
-    .loading-text {
-      margin-top: 20px;
-      font-size: 20px; /* Adjust font size */
-      color: #FFFFFF; /* Text color */
-    }
-  </style>
 </head>
 <body>
-  <script src='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.min.mjs' type='module'></script>
-  <script type='module'>
-  var { pdfjsLib } = globalThis;
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.worker.mjs';
-
-  var pdfRenderOptions = {
-    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/cmaps/',
-    cMapPacked: true,
-  }
-  </script>
-<div class="splash-screen">
-  <img class="logo" src="assets/images/logo.png" alt="Logo"> <!-- Your logo -->
-  <div class="loading-text">Loading...</div>
-</div>
-
-<script src="flutter_bootstrap.js" async></script>
-<script>
-  window.addEventListener('load', function() {
-    // Clear the splash screen
-    document.body.innerHTML = '';
-    const appElement = document.createElement('div');
-    appElement.id = 'flutter_app';
-    document.body.appendChild(appElement);
-
-    // Now run the Flutter app
-    const script = document.createElement('script');
-    script.src = "main.dart.js";
-    document.body.appendChild(script);
-  });
-</script>
 </body>
 </html>

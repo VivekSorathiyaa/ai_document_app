@@ -1,12 +1,11 @@
+import 'package:ai_document_app/controllers/login_controller.dart';
 import 'package:ai_document_app/main.dart';
 import 'package:ai_document_app/utils/gradient_border_widget.dart';
 import 'package:ai_document_app/view/auth/forgot_password_view.dart';
-import 'package:ai_document_app/view/home/home_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -21,9 +20,8 @@ import 'auth_footer_widget.dart';
 
 class LoginWidget extends StatelessWidget {
   LoginWidget({super.key});
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final RxBool isCheck = false.obs;
+  var controller = Get.put(LoginController());
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -71,27 +69,35 @@ class LoginWidget extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    TextFormFieldWidget(
-                      hintText: 'Email',
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    PasswordWidget(
-                      hintText: 'Password',
-                      controller: passwordController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
+                    AutofillGroup(
+                      child: Column(
+                        children: [
+                          TextFormFieldWidget(
+                            hintText: 'Email',
+                            controller: controller.emailController,
+                            autofillHints: [AutofillHints.email],
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your email';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 24),
+                          PasswordWidget(
+                            hintText: 'Password',
+                            controller: controller.passwordController,
+                            autofillHints: [AutofillHints.password],
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your password';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -101,21 +107,22 @@ class LoginWidget extends StatelessWidget {
                         Obx(
                           () => GestureDetector(
                             onTap: () {
-                              isCheck.value = !isCheck.value;
+                              controller.isCheck.value =
+                                  !controller.isCheck.value;
                             },
                             child: Stack(
                               children: [
                                 Icon(
                                   CupertinoIcons.square_fill,
-                                  color: isCheck.value
+                                  color: controller.isCheck.value
                                       ? primaryWhite
                                       : Colors.transparent,
                                 ),
                                 Icon(
-                                  isCheck.value
+                                  controller.isCheck.value
                                       ? CupertinoIcons.checkmark_square_fill
                                       : CupertinoIcons.square,
-                                  color: isCheck.value
+                                  color: controller.isCheck.value
                                       ? purpleColor
                                       : hintGreyColor,
                                 ),
@@ -161,11 +168,32 @@ class LoginWidget extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 32),
-                    PrimaryTextButton(
-                      title: 'Log in',
-                      onPressed: () {
-                        navigateTo(context, HomeView.name);
-                      },
+                    Obx(() {
+                      if (controller.errorMessage.value.isNotEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Text(
+                            controller.errorMessage.value,
+                            style: AppTextStyle.normalRegular14
+                                .copyWith(color: orangeColor),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    }),
+                    Obx(
+                      () => controller.isLoading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: primaryWhite,
+                              ),
+                            )
+                          : PrimaryTextButton(
+                              title: 'Log in',
+                              onPressed: () {
+                                controller.signInWithEmailAndPassword(context);
+                              },
+                            ),
                     ),
                     const SizedBox(height: 32),
                     Row(

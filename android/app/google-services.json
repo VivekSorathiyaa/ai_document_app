@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "862240061332",
+    "project_id": "answer-pdf",
+    "storage_bucket": "answer-pdf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862240061332:android:a982299cb146c2d36bc181",
+        "android_client_info": {
+          "package_name": "com.answerpdfai.solutions"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862240061332-knen0tehh0n0gfb4igvus1opv5g8b4sl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.answerpdfai.solutions",
+            "certificate_hash": "e1860c3ae5a5911d562e0800c2eb5f11417b7a36"
+          }
+        },
+        {
+          "client_id": "862240061332-70mao534v28gsv9pjp3id2sgolh5g1g1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7HwzX1WCfv5Vu_Qcx3rdcC3y_lTezdmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862240061332-70mao534v28gsv9pjp3id2sgolh5g1g1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

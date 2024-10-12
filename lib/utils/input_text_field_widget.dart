@@ -7,16 +7,6 @@ import 'package:get/get.dart';
 import 'app_text_style.dart';
 import 'color.dart';
 
-class PasswordController extends GetxController {
-  // Observable for controlling password visibility
-  var obscureText = true.obs;
-
-  // Method to toggle the visibility of the password
-  void toggleObscureText() {
-    obscureText.value = !obscureText.value;
-  }
-}
-
 class PasswordWidget extends StatelessWidget {
   final Key? fieldKey;
   final int? maxLength;
@@ -48,6 +38,7 @@ class PasswordWidget extends StatelessWidget {
   final Color? enabledBorderColor;
   final Color? errorBorderColor;
   final EdgeInsetsGeometry? contentPadding;
+  final Iterable<String>? autofillHints;
 
   PasswordWidget({
     Key? key,
@@ -62,6 +53,7 @@ class PasswordWidget extends StatelessWidget {
     this.hintStyle,
     this.labelText,
     this.prefixIcon,
+    this.autofillHints,
     this.maxLines,
     this.suffixIcon,
     this.onTap,
@@ -81,7 +73,12 @@ class PasswordWidget extends StatelessWidget {
     this.contentPadding,
   }) : super(key: key);
 
-  final PasswordController _passwordController = Get.put(PasswordController());
+  var obscureText = true.obs;
+
+  // Method to toggle the visibility of the password
+  void toggleObscureText() {
+    obscureText.value = !obscureText.value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +98,8 @@ class PasswordWidget extends StatelessWidget {
         Obx(() => textFormField(
             fieldKey: fieldKey,
             hintText: hintText,
-            obscureText: _passwordController.obscureText.value,
+            autofillHints: autofillHints,
+            obscureText: obscureText.value,
             focusNode: focusNode,
             controller: controller,
             textInputAction: textInputAction,
@@ -109,11 +107,11 @@ class PasswordWidget extends StatelessWidget {
             maxLines: 1,
             suffixIcon: GestureDetector(
               onTap: () {
-                _passwordController.toggleObscureText();
+                toggleObscureText();
               },
               child: Obx(
                 () => Icon(
-                  _passwordController.obscureText.value
+                  obscureText.value
                       ? CupertinoIcons.eye
                       : CupertinoIcons.eye_slash,
                   size: 20,
@@ -179,6 +177,7 @@ class TextFormFieldWidget extends StatelessWidget {
     this.scropadding,
     this.textAlign = TextAlign.left,
     this.contentPadding,
+    this.autofillHints,
   }) : super(key: key);
   final EdgeInsets? scropadding;
   final Key? fieldKey;
@@ -209,6 +208,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final Color? enabledBorderColor;
   final Color? errorBorderColor;
   final EdgeInsetsGeometry? contentPadding;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -228,6 +228,7 @@ class TextFormFieldWidget extends StatelessWidget {
         textFormField(
             fieldKey: fieldKey,
             focusNode: focusNode,
+            autofillHints: autofillHints,
             hintText: hintText,
             labelText: labelText,
             controller: controller,
@@ -283,6 +284,7 @@ TextFormField textFormField({
   final Widget? prefixIcon,
   final Widget? suffixIcon,
   final FocusNode? focusNode,
+  final Iterable<String>? autofillHints,
   final TextStyle? style,
   final TextStyle? textStyle,
   final TextStyle? hintStyle,
@@ -307,7 +309,7 @@ TextFormField textFormField({
     readOnly: readonly ?? false,
     controller: controller,
     focusNode: focusNode,
-    maxLines: maxLines,
+    maxLines: maxLines ?? 1,
     initialValue: initialValue,
     keyboardType: keyboardType,
     textCapitalization: textCapitalization,
@@ -320,6 +322,7 @@ TextFormField textFormField({
     inputFormatters: inputFormatters,
     onTap: onTap,
     onSaved: onSaved,
+    autofillHints: autofillHints,
     onChanged: onChanged,
     onFieldSubmitted: onFieldSubmitted,
     autocorrect: true,

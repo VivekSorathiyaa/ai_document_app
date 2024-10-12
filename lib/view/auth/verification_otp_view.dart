@@ -6,9 +6,16 @@ import 'widget/branding_widget.dart';
 
 class VerificationOtpView extends StatelessWidget {
   static const String name = 'verification_otp';
+  String? uid;
 
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context)?.settings.arguments;
+    if (arguments is String) {
+      uid = arguments;
+    } else {
+      uid = null;
+    }
     return Scaffold(
       backgroundColor: Colors.black,
       body: Row(
@@ -17,7 +24,10 @@ class VerificationOtpView extends StatelessWidget {
             const Expanded(
               child: BrandingWidget(),
             ),
-          Expanded(child: VerificationOtpWidget())
+          Expanded(
+              child: VerificationOtpWidget(
+            uid: uid,
+          ))
         ],
       ),
     );

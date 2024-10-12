@@ -75,6 +75,19 @@ class Validators {
     return null;
   }
 
+  static String? validateURL(String? value) {
+    // Regular expression pattern for URL validation
+    final pattern = r'^(https?:\/\/)?([\w\d\-]+\.)+[\w\-]{2,4}\/?.*$';
+    final regExp = RegExp(pattern, caseSensitive: false);
+
+    if (value == null || value.isEmpty) {
+      return "URL is required.";
+    } else if (!regExp.hasMatch(value)) {
+      return "Please enter a valid URL.";
+    }
+    return null;
+  }
+
   // Validate email
   static String? validateEmail(String? value) {
     final pattern = r'^[^@]+@[^@]+\.[^@]+$';
@@ -84,6 +97,14 @@ class Validators {
       return "Email is required.";
     } else if (!regExp.hasMatch(value)) {
       return "Invalid email address.";
+    }
+    return null;
+  }
+
+  // Validate account deletion reason
+  static String? validateDeletionReason(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please provide a reason for your account deletion request.";
     }
     return null;
   }
@@ -101,15 +122,26 @@ class Validators {
   }
 
 // Validate password
-  static String? validatePassword(String value) {
-    final pattern =
-        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$';
-    final regExp = RegExp(pattern);
+//   static String? validatePassword(String value) {
+//     final pattern =
+//         r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$';
+//     final regExp = RegExp(pattern);
+//
+//     if (value.isEmpty) {
+//       return "Password is required.";
+//     } else if (!regExp.hasMatch(value)) {
+//       return "Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.";
+//     }
+//     return null;
+//   }
 
+  static String? validatePassword(String value) {
     if (value.isEmpty) {
       return "Password is required.";
-    } else if (!regExp.hasMatch(value)) {
-      return "Password must be at least 8 characters long, contain uppercase and lowercase letters, a number, and a special character.";
+    } else if (value.length < 6) {
+      return "Password must be at least 6 characters long.";
+    } else if (value.length > 32) {
+      return "Password must not exceed 32 characters.";
     }
     return null;
   }

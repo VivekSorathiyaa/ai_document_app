@@ -14,7 +14,8 @@ import '../../../utils/static_decoration.dart';
 import 'auth_footer_widget.dart';
 
 class VerificationOtpWidget extends StatelessWidget {
-  VerificationOtpWidget({super.key});
+  String? uid;
+  VerificationOtpWidget({super.key, this.uid});
   final TextEditingController pinController = TextEditingController();
 
   @override
