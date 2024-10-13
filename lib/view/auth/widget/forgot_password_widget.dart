@@ -1,11 +1,12 @@
 import 'package:ai_document_app/main.dart';
 import 'package:ai_document_app/utils/gradient_border_widget.dart';
 import 'package:ai_document_app/view/auth/login_view.dart';
-import 'package:ai_document_app/view/auth/verification_otp_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import '../../../controllers/login_controller.dart';
 import '../../../utils/app_text_style.dart';
 import '../../../utils/color.dart';
 import '../../../utils/input_text_field_widget.dart';
@@ -15,10 +16,16 @@ import 'auth_footer_widget.dart';
 
 class ForgotPasswordWidget extends StatelessWidget {
   ForgotPasswordWidget({super.key});
-  final TextEditingController emailController = TextEditingController();
+  var controller = Get.put(LoginController());
+
+  refreshPage() {
+    controller.infoMessage("");
+    controller.errorMessage("");
+  }
 
   @override
   Widget build(BuildContext context) {
+    refreshPage();
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Center(
@@ -69,7 +76,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                       const SizedBox(height: 32),
                       TextFormFieldWidget(
                         hintText: 'Email',
-                        controller: emailController,
+                        controller: controller.emailController,
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -78,12 +85,41 @@ class ForgotPasswordWidget extends StatelessWidget {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 44),
-                      PrimaryTextButton(
-                        title: 'Get OTP',
-                        onPressed: () {
-                          navigateTo(context, VerificationOtpView.name);
-                        },
+                      const SizedBox(height: 32),
+                      Obx(() {
+                        if (controller.errorMessage.value.isNotEmpty ||
+                            controller.infoMessage.value.isNotEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Text(
+                              controller.errorMessage.value.isNotEmpty
+                                  ? controller.errorMessage.value
+                                  : controller.infoMessage.value,
+                              style: AppTextStyle.normalRegular14.copyWith(
+                                  color:
+                                      controller.errorMessage.value.isNotEmpty
+                                          ? orangeColor
+                                          : greenColor),
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      }),
+                      Obx(
+                        () => controller.isLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: primaryWhite,
+                                ),
+                              )
+                            : PrimaryTextButton(
+                                title: 'Reset Password',
+                                onPressed: () {
+                                  refreshPage();
+
+                                  controller.sendPasswordResetEmail(context);
+                                },
+                              ),
                       ),
                       const SizedBox(height: 32),
                       Row(

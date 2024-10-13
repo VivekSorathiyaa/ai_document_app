@@ -9,8 +9,8 @@ import '../../../utils/color.dart';
 import '../../../utils/input_text_field_widget.dart';
 
 class SearchbarWidget extends StatelessWidget {
-  HomeController homeController;
-  SearchbarWidget({super.key, required this.homeController});
+  SearchbarWidget({super.key});
+  final homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {

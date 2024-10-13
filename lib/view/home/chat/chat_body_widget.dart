@@ -1,108 +1,141 @@
-import 'package:ai_document_app/controllers/home_controller.dart';
+import 'package:ai_document_app/controllers/chat_controller.dart';
 import 'package:ai_document_app/utils/app_asset.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
+import 'package:ai_document_app/utils/common_method.dart';
 import 'package:ai_document_app/utils/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../../model/chatroom_model.dart';
 import '../../../utils/common_markdown_widget.dart';
 import '../../../utils/static_decoration.dart';
+import '../common/no_data_widget.dart';
 
 class ChatBodyWidget extends StatelessWidget {
-  final HomeController homeController;
+  ChatBodyWidget({Key? key}) : super(key: key);
+  final chatController = Get.put(ChatController());
 
-  ChatBodyWidget({Key? key, required this.homeController}) : super(key: key);
+  refreshPage() {
+    chatController.refreshPage();
+    chatController.loading.value = false;
+  }
 
   @override
   Widget build(BuildContext context) {
+    refreshPage();
     bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
-    ChatRoomModel chatRoom = homeController.chatRoomList.value.last;
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 860.0),
-      child: Stack(
-        clipBehavior: Clip.hardEdge,
-        children: [
-          ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: isDesktop ? 16 : 0),
-            itemCount: chatRoom.messages.length,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              final message = chatRoom.messages[index];
-              return message.isUser
-                  ? Padding(
-                      padding: EdgeInsets.only(top: index == 0 ? 20 : 0),
-                      child: UserWidget(message: message, isDesktop: isDesktop),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.only(
-                          bottom:
-                              index == chatRoom.messages.length - 1 ? 50 : 0),
-                      child:
-                          AiBotWidget(message: message, isDesktop: isDesktop),
-                    );
-            },
-          ),
-          if (isDesktop == false)
-            Positioned(
-              top: 0,
-              right: 0,
-              left: 0,
-              child: AbsorbPointer(
-                absorbing: true,
-                child: Container(
-                  width: Get.width,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        primaryBlack,
-                        primaryBlack.withOpacity(.6),
-                        Colors.transparent
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
+    return Obx(
+      () => chatController.messagesList.value.isEmpty
+          ? NoDataWiget()
+          : ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 860.0),
+              child: Stack(
+                clipBehavior: Clip.hardEdge,
+                children: [
+                  Obx(
+                    () {
+                      final messages = chatController.messagesList.value;
+
+                      if (messages.isEmpty) {
+                        return const SizedBox();
+                      }
+                      return ListView.builder(
+                        controller: chatController.scrollController,
+                        reverse: true,
+                        itemCount: messages.length,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: isDesktop ? 16 : 0),
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final messageData =
+                              messages[index].data() as Map<String, dynamic>;
+                          final isSender = messageData['senderId'] ==
+                              CommonMethod.auth.currentUser?.email;
+                          final isLastIndex = (index == 0);
+                          return isSender
+                              ? Padding(
+                                  padding:
+                                      EdgeInsets.only(top: index == 0 ? 20 : 0),
+                                  child: UserWidget(
+                                      messageData: messageData,
+                                      isDesktop: isDesktop),
+                                )
+                              : Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: isLastIndex ? 50 : 0),
+                                  child: chatController.loading.value &&
+                                          isLastIndex
+                                      ? Lottie.asset(AppAsset.aiJson)
+                                      : AiBotWidget(
+                                          isLastIndex: isLastIndex,
+                                          messageData: messageData,
+                                          isDesktop: isDesktop),
+                                );
+                        },
+                      );
+                    },
                   ),
-                ),
+                  if (isDesktop == false)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      left: 0,
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: Container(
+                          width: Get.width,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                primaryBlack,
+                                primaryBlack.withOpacity(.6),
+                                Colors.transparent
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (isDesktop == false)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      left: 0,
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: Container(
+                          width: Get.width,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.transparent,
+                                primaryBlack.withOpacity(.6),
+                                primaryBlack
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
-          if (isDesktop == false)
-            Positioned(
-              bottom: 0,
-              right: 0,
-              left: 0,
-              child: AbsorbPointer(
-                absorbing: true,
-                child: Container(
-                  width: Get.width,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        primaryBlack.withOpacity(.6),
-                        primaryBlack
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
     );
   }
 
   Widget UserWidget(
-      {required ChatMessageModel message, required bool isDesktop}) {
+      {required Map<String, dynamic> messageData, required bool isDesktop}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +169,7 @@ class ChatBodyWidget extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      message.content,
+                      messageData['text'],
                       style: isDesktop
                           ? AppTextStyle.normalSemiBold16
                               .copyWith(color: primaryWhite.withOpacity(.9))
@@ -161,7 +194,9 @@ class ChatBodyWidget extends StatelessWidget {
   }
 
   Widget AiBotWidget(
-      {required ChatMessageModel message, required bool isDesktop}) {
+      {required Map<String, dynamic> messageData,
+      required bool isDesktop,
+      required bool isLastIndex}) {
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 50),
       child: Row(
@@ -178,7 +213,7 @@ class ChatBodyWidget extends StatelessWidget {
           customWidth(10),
           Flexible(
             child: CommonMarkdownWidget(
-              data: message.content,
+              data: messageData['text'],
             ),
           ),
           Column(

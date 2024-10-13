@@ -11,7 +11,6 @@ import '../../controllers/home_controller.dart';
 import '../../controllers/settings_controller.dart';
 import '../../controllers/user_controller.dart';
 import '../../utils/color.dart';
-import '../../utils/pdf_view_widget.dart';
 import 'chat/chat_body_widget.dart';
 import 'chat/chat_footer_widget.dart';
 import 'chat/desktop_chat_header_widget.dart';
@@ -104,7 +103,7 @@ class DeskTopHomeView extends StatelessWidget {
         () {
           final selectedMenuId = homeController.selectedMenuModel.value.id;
           if (selectedMenuId == 0) {
-            return DesktopChatHeaderWidget(homeController: homeController);
+            return DesktopChatHeaderWidget();
           } else if (selectedMenuId == 1) {
             return DocumentsHeaderWidget(
                 documentsController: documentsController);
@@ -147,17 +146,7 @@ class DeskTopHomeView extends StatelessWidget {
   Widget _getSelectedWidget(int selectedMenuId) {
     switch (selectedMenuId) {
       case 0:
-        return homeController.chatRoomList.value.isEmpty
-            ? NoDataWiget()
-            : Row(
-                children: [
-                  // Expanded(
-                  //   child: PinchPage(),
-                  // ),
-                  Expanded(
-                      child: ChatBodyWidget(homeController: homeController)),
-                ],
-              );
+        return ChatBodyWidget();
       case 1:
         return DesktopDocumentsWidget(documentsController: documentsController);
       case 2:
@@ -173,7 +162,7 @@ class DeskTopHomeView extends StatelessWidget {
     return Obx(() {
       final selectedMenuId = homeController.selectedMenuModel.value.id;
       if (selectedMenuId == 0) {
-        return ChatFooterWidget(homeController: homeController);
+        return ChatFooterWidget();
       } else if (selectedMenuId == 1) {
         return DocumentFooterWidget(documentsController: documentsController);
       } else if (selectedMenuId == 2) {

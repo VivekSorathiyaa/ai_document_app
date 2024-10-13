@@ -2,6 +2,7 @@ import 'package:ai_document_app/controllers/documents_controller.dart';
 import 'package:ai_document_app/model/document_model.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
+import 'package:ai_document_app/utils/common_method.dart';
 import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -271,6 +272,12 @@ class TableDataSource extends DataGridSource {
   }
 
   Widget _buildActionsCell(DataGridCell cell, DataGridRow row) {
+    final rowIndex = rows.indexOf(row);
+
+    if (rowIndex < 0 || rowIndex >= tableData.length) {
+      return Container();
+    }
+    final DocumentModel data = tableData[rowIndex];
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -281,21 +288,26 @@ class TableDataSource extends DataGridSource {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: tableButtonColor),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset(
-                    AppAsset.delete,
-                    height: 24,
-                    width: 24,
-                    fit: BoxFit.scaleDown,
+            child: GestureDetector(
+              onTap: () async {
+                await CommonMethod.deleteDocumentAndFile(data);
+              },
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: tableButtonColor),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset(
+                      AppAsset.delete,
+                      height: 24,
+                      width: 24,
+                      fit: BoxFit.scaleDown,
+                    ),
                   ),
                 ),
               ),

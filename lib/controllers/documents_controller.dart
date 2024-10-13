@@ -1,3 +1,5 @@
+import 'package:ai_document_app/utils/common_method.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 import '../model/document_model.dart';
@@ -7,27 +9,42 @@ class DocumentsController extends GetxController {
   final RxInt rowsPerPage = 10.obs;
   final RxInt currentPage = 0.obs;
 
-  DocumentsController() {
-    // Dummy data
-    documentDataList.addAll(List.generate(100, (index) {
-      return DocumentModel(
-        status: index % 2 == 0 ? 'Uploaded' : 'Pending',
-        uploadedBy: 'Yuvraj Rathod',
-        size: (index + 10) * 1.5,
-        date: '31 July 2022',
-        actions: 'Action $index',
-        id: index.toString(),
-        name: 'PDF0$index',
-      );
-    }));
+  @override
+  void onInit() {
+    super.onInit();
+    fetchDocuments();
   }
+
+  void fetchDocuments() {
+    FirebaseFirestore.instance
+        .collection('documents')
+        .where('uploaded_by', isEqualTo: CommonMethod.auth.currentUser?.email)
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      documentDataList.assignAll(snapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return DocumentModel(
+          id: doc.id,
+          name: data['name'] ?? '',
+          url: data['url'] ?? '',
+          status: data['upload_status'] ?? 'Unknown',
+          uploadedBy: data['uploaded_by'] ?? '',
+          size: data['size']?.toDouble() ?? 0.0,
+          date: data['timestamp']?.toDate().toString() ??
+              '', // Adjust date format as needed
+          actions: 'Action ${doc.id}', // Or set this based on your needs
+        );
+      }).toList());
+    });
+  }
+
   void paginateData() {
     final start = currentPage.value * rowsPerPage.value;
     final end = (start + rowsPerPage.value).clamp(0, documentDataList.length);
     paginatedData.assignAll(documentDataList.sublist(start, end));
   }
 
-  // Sort the table data by column
   void sortByColumn(String columnName, bool ascending) {
     documentDataList.sort((a, b) {
       switch (columnName) {
@@ -58,7 +75,6 @@ class DocumentsController extends GetxController {
     update();
   }
 
-  // Paginated data
   List<DocumentModel> get paginatedData => documentDataList
       .skip(currentPage.value * rowsPerPage.value)
       .take(rowsPerPage.value)

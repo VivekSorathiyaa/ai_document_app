@@ -62,6 +62,12 @@ dependencies:
   firebase_core: ^3.6.0
   cloud_firestore: ^5.4.4
   mailer: ^6.2.0
+  firebase_storage: ^12.3.3
+  pdf:
+  pdf_text:
+  js:
+  http:
+  google_generative_ai:
 
 dev_dependencies:
   flutter_test:

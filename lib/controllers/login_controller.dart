@@ -14,12 +14,25 @@ class LoginController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final RxBool isCheck = false.obs;
   var errorMessage = ''.obs;
+  var infoMessage = ''.obs;
   var isLoading = false.obs;
 
   Future<bool> checkValidInputs() async {
     final errors = [
       Validators.validateEmail(emailController.text),
       Validators.validatePassword(passwordController.text),
+    ].where((error) => error != null).toList();
+
+    if (errors.isNotEmpty) {
+      errorMessage(errors.join('\n'));
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> checkValidInputsForgotPassword() async {
+    final errors = [
+      Validators.validateEmail(emailController.text),
     ].where((error) => error != null).toList();
 
     if (errors.isNotEmpty) {
@@ -56,6 +69,31 @@ class LoginController extends GetxController {
       }
     } on FirebaseAuthException catch (e) {
       errorMessage('Failed to sign in: ${e.message}');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> sendPasswordResetEmail(BuildContext context) async {
+    isLoading(true);
+
+    bool inputsValid = await checkValidInputsForgotPassword();
+    if (!inputsValid) {
+      isLoading(false);
+      return;
+    }
+    Get.back();
+    try {
+      await auth.sendPasswordResetEmail(
+        email: emailController.text.trim(),
+      );
+      infoMessage(
+        'Password reset email sent to ${emailController.text.trim()}',
+      );
+    } catch (e) {
+      errorMessage(
+        'Failed to send password reset email: $e',
+      );
     } finally {
       isLoading(false);
     }

@@ -1,15 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/home_controller.dart';
-import '../../../model/chat_list_model.dart';
+import '../../../controllers/chat_controller.dart';
 import '../../../model/document_list_model.dart';
 import '../../../model/language_list_model.dart';
 import '../../../utils/custom_dropdown_widget.dart';
 
 class DesktopChatHeaderWidget extends StatelessWidget {
-  HomeController homeController;
-  DesktopChatHeaderWidget({super.key, required this.homeController});
+  DesktopChatHeaderWidget({super.key});
+
+  final chatController = Get.put(ChatController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +21,19 @@ class DesktopChatHeaderWidget extends StatelessWidget {
           Expanded(
             child: Obx(
               () => CustomDropdown(
-                items: homeController.chatList.value,
-                selectedValues: homeController.selectedChatList.value.isNotEmpty
-                    ? [homeController.selectedChatList.value.first]
+                items: chatController.chatRoomList.value,
+                selectedValues: chatController.selectedChatList.value.isNotEmpty
+                    ? [chatController.selectedChatList.value.first]
                     : [],
                 hintText: 'History',
                 onChanged: (newValues) {
-                  homeController.selectedChatList.value =
-                      newValues.cast<ChatListModel>();
+                  chatController.selectedChatList.value =
+                      newValues.cast<QueryDocumentSnapshot>();
+                  chatController.setCurrentChatRoomId(
+                      chatRoomId: newValues.first.id,
+                      chatRoomName: newValues.first['name']);
                 },
-                displayItem: (item) => item.name,
+                displayItem: (item) => item['name'],
                 selectionMode: SelectionMode.single,
               ),
             ),
@@ -38,11 +42,11 @@ class DesktopChatHeaderWidget extends StatelessWidget {
           Expanded(
             child: Obx(
               () => CustomDropdown(
-                items: homeController.documentList.value,
-                selectedValues: homeController.selectedDocumentList.value,
+                items: chatController.documentList.value,
+                selectedValues: chatController.selectedDocumentList.value,
                 hintText: 'Select PDF to get answer',
                 onChanged: (newValues) {
-                  homeController.selectedDocumentList.value =
+                  chatController.selectedDocumentList.value =
                       newValues.cast<DocumentListModel>();
                 },
                 displayItem: (item) => item.name,
@@ -54,11 +58,11 @@ class DesktopChatHeaderWidget extends StatelessWidget {
           Expanded(
             child: Obx(
               () => CustomDropdown(
-                items: homeController.languageList.value,
-                selectedValues: homeController.selectedLanguageList.value,
+                items: chatController.languageList.value,
+                selectedValues: chatController.selectedLanguageList.value,
                 hintText: 'Select the Language to get Answer',
                 onChanged: (newValues) {
-                  homeController.selectedLanguageList.value =
+                  chatController.selectedLanguageList.value =
                       newValues.cast<LanguageListModel>();
                 },
                 displayItem: (item) => item.name,

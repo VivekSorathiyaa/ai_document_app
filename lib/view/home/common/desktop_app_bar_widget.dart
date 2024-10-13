@@ -32,11 +32,7 @@ class DesktopAppBarWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-                flex: 3,
-                child: SearchbarWidget(
-                  homeController: homeController,
-                ))
+            Expanded(flex: 3, child: SearchbarWidget())
           ],
         ),
       ),

@@ -3,12 +3,6 @@ import 'dart:ui';
 import 'package:ai_document_app/router.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
-import 'package:ai_document_app/view/auth/forgot_password_view.dart';
-import 'package:ai_document_app/view/auth/login_view.dart';
-import 'package:ai_document_app/view/auth/signup_view.dart';
-import 'package:ai_document_app/view/auth/verification_otp_view.dart';
-import 'package:ai_document_app/view/home/home_view.dart';
-import 'package:ai_document_app/view/home/plans_pricing_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -19,9 +13,17 @@ import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'view/auth/add_new_password_view.dart';
+import 'view/auth/forgot_password_view.dart';
+import 'view/auth/login_view.dart';
+import 'view/auth/signup_view.dart';
+import 'view/auth/verification_otp_view.dart';
+import 'view/home/home_view.dart';
+import 'view/home/plans_pricing_view.dart';
 
 Future<void> main() async {
   BindingBase.debugZoneErrorsAreFatal = true;
+  WidgetsFlutterBinding.ensureInitialized();
+
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await Firebase.initializeApp(
@@ -191,45 +193,36 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// onGenerateRoute route switcher.
-// Navigate using the page name, `Navigator.pushNamed(context, ListPage.name)`.
-Route<dynamic> buildPage({
-  required String path,
-  Map<String, String> queryParams = const {},
-}) {
-  final User? currentUser = FirebaseAuth.instance.currentUser;
-  bool isLoggedIn = currentUser != null;
-
+Route<dynamic> buildPage(
+    {required String path, Map<String, String> queryParams = const {}}) {
   return Routes.noAnimation(
-    settings: RouteSettings(
-      name: (path.startsWith('/') == false) ? '/$path' : path,
-    ),
-    builder: (context) {
-      String pathName =
-          path != '/' && path.startsWith('/') ? path.substring(1) : path;
+      settings: RouteSettings(
+          name: (path.startsWith('/') == false) ? '/$path' : path),
+      builder: (context) {
+        String pathName =
+            path != '/' && path.startsWith('/') ? path.substring(1) : path;
+        final User? currentUser = FirebaseAuth.instance.currentUser;
+        bool isLoggedIn = currentUser != null;
 
-      if (!isLoggedIn) {
-        return LoginView();
-      } else if (pathName == '/' || pathName == LoginView.name) {
-        return HomeView();
-      } else if (pathName == HomeView.name) {
-        return HomeView();
-      } else if (pathName == ForgotPasswordView.name) {
-        return ForgotPasswordView();
-      } else if (pathName == SignupView.name) {
-        return SignupView();
-      } else if (pathName == VerificationOtpView.name) {
-        return VerificationOtpView();
-      } else if (pathName == AddNewPasswordView.name) {
-        return AddNewPasswordView();
-      } else if (pathName == PlansPricingView.name) {
-        return PlansPricingView();
-      } else {
-        return const SizedBox
-            .shrink(); // Default empty widget for unknown routes
-      }
-    },
-  );
+        // Redirect to HomeView if the user is logged in and trying to access the login/signup views
+        if (isLoggedIn &&
+            (pathName == '/' ||
+                pathName == LoginView.name ||
+                pathName == SignupView.name)) {
+          return HomeView();
+        }
+
+        return switch (pathName) {
+          '/' || LoginView.name => LoginView(),
+          HomeView.name => HomeView(),
+          ForgotPasswordView.name => ForgotPasswordView(),
+          SignupView.name => SignupView(),
+          VerificationOtpView.name => VerificationOtpView(),
+          AddNewPasswordView.name => AddNewPasswordView(),
+          PlansPricingView.name => PlansPricingView(),
+          _ => const SizedBox.shrink(),
+        };
+      });
 }
 
 // Navigate to a named route

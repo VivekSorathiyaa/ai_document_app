@@ -6,6 +6,7 @@ class DocumentModel {
   final double size;
   final String date;
   final String actions;
+  final String url;
 
   DocumentModel({
     required this.id,
@@ -15,5 +16,6 @@ class DocumentModel {
     required this.size,
     required this.date,
     required this.actions,
+    required this.url,
   });
 }

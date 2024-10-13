@@ -13,18 +13,34 @@ class DocumentFooterWidget extends StatelessWidget {
     super.key,
     required this.documentsController,
   });
-
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       final currentPage = documentsController.currentPage.value;
       final rowsPerPage = documentsController.rowsPerPage.value;
-      final totalPages =
-          (documentsController.documentDataList.value.length / rowsPerPage)
-              .ceil();
-      final startItem = (currentPage * rowsPerPage) + 1;
-      final endItem = ((currentPage + 1) * rowsPerPage)
-          .clamp(1, documentsController.documentDataList.value.length);
+      final documentDataList = documentsController.documentDataList.value;
+
+      // Check if the list is empty
+      if (documentDataList.isEmpty) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 46, horizontal: 24),
+          child: Text(
+            "No results found",
+            style: AppTextStyle.normalRegular18,
+          ),
+        );
+      }
+
+      final totalResults = documentDataList.length;
+      final totalPages = (totalResults / rowsPerPage).ceil();
+
+      // Ensure rowsPerPage is greater than 0
+      final effectiveRowsPerPage = rowsPerPage > 0 ? rowsPerPage : 1;
+
+      // Calculate start and end item indices safely
+      final startItem = (currentPage * effectiveRowsPerPage) + 1;
+      final endItem =
+          ((currentPage + 1) * effectiveRowsPerPage).clamp(1, totalResults);
 
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 46, horizontal: 24),
@@ -33,7 +49,7 @@ class DocumentFooterWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                "Showing $startItem to $endItem of ${documentsController.documentDataList.value.length} results",
+                "Showing $startItem to $endItem of $totalResults results",
                 style: AppTextStyle.normalRegular18,
                 maxLines: 1,
                 overflow: TextOverflow.fade,
@@ -53,8 +69,9 @@ class DocumentFooterWidget extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         top: 8, bottom: 8, right: 16, left: 20),
                     decoration: BoxDecoration(
-                        border: Border.all(color: primaryWhite),
-                        borderRadius: BorderRadius.circular(8)),
+                      border: Border.all(color: primaryWhite),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: Row(
                       children: [
                         const Icon(
@@ -68,15 +85,11 @@ class DocumentFooterWidget extends StatelessWidget {
                             'Previous',
                             style: AppTextStyle.normalBold16,
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
-                // Text(
-                //   'Page ${currentPage + 1} of $totalPages',
-                //   style: AppTextStyle.normalSemiBold14,
-                // ),
                 width16,
                 GestureDetector(
                   onTap: currentPage < totalPages - 1
@@ -90,8 +103,9 @@ class DocumentFooterWidget extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         top: 8, bottom: 8, right: 20, left: 16),
                     decoration: BoxDecoration(
-                        border: Border.all(color: primaryWhite),
-                        borderRadius: BorderRadius.circular(8)),
+                      border: Border.all(color: primaryWhite),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: Row(
                       children: [
                         Text(

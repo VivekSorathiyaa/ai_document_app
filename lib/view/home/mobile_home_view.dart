@@ -40,7 +40,6 @@ class MobileHomeView extends StatelessWidget {
       key: _scaffoldKey,
       backgroundColor: primaryBlack,
       appBar: MobileAppBarWidget(
-        homeController: homeController,
         onMenuTap: () {
           _scaffoldKey.currentState?.openDrawer();
         },
@@ -87,7 +86,7 @@ class MobileHomeView extends StatelessWidget {
     return Obx(() {
       switch (homeController.selectedMenuModel.value.id) {
         case 0:
-          return MobileChatHeaderWidget(homeController: homeController);
+          return MobileChatHeaderWidget();
         case 1:
           return DocumentsHeaderWidget(
               documentsController: documentsController);
@@ -114,9 +113,7 @@ class MobileHomeView extends StatelessWidget {
           Obx(() {
             switch (homeController.selectedMenuModel.value.id) {
               case 0:
-                return homeController.chatRoomList.value.isNotEmpty
-                    ? ChatBodyWidget(homeController: homeController)
-                    : NoDataWiget();
+                return ChatBodyWidget();
               case 1:
                 return MobileDocumentsWidget(
                     documentsController: documentsController);
@@ -136,7 +133,7 @@ class MobileHomeView extends StatelessWidget {
   Widget _buildFooter() {
     return Obx(() {
       if (homeController.selectedMenuModel.value.id == 0) {
-        return ChatFooterWidget(homeController: homeController);
+        return ChatFooterWidget();
       }
       return const SizedBox();
     });

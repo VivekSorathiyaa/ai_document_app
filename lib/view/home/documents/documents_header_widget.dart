@@ -1,6 +1,7 @@
 import 'package:ai_document_app/controllers/documents_controller.dart';
 import 'package:ai_document_app/utils/app_asset.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
+import 'package:ai_document_app/utils/common_method.dart';
 import 'package:ai_document_app/utils/primary_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -91,7 +92,9 @@ class DocumentsHeaderWidget extends StatelessWidget {
                         : 3,
                     child: PrimaryTextButton(
                       title: "Upload New Documents",
-                      onPressed: () {},
+                      onPressed: () {
+                        CommonMethod.uploadDocument(context);
+                      },
                       fontSize: isDesktop ? null : 14,
                       height: ResponsiveValue<double>(
                         context,

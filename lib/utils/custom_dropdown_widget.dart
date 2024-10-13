@@ -77,8 +77,7 @@ class CustomDropdown extends StatelessWidget {
               value: item,
               child: Row(
                 children: [
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
+                  Expanded(
                     child: Text(
                       displayItem != null
                           ? displayItem!(item)

@@ -1,32 +1,31 @@
 import 'package:ai_document_app/controllers/home_controller.dart';
-import 'package:ai_document_app/model/chat_list_model.dart';
 import 'package:ai_document_app/utils/color.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/chat_controller.dart';
 import '../../../utils/app_text_style.dart';
 import '../../../utils/common_dialog.dart';
 import 'searchbar_widget.dart';
 
 class MobileAppBarWidget extends StatelessWidget
     implements PreferredSizeWidget {
-  final HomeController homeController;
   final VoidCallback onMenuTap;
 
   MobileAppBarWidget({
-    required this.homeController,
     required this.onMenuTap,
   });
+  final chatController = Get.put(ChatController());
+  final homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Obx(
         () => homeController.isSearchOpen.value
-            ? SearchbarWidget(
-                homeController: homeController,
-              )
+            ? SearchbarWidget()
             : Text(
                 homeController.selectedMenuModel.value.name,
                 style: AppTextStyle.normalBold18,
@@ -88,7 +87,7 @@ class MobileAppBarWidget extends StatelessWidget
         children: [
           Obx(
             () {
-              if (homeController.chatList.value.isEmpty) {
+              if (chatController.chatRoomList.value.isEmpty) {
                 return Center(
                     child: Text(
                   'No history available',
@@ -97,15 +96,15 @@ class MobileAppBarWidget extends StatelessWidget
               }
               return Obx(
                 () => Column(
-                  children: homeController.chatList.value.map((element) {
+                  children: chatController.chatRoomList.value.map((element) {
                     return HistoryMenuTileWidget(
                       model: element,
                       onTap: () {
-                        homeController.selectedChatList.value = [element];
-                        homeController.selectedChatList.refresh();
+                        chatController.selectedChatList.value = [element];
+                        chatController.selectedChatList.refresh();
                         Get.back(); // Close dialog after selection
                       },
-                      isSelect: homeController.selectedChatList.value
+                      isSelect: chatController.selectedChatList.value
                           .contains(element),
                     );
                   }).toList(),
@@ -130,7 +129,7 @@ class MobileAppBarWidget extends StatelessWidget
 }
 
 Widget HistoryMenuTileWidget({
-  required ChatListModel model,
+  required QueryDocumentSnapshot model,
   required VoidCallback onTap,
   required bool isSelect,
 }) {
@@ -157,7 +156,8 @@ Widget HistoryMenuTileWidget({
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  model.name,
+                  // model.name,
+                  model['name'].toString(),
                   style: AppTextStyle.normalBold16,
                   maxLines: 1,
                   textAlign: TextAlign.start,
