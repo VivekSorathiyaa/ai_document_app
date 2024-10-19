@@ -4,6 +4,7 @@ import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
 import 'package:ai_document_app/utils/common_method.dart';
 import 'package:ai_document_app/utils/static_decoration.dart';
+import 'package:ai_document_app/view/home/documents/upload_document_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -19,49 +20,51 @@ class DesktopDocumentsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(9),
-        child: SfDataGrid(
-          source: TableDataSource(documentsController.paginatedData),
-          allowSorting: false,
-          rowsPerPage: 10,
-          headerGridLinesVisibility: GridLinesVisibility.none,
-          gridLinesVisibility: GridLinesVisibility.none,
-          columnWidthMode: ColumnWidthMode.fill,
-          columns: <GridColumn>[
-            GridColumn(
-              allowSorting: true,
-              columnName: 'Name',
-              label: buildHeader(title: 'Name', context: context),
-            ),
-            GridColumn(
-              allowSorting: true,
-              columnName: 'Uploaded By',
-              label: buildHeader(title: 'Uploaded By', context: context),
-            ),
-            GridColumn(
-              allowSorting: true,
-              columnName: 'Size',
-              label: buildHeader(title: 'Size', context: context),
-            ),
-            GridColumn(
-              allowSorting: true,
-              columnName: 'Status',
-              label: buildHeader(title: 'Status', context: context),
-            ),
-            GridColumn(
-              allowSorting: true,
-              columnName: 'Date',
-              label: buildHeader(title: 'Date', context: context),
-            ),
-            GridColumn(
-              allowSorting: false,
-              columnName: 'Actions',
-              label: buildHeader(title: 'Actions', context: context),
-            ),
-          ],
-        ),
-      );
+      return documentsController.isUploadWidgetOpen.value
+          ? UploadDocumentWidget()
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(9),
+              child: SfDataGrid(
+                source: TableDataSource(documentsController.paginatedData),
+                allowSorting: false,
+                rowsPerPage: 10,
+                headerGridLinesVisibility: GridLinesVisibility.none,
+                gridLinesVisibility: GridLinesVisibility.none,
+                columnWidthMode: ColumnWidthMode.fill,
+                columns: <GridColumn>[
+                  GridColumn(
+                    allowSorting: true,
+                    columnName: 'Name',
+                    label: buildHeader(title: 'Name', context: context),
+                  ),
+                  GridColumn(
+                    allowSorting: true,
+                    columnName: 'Uploaded By',
+                    label: buildHeader(title: 'Uploaded By', context: context),
+                  ),
+                  GridColumn(
+                    allowSorting: true,
+                    columnName: 'Size',
+                    label: buildHeader(title: 'Size', context: context),
+                  ),
+                  GridColumn(
+                    allowSorting: true,
+                    columnName: 'Status',
+                    label: buildHeader(title: 'Status', context: context),
+                  ),
+                  GridColumn(
+                    allowSorting: true,
+                    columnName: 'Date',
+                    label: buildHeader(title: 'Date', context: context),
+                  ),
+                  GridColumn(
+                    allowSorting: false,
+                    columnName: 'Actions',
+                    label: buildHeader(title: 'Actions', context: context),
+                  ),
+                ],
+              ),
+            );
     });
   }
 

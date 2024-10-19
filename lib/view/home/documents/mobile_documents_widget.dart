@@ -2,6 +2,7 @@ import 'package:ai_document_app/controllers/documents_controller.dart';
 import 'package:ai_document_app/model/document_model.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
+import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -109,6 +110,7 @@ class MobileDocumentsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(child: _buildDocumentDetails(document)),
+            customWidth(5),
             _buildActionsRow(document),
           ],
         ),
@@ -129,28 +131,40 @@ class MobileDocumentsWidget extends StatelessWidget {
           fit: BoxFit.scaleDown,
         ),
         const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              document.name,
-              style: AppTextStyle.normalSemiBold14.copyWith(
-                color: Colors.white,
-                fontSize: 14,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      document.name,
+                      style: AppTextStyle.normalSemiBold14.copyWith(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                _buildIconWithText(AppAsset.clipboard,
-                    '${document.size.toStringAsFixed(2)} MB'),
-                const SizedBox(width: 12),
-                _buildIconWithText(AppAsset.date, document.date),
-              ],
-            ),
-          ],
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildIconWithText(AppAsset.clipboard,
+                        '${document.size.toStringAsFixed(2)} MB'),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                      child: _buildIconWithText(AppAsset.date, document.date)),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -168,11 +182,15 @@ class MobileDocumentsWidget extends StatelessWidget {
           fit: BoxFit.scaleDown,
         ),
         const SizedBox(width: 4),
-        Text(
-          text,
-          style: AppTextStyle.normalRegular14.copyWith(
-            color: Colors.white70,
-            fontSize: 12,
+        Expanded(
+          child: Text(
+            text,
+            style: AppTextStyle.normalRegular14.copyWith(
+              color: Colors.white70,
+              fontSize: 12,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.visible,
           ),
         ),
       ],
@@ -200,7 +218,7 @@ class MobileDocumentsWidget extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.white10,
@@ -214,8 +232,9 @@ class MobileDocumentsWidget extends StatelessWidget {
         ),
         child: SvgPicture.asset(
           iconPath,
-          width: 20,
-          height: 20,
+          width: 16,
+          height: 16,
+          fit: BoxFit.scaleDown,
           color: Colors.white,
         ),
       ),

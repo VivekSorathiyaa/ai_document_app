@@ -20,6 +20,10 @@ class DocumentFooterWidget extends StatelessWidget {
       final rowsPerPage = documentsController.rowsPerPage.value;
       final documentDataList = documentsController.documentDataList.value;
 
+      if (documentsController.isUploadWidgetOpen.value) {
+        return const SizedBox.shrink();
+      }
+
       // Check if the list is empty
       if (documentDataList.isEmpty) {
         return Container(

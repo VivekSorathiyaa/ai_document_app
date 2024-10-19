@@ -59,8 +59,8 @@ class ChatBodyWidget extends StatelessWidget {
                           final isLastIndex = (index == 0);
                           return isSender
                               ? Padding(
-                                  padding:
-                                      EdgeInsets.only(top: index == 0 ? 20 : 0),
+                                  padding: EdgeInsets.only(
+                                      top: index == 0 ? 20 : 10),
                                   child: UserWidget(
                                       messageData: messageData,
                                       isDesktop: isDesktop),
@@ -199,27 +199,32 @@ class ChatBodyWidget extends StatelessWidget {
       required bool isLastIndex}) {
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 50),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+      child: Column(
         children: [
-          SvgPicture.asset(
-            AppAsset.aiAvatar,
-            height: 34,
-            width: 34,
-            fit: BoxFit.scaleDown,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SvgPicture.asset(
+                AppAsset.aiAvatar,
+                height: 34,
+                width: 34,
+                fit: BoxFit.scaleDown,
+              ),
+              customWidth(10),
+              Flexible(
+                child: CommonMarkdownWidget(
+                  data: messageData['text'],
+                ),
+              ),
+            ],
           ),
-          customWidth(10),
-          Flexible(
-            child: CommonMarkdownWidget(
-              data: messageData['text'],
-            ),
-          ),
-          Column(
+          height20,
+          Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(right: 12),
                 child: SvgPicture.asset(
                   AppAsset.copy,
                   height: 20,
@@ -228,7 +233,7 @@ class ChatBodyWidget extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(right: 12),
                 child: SvgPicture.asset(
                   AppAsset.refresh,
                   height: 20,
@@ -237,7 +242,7 @@ class ChatBodyWidget extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(right: 12),
                 child: SvgPicture.asset(
                   AppAsset.like,
                   height: 20,
@@ -245,9 +250,8 @@ class ChatBodyWidget extends StatelessWidget {
                   fit: BoxFit.scaleDown,
                 ),
               ),
-              customWidth(40),
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(right: 12),
                 child: SvgPicture.asset(
                   AppAsset.dislike,
                   height: 20,

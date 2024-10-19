@@ -1,33 +1,29 @@
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:math' as math;
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:ai_document_app/main.dart';
 import 'package:ai_document_app/utils/primary_text_button.dart';
 import 'package:ai_document_app/view/auth/login_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:js/js.dart';
-import 'package:js/js_util.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf_text/pdf_text.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/document_model.dart';
 import '../utils/color.dart';
 import 'app_text_style.dart';
-
-@JS('extractTextFromPDF')
-external dynamic extractTextFromPDF(String pdfUrl);
 
 class CommonMethod {
   static FirebaseAuth auth = FirebaseAuth.instance;
@@ -292,7 +288,7 @@ class CommonMethod {
     }
   }
 
-  static Future<void> uploadDocument(BuildContext context) async {
+  static Future<void> uploadDocument() async {
     if (auth.currentUser == null) {
       CommonMethod.getXSnackBar(
         'Error',
@@ -300,76 +296,44 @@ class CommonMethod {
       );
       return;
     }
-
     FilePickerResult? result;
     try {
-      if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-        result = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: ['pdf'], // Allow only PDF files
-        );
-      } else {
-        // For web platform
-        html.FileUploadInputElement uploadInput = html.FileUploadInputElement()
-          ..accept = '.pdf'; // Accept only PDF files
-        uploadInput.click();
-        await uploadInput.onChange.first;
-
-        if (uploadInput.files!.isEmpty) return;
-
-        final html.File file = uploadInput.files!.first;
-        final reader = html.FileReader();
-        reader.readAsArrayBuffer(file);
-        await reader.onLoad.first;
-
-        result = FilePickerResult([
-          PlatformFile(
-            name: file.name,
-            size: file.size!.toInt(),
-            bytes: reader.result as Uint8List?,
-          ),
-        ]);
-      }
-
+      result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+      );
       if (result != null && result.files.isNotEmpty) {
         PlatformFile file = result.files.first;
         String fileName = file.name;
         String fileId = Uuid().v4();
-
-        // Add document entry to Firestore with "Processing" status
         await FirebaseFirestore.instance
             .collection('documents')
             .doc(fileId)
             .set({
           'name': fileName,
           'uploaded_by': auth.currentUser?.email ?? 'Unknown',
-          'size': file.size.toDouble(), // Store size as double
+          'size': file.size.toDouble(),
           'upload_status': 'Processing',
           'timestamp': FieldValue.serverTimestamp(),
         });
         final storageRef =
             FirebaseStorage.instance.ref('documents/$fileId.pdf');
         UploadTask uploadTask = storageRef.putData(file.bytes!);
-
         TaskSnapshot snapshot = await uploadTask;
         String downloadUrl = await snapshot.ref.getDownloadURL();
-
-        // Update the document entry with the completed status
         await FirebaseFirestore.instance
             .collection('documents')
             .doc(fileId)
             .update({
           'url': downloadUrl,
           'upload_status': 'Completed',
-          'timestamp':
-              FieldValue.serverTimestamp(), // Update timestamp if needed
+          'timestamp': FieldValue.serverTimestamp(),
         });
 
-        await _extractTextFromPDF(
-          context: context,
+        await extractTextFromPDF(
           downloadUrl: downloadUrl,
           fileName: fileName,
-          fileSize: file.size.toDouble(), // Use double for file size
+          fileSize: file.size.toDouble(),
           fileId: fileId,
         );
       } else {
@@ -381,51 +345,123 @@ class CommonMethod {
     }
   }
 
-  static String? extractedText;
-
-  static Future<void> _extractTextFromPDF({
-    required BuildContext context,
+  static Future<String> extractTextFromPDF({
     required String downloadUrl,
     required String fileId,
     required String fileName,
     required double fileSize,
   }) async {
-    print("Extracting text from PDF: $downloadUrl");
+    try {
+      print("Extracting text from downloadUrl: $downloadUrl");
+      print("Extracting text from fileId: $fileId");
+      print("Extracting text from fileName: $fileName");
+      print("Extracting text from fileSize: $fileSize");
 
-    // try {
-    if (kIsWeb) {
-      extractedText =
-          await promiseToFuture<String>(extractTextFromPDF(downloadUrl));
-    } else {
-      FirebaseStorage storage = FirebaseStorage.instance;
-      Uri uri = Uri.parse(downloadUrl);
-      String path = uri.path.substring(1);
-      Reference ref = storage.ref().child(path);
-      final tempDir = await getTemporaryDirectory();
-      final tempFilePath = '${tempDir.path}/temp.pdf';
-      File tempFile = File(tempFilePath);
-      await ref.writeToFile(tempFile);
+      final response = await Dio().get(
+        downloadUrl,
+        options: Options(responseType: ResponseType.bytes),
+      );
 
-      final doc = await PDFDoc.fromFile(tempFile);
-      extractedText = await doc.text;
+      if (response.statusCode == 200) {
+        Uint8List bytes = response.data;
 
-      print("----extractedText--->$extractedText");
+        // Check if bytes are not empty
+        if (bytes.isEmpty) {
+          print('Downloaded bytes are empty.');
+          return '';
+        }
+
+        // Create a PdfDocument from the downloaded bytes
+        final PdfDocument document = PdfDocument(inputBytes: bytes);
+
+        // Extract text from the PDF
+        String content = PdfTextExtractor(document).extractText();
+
+        // Dispose of the document to free resources
+        document.dispose();
+
+        // Check if the content is not empty before updating Firestore
+        if (content.isNotEmpty) {
+          // Update Firestore with the extracted content
+          await collectionDocuments.doc(fileId).update({
+            'id': fileId,
+            'name': fileName,
+            'url': downloadUrl,
+            'uploaded_by': CommonMethod.auth.currentUser?.email ?? 'Unknown',
+            'size': fileSize,
+            'upload_status': 'Completed',
+            'extracted_text': content,
+            'timestamp': FieldValue.serverTimestamp(),
+          });
+
+          print("Extracted text: $content");
+          return content;
+        } else {
+          print('No text extracted from the PDF.');
+          return '';
+        }
+      } else {
+        print('Failed to download PDF: ${response.statusCode}');
+        return '';
+      }
+    } catch (e) {
+      print('Error extracting text from PDF: $e');
+      return '';
+    }
+  }
+
+  static String getFileSizeInMB(dynamic file) {
+    if (file is PlatformFile) {
+      // If it's a PlatformFile (web or mobile)
+      if (file.bytes != null) {
+        // Web file
+        final sizeInBytes = file.size; // size is available in bytes for web
+        return (sizeInBytes / (1024 * 1024))
+            .toStringAsFixed(2); // Convert to MB
+      } else if (file.path != null) {
+        // Mobile/Desktop file
+        final nativeFile = io.File(file.path!);
+        return (nativeFile.lengthSync() / (1024 * 1024))
+            .toStringAsFixed(2); // Convert to MB
+      }
+    } else if (file is io.File) {
+      // If it's a native file (mobile/Desktop)
+      return (file.lengthSync() / (1024 * 1024))
+          .toStringAsFixed(2); // Convert to MB
     }
 
-    await collectionDocuments.doc(fileId).update({
-      'id': fileId,
-      'name': fileName,
-      'url': downloadUrl,
-      'uploaded_by': CommonMethod.auth.currentUser?.email ?? 'Unknown',
-      'size': fileSize,
-      'upload_status': 'Completed',
-      'extracted_text': extractedText,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-    // } catch (e) {
-    //   print('Error extracting text from PDF: $e');
-    //   CommonMethod.getXSnackBar('Error', 'Error extracting text from PDF');
-    // }
+    return "0.00"; // Default value if file is invalid
+  }
+
+  static String getFileName(dynamic file) {
+    if (file is PlatformFile) {
+      // For PlatformFile (web or mobile)
+      return file.name; // Directly return the file name
+    } else if (file is io.File) {
+      // For mobile applications
+      return file.path.split('/').last; // Extract file name from path
+    } else if (file is html.File) {
+      // For web applications
+      return file.name; // Get file name
+    } else {
+      return "Unknown"; // Default value if file type is unsupported
+    }
+  }
+
+  /// Get the file size from a dynamic file input.
+  static int getFileSize(dynamic file) {
+    if (file is PlatformFile) {
+      // For PlatformFile (web or mobile)
+      return file.size; // Get file size
+    } else if (file is io.File) {
+      // For mobile applications
+      return file.lengthSync(); // Get file size
+    } else if (file is html.File) {
+      // For web applications
+      return file.size; // Get file size
+    } else {
+      return 0; // Default value if file type is unsupported
+    }
   }
 
   static Future<void> deleteDocumentAndFile(DocumentModel data) async {

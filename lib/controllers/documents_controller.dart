@@ -8,6 +8,7 @@ class DocumentsController extends GetxController {
   final RxList<DocumentModel> documentDataList = <DocumentModel>[].obs;
   final RxInt rowsPerPage = 10.obs;
   final RxInt currentPage = 0.obs;
+  RxBool isUploadWidgetOpen = false.obs;
 
   @override
   void onInit() {

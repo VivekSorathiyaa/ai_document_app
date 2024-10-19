@@ -7,17 +7,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:js/js.dart';
 
-import '../model/document_list_model.dart';
-import '../model/language_list_model.dart';
+// import 'package:js/js.dart';
+
 import '../model/suggestion_model.dart';
 import '../utils/app_text_style.dart';
 import '../utils/color.dart';
 import '../utils/common_method.dart';
 
-@JS('extractTextFromPDF')
-external dynamic extractTextFromPDF(String pdfUrl);
+// @JS('extractTextFromPDF')
+// external dynamic extractTextFromPDF(String pdfUrl);
 
 class ChatController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -33,29 +32,10 @@ class ChatController extends GetxController {
   var extractedTextList = <String>[].obs;
   var messagesList = <QueryDocumentSnapshot>[].obs;
   RxList<QueryDocumentSnapshot> chatRoomList = <QueryDocumentSnapshot>[].obs;
-  var documentsList = <DocumentSnapshot>[].obs;
+  RxList<QueryDocumentSnapshot> documentsList = <QueryDocumentSnapshot>[].obs;
   RxnString geminiApiKey = RxnString();
   RxnString openaiApiKey = RxnString();
-  RxList<DocumentListModel> documentList = RxList<DocumentListModel>([
-    DocumentListModel(id: '1', name: "document 1"),
-    DocumentListModel(id: '2', name: "document 2"),
-    DocumentListModel(id: '3', name: "document 3"),
-    DocumentListModel(id: '4', name: "document 4"),
-    DocumentListModel(id: '5', name: "document 5"),
-    DocumentListModel(id: '6', name: "document 6"),
-    DocumentListModel(id: '7', name: "document 7"),
-    DocumentListModel(id: '8', name: "document 8"),
-  ]);
-  RxList<LanguageListModel> languageList = RxList<LanguageListModel>([
-    LanguageListModel(id: '1', name: "Hindi"),
-    LanguageListModel(id: '2', name: "Gujrati"),
-    LanguageListModel(id: '3', name: "Tamil"),
-    LanguageListModel(id: '4', name: "Kannad"),
-    LanguageListModel(id: '5', name: "Rassian"),
-    LanguageListModel(id: '6', name: "Urdu"),
-    LanguageListModel(id: '7', name: "Spanish"),
-    LanguageListModel(id: '8', name: "Chines"),
-  ]);
+
   RxList<SuggestionModel> suggestionList = RxList<SuggestionModel>([
     SuggestionModel(id: '1', name: "Write summary of book?"),
     SuggestionModel(id: '2', name: "Write summary of book?"),
@@ -69,8 +49,8 @@ class ChatController extends GetxController {
 
   RxList<QueryDocumentSnapshot> selectedChatList =
       <QueryDocumentSnapshot>[].obs;
-  RxList<DocumentListModel> selectedDocumentList = <DocumentListModel>[].obs;
-  RxList<LanguageListModel> selectedLanguageList = <LanguageListModel>[].obs;
+  RxList<QueryDocumentSnapshot> selectedDocumentList =
+      <QueryDocumentSnapshot>[].obs;
 
   RxBool loading = false.obs;
 
@@ -78,7 +58,7 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     _listenToChatRooms();
-
+    fetchDocuments(CommonMethod.auth.currentUser?.email ?? "");
     listenToSelectedDocuments();
   }
 
@@ -102,10 +82,7 @@ class ChatController extends GetxController {
           .snapshots()
           .listen((documentSnapshot) {
         if (documentSnapshot.exists) {
-          // Cast the data to Map<String, dynamic>
           final data = documentSnapshot.data() as Map<String, dynamic>?;
-
-          // Use the casted data to access 'selected_documents'
           final List<dynamic> documents = data?['selected_documents'] ?? [];
           selectedDocumentsId.value = List<String>.from(documents);
           selectedDocumentsId.refresh();
@@ -122,7 +99,8 @@ class ChatController extends GetxController {
         .orderBy('timestamp', descending: true)
         .snapshots()
         .listen((snapshot) {
-      documentsList.assignAll(snapshot.docs); // Update the reactive list
+      documentsList.assignAll(snapshot.docs);
+      documentsList.refresh();
       listenToSelectedDocuments();
     });
   }

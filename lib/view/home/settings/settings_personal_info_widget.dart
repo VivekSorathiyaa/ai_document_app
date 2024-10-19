@@ -3,7 +3,6 @@ import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
 import 'package:ai_document_app/utils/input_text_field_widget.dart';
 import 'package:ai_document_app/utils/static_decoration.dart';
-import 'package:ai_document_app/utils/uploading_documets_widget.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_dropdown.dart';
 import 'package:country_pickers/utils/utils.dart';
@@ -209,11 +208,14 @@ Widget _buildPhotoWidget(BuildContext context, bool isFromProfile) {
                   ),
                 CommonFileDropzone(
                   onFileUploaded: (String downloadUrl) {},
+                  allowedFormats: ['.jpeg', 'png', 'jpg'],
+                  maxSizeInMB: 16,
+                  maxFiles: 1,
                 ),
-                if (isFromProfile == false)
-                  ...List.generate(3, (index) {
-                    return const UploadingDocumetsWidget();
-                  })
+                // if (isFromProfile == false)
+                //   ...List.generate(3, (index) {
+                //     return const UploadingDocumetsWidget();
+                //   })
               ],
             ),
           )

@@ -1,10 +1,12 @@
 import 'package:ai_document_app/controllers/documents_controller.dart';
 import 'package:ai_document_app/utils/app_asset.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
-import 'package:ai_document_app/utils/common_method.dart';
 import 'package:ai_document_app/utils/primary_text_button.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+
+import '../../../utils/color.dart';
 
 class DocumentsHeaderWidget extends StatelessWidget {
   final DocumentsController documentsController;
@@ -17,8 +19,11 @@ class DocumentsHeaderWidget extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-          bottom:
-              ResponsiveBreakpoints.of(context).smallerThan(DESKTOP) ? 0 : 40,
+          bottom: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
+              ? 0
+              : documentsController.isUploadWidgetOpen.value
+                  ? 0
+                  : 40,
           top: 4),
       child: ResponsiveRowColumn(
         layout: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
@@ -36,79 +41,90 @@ class DocumentsHeaderWidget extends StatelessWidget {
                   bottom: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
                       ? 20
                       : 0),
-              child: Text(
-                "Uploaded PDFs",
-                style: AppTextStyle.normalSemiBold18.copyWith(
-                    fontSize:
-                        ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
-                            ? 14
-                            : 18),
-                overflow: TextOverflow.ellipsis, // Handle overflow gracefully
-              ),
-            ),
-          ),
-
-          // Button Section
-          ResponsiveRowColumnItem(
-            rowFlex: 2,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 474),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Filters Button
-                  Expanded(
-                    flex: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
-                        ? 3
-                        : 2,
-                    child: PrimaryTextButton(
-                      title: "Filters",
-                      onPressed: () {},
-                      fontSize: isDesktop ? null : 14,
-                      height: ResponsiveValue<double>(
-                        context,
-                        defaultValue: 45.0,
-                        conditionalValues: [
-                          const Condition.smallerThan(
-                              name: DESKTOP, value: 40.0),
-                        ],
-                      ).value!,
-                      icon: AppAsset.filter,
-                    ),
+                  Obx(
+                    () => documentsController.isUploadWidgetOpen.value
+                        ? GestureDetector(
+                            onTap: () {
+                              documentsController.isUploadWidgetOpen.value =
+                                  false;
+                              documentsController.isUploadWidgetOpen.refresh();
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(right: 15, top: 4),
+                              child: Icon(
+                                CupertinoIcons.back,
+                                color: primaryWhite,
+                              ),
+                            ),
+                          )
+                        : SizedBox.shrink(),
                   ),
-                  SizedBox(
-                    width: ResponsiveValue<double>(
-                      context,
-                      defaultValue: 24.0,
-                      conditionalValues: [
-                        const Condition.smallerThan(name: DESKTOP, value: 16.0),
-                      ],
-                    ).value!,
-                  ),
-                  // Upload New Documents Button
                   Expanded(
-                    flex: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
-                        ? 5
-                        : 3,
-                    child: PrimaryTextButton(
-                      title: "Upload New Documents",
-                      onPressed: () {
-                        CommonMethod.uploadDocument(context);
-                      },
-                      fontSize: isDesktop ? null : 14,
-                      height: ResponsiveValue<double>(
-                        context,
-                        defaultValue: 45.0,
-                        conditionalValues: [
-                          const Condition.smallerThan(
-                              name: DESKTOP, value: 40.0),
-                        ],
-                      ).value!,
-                      icon: AppAsset.plus,
+                    child: Text(
+                      "Uploaded PDFs",
+                      style: AppTextStyle.normalSemiBold18.copyWith(
+                          fontSize: ResponsiveBreakpoints.of(context)
+                                  .smallerThan(DESKTOP)
+                              ? 14
+                              : 16),
+                      overflow:
+                          TextOverflow.ellipsis, // Handle overflow gracefully
                     ),
                   ),
                 ],
               ),
+            ),
+          ),
+
+          ResponsiveRowColumnItem(
+            rowFlex: 2,
+            child: Obx(
+              () => documentsController.isUploadWidgetOpen.value
+                  ? SizedBox.shrink()
+                  : ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 474),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Filters Button
+                          Expanded(
+                            flex: ResponsiveBreakpoints.of(context)
+                                    .smallerThan(DESKTOP)
+                                ? 3
+                                : 2,
+                            child: PrimaryTextButton(
+                              title: "Filters",
+                              onPressed: () {},
+                              fontSize: 14,
+                              height: 40,
+                              icon: AppAsset.filter,
+                            ),
+                          ),
+                          SizedBox(width: 24),
+                          // Upload New Documents Button
+                          Expanded(
+                            flex: ResponsiveBreakpoints.of(context)
+                                    .smallerThan(DESKTOP)
+                                ? 5
+                                : 3,
+                            child: PrimaryTextButton(
+                              title: "Upload New Documents",
+                              onPressed: () {
+                                documentsController.isUploadWidgetOpen.value =
+                                    true;
+                                documentsController.isUploadWidgetOpen
+                                    .refresh();
+                              },
+                              fontSize: 14,
+                              height: 40,
+                              icon: AppAsset.plus,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
           ),
         ],

@@ -29,5 +29,6 @@ class AppAsset {
   static const date = 'assets/images/date.svg';
   static const cloud = 'assets/images/cloud.svg';
   static const check = 'assets/images/check.svg';
+  static const checkGrey = 'assets/images/check_grey.svg';
   static const aiJson = 'assets/json/ai.json';
 }
