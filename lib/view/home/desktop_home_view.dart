@@ -239,7 +239,7 @@ class DeskTopHomeView extends StatelessWidget {
       case 3:
         return SettingsWidget(settingsController: settingsController);
       default:
-        return NoDataWiget();
+        return NoDataWidget();
     }
   }
 

@@ -59,7 +59,7 @@ class DocumentsHeaderWidget extends StatelessWidget {
                               ),
                             ),
                           )
-                        : SizedBox.shrink(),
+                        : const SizedBox.shrink(),
                   ),
                   Expanded(
                     child: Text(
@@ -82,7 +82,7 @@ class DocumentsHeaderWidget extends StatelessWidget {
             rowFlex: 2,
             child: Obx(
               () => documentsController.isUploadWidgetOpen.value
-                  ? SizedBox.shrink()
+                  ? const SizedBox.shrink()
                   : ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 474),
                       child: Row(
@@ -102,7 +102,7 @@ class DocumentsHeaderWidget extends StatelessWidget {
                               icon: AppAsset.filter,
                             ),
                           ),
-                          SizedBox(width: 24),
+                          const SizedBox(width: 24),
                           // Upload New Documents Button
                           Expanded(
                             flex: ResponsiveBreakpoints.of(context)

@@ -5,6 +5,7 @@ import 'package:ai_document_app/utils/color.dart';
 import 'package:ai_document_app/utils/common_method.dart';
 import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:ai_document_app/view/home/documents/upload_document_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -37,11 +38,11 @@ class DesktopDocumentsWidget extends StatelessWidget {
                     columnName: 'Name',
                     label: buildHeader(title: 'Name', context: context),
                   ),
-                  GridColumn(
-                    allowSorting: true,
-                    columnName: 'Uploaded By',
-                    label: buildHeader(title: 'Uploaded By', context: context),
-                  ),
+                  // GridColumn(
+                  //   allowSorting: true,
+                  //   columnName: 'Uploaded By',
+                  //   label: buildHeader(title: 'Uploaded By', context: context),
+                  // ),
                   GridColumn(
                     allowSorting: true,
                     columnName: 'Size',
@@ -140,9 +141,13 @@ class TableDataSource extends DataGridSource {
               DataGridCell<String>(columnName: 'Name', value: data.name),
               DataGridCell<String>(
                   columnName: 'Uploaded By', value: data.uploadedBy),
-              DataGridCell<double>(columnName: 'Size', value: data.size),
-              DataGridCell<String>(columnName: 'Status', value: data.status),
-              DataGridCell<String>(columnName: 'Date', value: data.date),
+              DataGridCell<String>(
+                  columnName: 'Size',
+                  value: CommonMethod.formatBytes(data.size)),
+              // DataGridCell<String>(columnName: 'Status', value: data.status),
+              DataGridCell<String>(
+                  columnName: 'Date',
+                  value: CommonMethod.formatDate(DateTime.parse(data.date))),
               DataGridCell<String>(columnName: 'Actions', value: data.actions),
             ]))
         .toList();
@@ -249,7 +254,7 @@ class TableDataSource extends DataGridSource {
       ),
       child: Center(
         child: Text(
-          '${cell.value.toStringAsFixed(2)} MB',
+          '${cell.value}',
           style: AppTextStyle.normalRegular12.copyWith(color: tableTextColor),
         ),
       ),
@@ -266,9 +271,9 @@ class TableDataSource extends DataGridSource {
       child: Center(
         child: Text(
           cell.value,
-          style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
+          style: AppTextStyle.normalRegular12.copyWith(color: tableTextColor),
           maxLines: 1,
-          overflow: TextOverflow.clip,
+          overflow: TextOverflow.visible,
         ),
       ),
     );
@@ -318,21 +323,22 @@ class TableDataSource extends DataGridSource {
           ),
           customWidth(12),
           Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: tableButtonColor),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset(
-                    AppAsset.reset,
-                    height: 24,
-                    width: 24,
-                    fit: BoxFit.scaleDown,
+            child: GestureDetector(
+              onTap: () async {
+                await CommonMethod.viewDocument(data.url);
+              },
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: tableButtonColor),
+                  child: Icon(
+                    CupertinoIcons.eye,
+                    color: primaryWhite.withOpacity(.6),
+                    size: 20,
                   ),
                 ),
               ),

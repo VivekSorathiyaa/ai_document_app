@@ -1,4 +1,5 @@
 import 'package:ai_document_app/controllers/chat_controller.dart';
+import 'package:ai_document_app/model/chat_model.dart';
 import 'package:ai_document_app/utils/app_asset.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
@@ -20,7 +21,6 @@ class ChatBodyWidget extends StatelessWidget {
 
   refreshPage() {
     chatController.refreshPage();
-    chatController.loading.value = false;
   }
 
   @override
@@ -30,7 +30,7 @@ class ChatBodyWidget extends StatelessWidget {
 
     return Obx(
       () => chatController.messagesList.value.isEmpty
-          ? NoDataWiget()
+          ? NoDataWidget()
           : ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 860.0),
               child: Stack(
@@ -52,9 +52,8 @@ class ChatBodyWidget extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          final messageData =
-                              messages[index].data() as Map<String, dynamic>;
-                          final isSender = messageData['senderId'] ==
+                          final messageData = messages[index];
+                          final isSender = messageData.senderId ==
                               CommonMethod.auth.currentUser?.email;
                           final isLastIndex = (index == 0);
                           return isSender
@@ -67,7 +66,7 @@ class ChatBodyWidget extends StatelessWidget {
                                 )
                               : Padding(
                                   padding: EdgeInsets.only(
-                                      bottom: isLastIndex ? 50 : 0),
+                                      bottom: isLastIndex ? 50 : 0, left: 30),
                                   child: chatController.loading.value &&
                                           isLastIndex
                                       ? Lottie.asset(AppAsset.aiJson)
@@ -135,11 +134,11 @@ class ChatBodyWidget extends StatelessWidget {
   }
 
   Widget UserWidget(
-      {required Map<String, dynamic> messageData, required bool isDesktop}) {
+      {required MessageModel messageData, required bool isDesktop}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       children: [
         NetworkImageWidget(
           height: 34,
@@ -147,41 +146,42 @@ class ChatBodyWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(34),
         ),
         const SizedBox(width: 10),
-        Flexible(
+        Expanded(
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: purpleBorderColor,
+                color: purpleBorderColor.withOpacity(.8),
                 width: isDesktop ? 1 : 0.5,
               ),
-              color: Colors.transparent,
+              // color: Colors.transparent,
+              // color: purpleBorderColor.withOpacity(.06),
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                vertical: isDesktop ? 16 : 12,
-                horizontal: isDesktop ? 14 : 10,
+                vertical: isDesktop ? 10 : 8,
+                horizontal: isDesktop ? 16 : 10,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Flexible(
+                  Expanded(
                     child: Text(
-                      messageData['text'],
+                      messageData.text ?? "",
                       style: isDesktop
-                          ? AppTextStyle.normalSemiBold16
+                          ? AppTextStyle.normalRegular16
                               .copyWith(color: primaryWhite.withOpacity(.9))
-                          : AppTextStyle.normalSemiBold14
+                          : AppTextStyle.normalRegular14
                               .copyWith(color: primaryWhite.withOpacity(.9)),
                     ),
                   ),
                   const SizedBox(width: 20),
                   SvgPicture.asset(
                     AppAsset.edit,
-                    height: 20,
-                    width: 20,
+                    height: 18,
+                    width: 18,
                     fit: BoxFit.scaleDown,
                   ),
                 ],
@@ -194,7 +194,7 @@ class ChatBodyWidget extends StatelessWidget {
   }
 
   Widget AiBotWidget(
-      {required Map<String, dynamic> messageData,
+      {required MessageModel messageData,
       required bool isDesktop,
       required bool isLastIndex}) {
     return Padding(
@@ -203,7 +203,7 @@ class ChatBodyWidget extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
               SvgPicture.asset(
@@ -215,7 +215,7 @@ class ChatBodyWidget extends StatelessWidget {
               customWidth(10),
               Flexible(
                 child: CommonMarkdownWidget(
-                  data: messageData['text'],
+                  data: messageData.text ?? "",
                 ),
               ),
             ],
@@ -223,6 +223,7 @@ class ChatBodyWidget extends StatelessWidget {
           height20,
           Row(
             children: [
+              Spacer(),
               Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: SvgPicture.asset(

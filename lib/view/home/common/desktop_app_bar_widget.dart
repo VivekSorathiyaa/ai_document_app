@@ -1,11 +1,12 @@
 import 'package:ai_document_app/controllers/chat_controller.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/home_controller.dart';
+import '../../../model/chat_model.dart';
+import '../../../model/document_model.dart';
 import '../../../utils/custom_dropdown_widget.dart';
 import 'searchbar_widget.dart';
 
@@ -36,12 +37,11 @@ class DesktopAppBarWidget extends StatelessWidget {
                           hintText: 'History',
                           onChanged: (newValues) {
                             chatController.selectedChatList.value =
-                                newValues.cast<QueryDocumentSnapshot>();
+                                newValues.cast<ChatModel>();
                             chatController.setCurrentChatRoomId(
-                                chatRoomId: newValues.first.id,
-                                chatRoomName: newValues.first['name']);
+                                chatController.selectedChatList.value.first);
                           },
-                          displayItem: (item) => item['name'],
+                          displayItem: (item) => item.name,
                           selectionMode: SelectionMode.single,
                         ),
                       ),
@@ -53,15 +53,16 @@ class DesktopAppBarWidget extends StatelessWidget {
                           return CustomDropdown(
                             items: chatController.documentsList.value,
                             selectedValues:
-                                chatController.documentsList.value.isNotEmpty
-                                    ? [chatController.documentsList.value.first]
-                                    : [],
+                                chatController.selectedDocumentList.value,
                             hintText: 'Select PDF to get answer',
                             onChanged: (newValues) {
-                              chatController.selectedDocumentList.value =
-                                  newValues.cast<QueryDocumentSnapshot>();
+                              chatController.selectedDocumentList.assignAll(
+                                  newValues
+                                      .cast<DocumentModel>()); // Use assignAll
+                              chatController
+                                  .updateSelectedDocumentsInFirestore();
                             },
-                            displayItem: (item) => item['name'],
+                            displayItem: (item) => item.name,
                             selectionMode: SelectionMode.multi,
                           );
                         },

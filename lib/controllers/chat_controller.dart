@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 
 // import 'package:js/js.dart';
 
+import '../model/chat_model.dart';
+import '../model/document_model.dart';
 import '../model/suggestion_model.dart';
 import '../utils/app_text_style.dart';
 import '../utils/color.dart';
@@ -22,17 +24,17 @@ class ChatController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final CollectionReference collectionDocuments =
       FirebaseFirestore.instance.collection('documents');
-  RxnString currentChatRoomId = RxnString();
-  RxnString currentChatRoomName = RxnString();
+
+  Rxn<ChatModel> currentChatRoom = Rxn<ChatModel>();
   final TextEditingController chatRoomNameController = TextEditingController();
   final TextEditingController messageTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   var currentIndex = 0.obs;
-  var selectedDocumentsId = <String>[].obs;
+  // var selectedDocumentsId = <String>[].obs;
   var extractedTextList = <String>[].obs;
-  var messagesList = <QueryDocumentSnapshot>[].obs;
-  RxList<QueryDocumentSnapshot> chatRoomList = <QueryDocumentSnapshot>[].obs;
-  RxList<QueryDocumentSnapshot> documentsList = <QueryDocumentSnapshot>[].obs;
+  var messagesList = <MessageModel>[].obs;
+  RxList<ChatModel> chatRoomList = <ChatModel>[].obs;
+  RxList<DocumentModel> documentsList = <DocumentModel>[].obs;
   RxnString geminiApiKey = RxnString();
   RxnString openaiApiKey = RxnString();
 
@@ -47,59 +49,92 @@ class ChatController extends GetxController {
     SuggestionModel(id: '8', name: "Write summary of book?"),
   ]);
 
-  RxList<QueryDocumentSnapshot> selectedChatList =
-      <QueryDocumentSnapshot>[].obs;
-  RxList<QueryDocumentSnapshot> selectedDocumentList =
-      <QueryDocumentSnapshot>[].obs;
+  RxList<ChatModel> selectedChatList = <ChatModel>[].obs;
+  RxList<DocumentModel> selectedDocumentList = <DocumentModel>[].obs;
 
   RxBool loading = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _listenToChatRooms();
-    fetchDocuments(CommonMethod.auth.currentUser?.email ?? "");
-    listenToSelectedDocuments();
-  }
-
-  void _listenToChatRooms() {
+  void listenToChatRooms() {
     FirebaseFirestore.instance
         .collection('chat_rooms')
         .where('participants',
             arrayContains: CommonMethod.auth.currentUser?.email)
         .snapshots()
         .listen((snapshot) {
-      chatRoomList.assignAll(snapshot.docs);
+      // Convert the documents into ChatModel instances
+      List<ChatModel> chatRooms =
+          snapshot.docs.map((doc) => ChatModel.fromFirestore(doc)).toList();
+
+      // Assign the converted list to your chatRoomList
+      chatRoomList.assignAll(chatRooms);
     });
   }
 
   void listenToSelectedDocuments() {
-    if (currentChatRoomId.value != null &&
-        currentChatRoomId.value!.isNotEmpty) {
+    if (currentChatRoom.value != null) {
       FirebaseFirestore.instance
           .collection('chat_rooms')
-          .doc(currentChatRoomId.value)
+          .doc(currentChatRoom.value!.id)
           .snapshots()
-          .listen((documentSnapshot) {
+          .listen((documentSnapshot) async {
         if (documentSnapshot.exists) {
           final data = documentSnapshot.data() as Map<String, dynamic>?;
+
+          // Get the list of document IDs, ensuring they are unique
           final List<dynamic> documents = data?['selected_documents'] ?? [];
-          selectedDocumentsId.value = List<String>.from(documents);
-          selectedDocumentsId.refresh();
-          getDocumentsByIdList();
+          List<String> documentIds = List<String>.from(documents.toSet());
+
+          log("-----documents------$documentIds");
+
+          // Fetch all documents at once using a batched get request
+          if (documentIds.isNotEmpty) {
+            List<DocumentSnapshot> snapshots = await FirebaseFirestore.instance
+                .collection('documents')
+                .where(FieldPath.documentId, whereIn: documentIds)
+                .get()
+                .then((querySnapshot) => querySnapshot.docs);
+
+            // Map the snapshots to DocumentModel
+            List<DocumentModel> documentModel = snapshots
+                .map((snapshot) => DocumentModel.fromFirestore(snapshot))
+                .toList();
+            documentsList.refresh();
+            selectedDocumentList.value = documentModel;
+            selectedDocumentList.refresh();
+            getDocumentsByIdList();
+            update();
+          }
+        } else {
+          log("Document does not exist.");
         }
+      }, onError: (error) {
+        log("Error listening to chat room: $error");
       });
     }
   }
 
-  void fetchDocuments(String email) {
+  void fetchDocuments() {
     FirebaseFirestore.instance
         .collection('documents')
-        .where('uploaded_by', isEqualTo: email)
+        .where('uploaded_by', isEqualTo: CommonMethod.auth.currentUser?.email)
         .orderBy('timestamp', descending: true)
         .snapshots()
         .listen((snapshot) {
-      documentsList.assignAll(snapshot.docs);
+      documentsList.assignAll(snapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return DocumentModel(
+          id: doc.id,
+          name: data['name'] ?? '',
+          url: data['url'] ?? '',
+          status: data['upload_status'] ?? 'Unknown',
+          uploadedBy: data['uploaded_by'] ?? '',
+          size: data['size']?.toDouble() ?? 0.0,
+          date: data['timestamp']?.toDate().toString() ??
+              '', // Adjust date format as needed
+          actions: 'Action ${doc.id}', // Or set this based on your needs
+        );
+      }).toList());
+
       documentsList.refresh();
       listenToSelectedDocuments();
     });
@@ -114,77 +149,66 @@ class ChatController extends GetxController {
           .orderBy('timestamp', descending: true)
           .snapshots()
           .listen((snapshot) {
-        messagesList.assignAll(snapshot.docs);
-        messagesList.refresh();
+        // Convert the documents into MessageModel instances
+        List<MessageModel> messages = snapshot.docs
+            .map((doc) =>
+                MessageModel.fromMap(doc.data() as Map<String, dynamic>))
+            .toList();
+
+        // Assign the converted list to your messagesList
+        messagesList.assignAll(messages);
+        messagesList.refresh(); // Refresh to notify listeners about the changes
       });
     }
   }
 
-  void setCurrentChatRoomId(
-      {required String chatRoomId, required String chatRoomName}) {
-    currentChatRoomId.value = chatRoomId;
-    currentChatRoomName.value = chatRoomName;
-    fetchMessages(
-        chatRoomId); // Fetch messages whenever the current chat room ID is set
+  void setCurrentChatRoomId(ChatModel model) {
+    currentChatRoom.value = model;
+    currentChatRoom.refresh();
+    fetchMessages(currentChatRoom.value?.id ??
+        ""); // Fetch messages whenever the current chat room ID is set
     refreshPage();
   }
 
-  void addSelectedDocumentsIds(String documentId) {
-    if (documentId.isNotEmpty && !selectedDocumentsId.contains(documentId)) {
-      selectedDocumentsId.add(documentId);
-      updateSelectedDocumentsInFirestore();
-    }
+  List<String> getSelectedDocumentIds() {
+    return selectedDocumentList.value.map((doc) => doc.id).toList();
   }
 
   Future<void> updateSelectedDocumentsInFirestore() async {
     // Check if the currentChatRoomId is not null or empty
-    if (currentChatRoomId.value != null &&
-        currentChatRoomId.value!.isNotEmpty) {
+    if (currentChatRoom.value != null) {
       // Reference to the specific document
       DocumentReference chatRoomRef = FirebaseFirestore.instance
           .collection('chat_rooms')
-          .doc(currentChatRoomId.value);
+          .doc(currentChatRoom.value?.id ?? "");
 
       // Fetch the document to see if it exists
       DocumentSnapshot snapshot = await chatRoomRef.get();
       if (snapshot.exists) {
         // Document exists, proceed with the update
+        // Get the selected document IDs and remove duplicates
+        List<String> uniqueDocumentIds =
+            getSelectedDocumentIds().toSet().toList();
+
         await chatRoomRef.update({
-          'selected_documents': selectedDocumentsId.toList(),
+          'selected_documents': uniqueDocumentIds,
         }).catchError((error) {
           print("Failed to update selected documents: $error");
         });
       } else {
         // Document does not exist
-        print("No document found with ID: ${currentChatRoomId.value}");
+        print("No document found with ID: ${currentChatRoom.value?.id ?? ""}");
       }
     } else {
       print("Current chat room ID is null or empty.");
     }
   }
 
-  Future<void> removeSelectedDocument(String documentId) async {
-    if (selectedDocumentsId.contains(documentId)) {
-      selectedDocumentsId.remove(documentId);
-      await updateSelectedDocumentsInFirestore();
-    }
-  }
-
-  void clearSelectedDocuments() {
-    selectedDocumentsId.clear();
-    listenToSelectedDocuments();
-  }
-
-  Future<void> assignSelectedDocuments(List<String> documentIds) async {
-    selectedDocumentsId.assignAll(documentIds);
-    await updateSelectedDocumentsInFirestore();
-  }
-
   Future<void> refreshPage() async {
-    await fetchApiKey();
-
-    await initializeChatRoom();
-    update();
+    listenToChatRooms();
+    fetchDocuments();
+    fetchApiKey();
+    initializeChatRoom();
   }
 
   Future<void> fetchApiKey() async {
@@ -460,13 +484,10 @@ class ChatController extends GetxController {
         ),
         onPressed: () async {
           if (chatRoomNameController.text.isNotEmpty) {
-            String newChatRoomId =
+            ChatModel model =
                 await CommonMethod.createChatRoom(chatRoomNameController.text);
-            Get.back(); // Close the dialog
-            setCurrentChatRoomId(
-                chatRoomId: newChatRoomId,
-                chatRoomName: chatRoomNameController.text);
-
+            Get.back();
+            setCurrentChatRoomId(model);
             chatRoomNameController.clear();
           }
         },
@@ -537,6 +558,7 @@ class ChatController extends GetxController {
   }
 
   Future<void> initializeChatRoom() async {
+    // Fetch chat rooms where the current user is a participant
     QuerySnapshot chatRoomsSnapshot = await firestore
         .collection('chat_rooms')
         .where('participants',
@@ -544,29 +566,49 @@ class ChatController extends GetxController {
         .get();
 
     if (chatRoomsSnapshot.docs.isNotEmpty) {
-      if (currentChatRoomId.value == null ||
-          currentChatRoomName.value == null) {
-        currentChatRoomId.value = chatRoomsSnapshot.docs.first.id;
-        currentChatRoomName.value = chatRoomsSnapshot.docs.first['name'];
-      }
+      // If currentChatRoom is not set, assign the first chat room
+      currentChatRoom.value ??=
+          ChatModel.fromFirestore(chatRoomsSnapshot.docs.first);
     } else {
-      String newChatRoomId =
+      ChatModel newChatRoom =
           await CommonMethod.createChatRoom('New Conversation');
-
-      currentChatRoomId.value = newChatRoomId;
-      currentChatRoomName.value = 'New Conversation';
+      currentChatRoom.value = newChatRoom; // Set the current chat room
     }
-    fetchMessages(currentChatRoomId.value.toString());
-    clearSelectedDocuments();
+    // Fetch messages for the current chat room
+    fetchMessages(currentChatRoom.value?.id ?? '');
     update();
   }
+
+  // Future<void> initializeChatRoom() async {
+  //   QuerySnapshot chatRoomsSnapshot = await firestore
+  //       .collection('chat_rooms')
+  //       .where('participants',
+  //           arrayContains: CommonMethod.auth.currentUser?.email)
+  //       .get();
+  //
+  //   if (chatRoomsSnapshot.docs.isNotEmpty) {
+  //     if (currentChatRoom.value == null) {
+  //       currentChatRoom.value = chatRoomsSnapshot.docs.first;
+  //       currentChatRoomName.value = chatRoomsSnapshot.docs.first['name'];
+  //     }
+  //   } else {
+  //     String newChatRoomId =
+  //         await CommonMethod.createChatRoom('New Conversation');
+  //
+  //     currentChatRoomId.value = newChatRoomId;
+  //     currentChatRoomName.value = 'New Conversation';
+  //   }
+  //   fetchMessages(currentChatRoomId.value.toString());
+  //   clearSelectedDocuments();
+  //   update();
+  // }
 
   Future<List<String>> getDocumentsByIdList() async {
     List<DocumentSnapshot<Object?>> documents = [];
     List<Future<DocumentSnapshot<Object?>>> fetchFutures = [];
 
     try {
-      for (String documentId in selectedDocumentsId) {
+      for (String documentId in getSelectedDocumentIds()) {
         fetchFutures.add(collectionDocuments.doc(documentId).get());
       }
       documents = await Future.wait(fetchFutures);

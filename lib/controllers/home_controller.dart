@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../model/menu_model.dart';
 
 class HomeController extends GetxController {
-  Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(menuList.value[1]);
+  Rx<MenuModel> selectedMenuModel = Rx<MenuModel>(menuList.value[0]);
 
   RxBool isDrawerExpand = true.obs;
   RxBool isSearchOpen = false.obs;

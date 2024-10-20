@@ -161,20 +161,21 @@ class ChatFooterWidget extends StatelessWidget {
                         width: 114,
                         child: Obx(
                           () => chatController.loading.value
-                              ? CircularProgressIndicator(
+                              ? const CircularProgressIndicator(
                                   color: primaryColor,
                                 )
                               : PrimaryTextButton(
                                   title: 'Send',
                                   onPressed: () {
-                                    if (chatController
-                                            .currentChatRoomId.value !=
+                                    if (chatController.currentChatRoom.value !=
                                         null) {
                                       chatController.sendMessage(
                                         message: chatController
-                                            .messageTextController.text,
+                                            .messageTextController.text
+                                            .trim(),
                                         chatRoomId: chatController
-                                            .currentChatRoomId.value!,
+                                                .currentChatRoom.value?.id ??
+                                            "",
                                         userId: CommonMethod
                                                 .auth.currentUser?.email ??
                                             "Unknown",

@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/app_asset.dart';
 
-Widget NoDataWiget() {
+Widget NoDataWidget() {
   return Container(
     width: double.infinity,
     child: ConstrainedBox(

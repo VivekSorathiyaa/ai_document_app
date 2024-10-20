@@ -1,6 +1,6 @@
 import 'package:ai_document_app/controllers/home_controller.dart';
+import 'package:ai_document_app/model/chat_model.dart';
 import 'package:ai_document_app/utils/color.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -129,7 +129,7 @@ class MobileAppBarWidget extends StatelessWidget
 }
 
 Widget HistoryMenuTileWidget({
-  required QueryDocumentSnapshot model,
+  required ChatModel model,
   required VoidCallback onTap,
   required bool isSelect,
 }) {
@@ -156,8 +156,7 @@ Widget HistoryMenuTileWidget({
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  // model.name,
-                  model['name'].toString(),
+                  model.name ?? "",
                   style: AppTextStyle.normalBold16,
                   maxLines: 1,
                   textAlign: TextAlign.start,

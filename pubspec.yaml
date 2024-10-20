@@ -71,6 +71,7 @@ dependencies:
 #  http:
   google_generative_ai:
   flutter_tesseract_ocr: ^0.4.27
+  animated_custom_dropdown: ^3.1.1
 
 dev_dependencies:
   flutter_test:

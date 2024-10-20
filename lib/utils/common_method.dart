@@ -16,11 +16,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
+import '../model/chat_model.dart';
 import '../model/document_model.dart';
 import '../utils/color.dart';
 import 'app_text_style.dart';
@@ -255,7 +258,7 @@ class CommonMethod {
     }
   }
 
-  static Future<String> createChatRoom(String roomName) async {
+  static Future<ChatModel> createChatRoom(String roomName) async {
     try {
       // Get the current date (without time) in a consistent format
       DateTime now = DateTime.now();
@@ -269,9 +272,10 @@ class CommonMethod {
               isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
           .get();
 
-      // If a chat room exists for today, return its ID
+      // If a chat room exists for today, return the corresponding ChatModel
       if (querySnapshot.docs.isNotEmpty) {
-        return querySnapshot.docs.first.id;
+        DocumentSnapshot existingDoc = querySnapshot.docs.first;
+        return ChatModel.fromFirestore(existingDoc);
       }
 
       // If no room found for today, create a new one
@@ -282,9 +286,11 @@ class CommonMethod {
         'selected_documents': [],
       });
 
-      return docRef.id;
+      // Fetch the newly created document to construct the ChatModel
+      DocumentSnapshot newDoc = await docRef.get();
+      return ChatModel.fromFirestore(newDoc);
     } catch (e) {
-      throw Exception('Error creating conversation: ${e.toString()}');
+      throw Exception('Error creating chat room: ${e.toString()}');
     }
   }
 
@@ -410,6 +416,25 @@ class CommonMethod {
     }
   }
 
+  static String formatBytes(double bytes, {int decimals = 2}) {
+    const int kB = 1024;
+    const int MB = kB * 1024;
+    const int GB = MB * 1024;
+    const int TB = GB * 1024;
+
+    if (bytes < kB) {
+      return '${bytes.toStringAsFixed(decimals)} B';
+    } else if (bytes < MB) {
+      return '${(bytes / kB).toStringAsFixed(decimals)} KB';
+    } else if (bytes < GB) {
+      return '${(bytes / MB).toStringAsFixed(decimals)} MB';
+    } else if (bytes < TB) {
+      return '${(bytes / GB).toStringAsFixed(decimals)} GB';
+    } else {
+      return '${(bytes / TB).toStringAsFixed(decimals)} TB';
+    }
+  }
+
   static String getFileSizeInMB(dynamic file) {
     if (file is PlatformFile) {
       // If it's a PlatformFile (web or mobile)
@@ -473,6 +498,31 @@ class CommonMethod {
       print('Document and associated file deleted successfully.');
     } catch (e) {
       print('Error deleting document or file: $e');
+    }
+  }
+
+  static Future<void> viewDocument(String url) async {
+    print("Attempting to view document: $url");
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    } catch (e) {
+      print("Error opening document: $e");
+    }
+  }
+
+  static String formatDate(DateTime? date) {
+    try {
+      if (date == null) {
+        return '';
+      }
+      return DateFormat('d MMM, yyyy').format(date); // Short month format
+    } catch (e) {
+      // Return a default message or handle the error accordingly
+      return '';
     }
   }
 }

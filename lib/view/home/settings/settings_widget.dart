@@ -115,10 +115,8 @@ class SettingsWidget extends StatelessWidget {
         return SettingsReferralCreditCouponWidget();
       case 4:
         return SettingsCustomQuestionsWidget();
-      case 5:
-        return NoDataWiget();
       default:
-        return NoDataWiget();
+        return NoDataWidget();
     }
   }
 }
