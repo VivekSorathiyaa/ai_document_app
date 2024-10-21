@@ -14,14 +14,14 @@ RxList<MenuModel> menuList = <MenuModel>[
   MenuModel(name: 'Chat', icon: AppAsset.chat, subTitle: "200 credits", id: 0),
   MenuModel(
       name: 'Documents', icon: AppAsset.clipboard, subTitle: '5 PDFs', id: 1),
-  MenuModel(
-    name: 'User Management',
-    icon: AppAsset.users,
-    id: 2,
-  ),
-  MenuModel(
-    name: 'Settings',
-    icon: AppAsset.setting,
-    id: 3,
-  ),
+  // MenuModel(
+  //   name: 'User Management',
+  //   icon: AppAsset.users,
+  //   id: 2,
+  // ),
+  // MenuModel(
+  //   name: 'Settings',
+  //   icon: AppAsset.setting,
+  //   id: 3,
+  // ),
 ].obs;
