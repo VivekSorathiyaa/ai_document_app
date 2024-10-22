@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <title>Answer PDF</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-storage.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js"></script>
+  <script src="pdfjs_interop.js"></script>
+  <!-- Preload Roboto font to ensure it's loaded before use -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf" as="font"
+        type="font/ttf" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Your Firebase configuration -->
+  <script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyD7HwzX1WCfv5Vu_Qcx3rdcC3y_lTezdmk",
+        authDomain: "answer-pdf.firebaseapp.com",
+        projectId: "answer-pdf",
+        storageBucket: "answer-pdf.appspot.com",
+        messagingSenderId: "862240061332",
+        appId: "1:862240061332:android:a982299cb146c2d36bc181",
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <!-- Main Dart script -->
+  <script defer src="main.dart.js"></script>
+
+</head>
+<body>
+</body>
+</html>
