@@ -61,7 +61,7 @@ class DocumentFooterWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: currentPage > 0
                       ? () {
                           documentsController.currentPage.value -= 1;
@@ -95,7 +95,7 @@ class DocumentFooterWidget extends StatelessWidget {
                   ),
                 ),
                 width16,
-                GestureDetector(
+                InkWell(
                   onTap: currentPage < totalPages - 1
                       ? () {
                           documentsController.currentPage.value += 1;

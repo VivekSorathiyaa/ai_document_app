@@ -137,7 +137,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                           ),
                           width10,
                           Flexible(
-                            child: GestureDetector(
+                            child: InkWell(
                               onTap: () {
                                 navigateAndRemove(context, LoginView.name);
                               },

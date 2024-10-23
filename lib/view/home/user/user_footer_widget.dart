@@ -39,7 +39,7 @@ class UserFooterWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: currentPage > 0
                       ? () {
                           userController.currentPage.value -= 1;
@@ -76,7 +76,7 @@ class UserFooterWidget extends StatelessWidget {
                 //   style: AppTextStyle.normalSemiBold14,
                 // ),
                 width16,
-                GestureDetector(
+                InkWell(
                   onTap: currentPage < totalPages - 1
                       ? () {
                           userController.currentPage.value += 1;

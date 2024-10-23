@@ -202,7 +202,7 @@ class ChatFooterWidget extends StatelessWidget {
                                 ),
                         ),
                       )
-                    : GestureDetector(
+                    : InkWell(
                         onTap: () {},
                         child: Container(
                           decoration: const BoxDecoration(

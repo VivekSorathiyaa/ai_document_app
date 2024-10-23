@@ -48,7 +48,7 @@ class CommonFileDropzone extends StatelessWidget {
     controller.maxSize = maxSizeInMB * 1024 * 1024; // Convert MB to bytes
     controller.maxFiles = maxFiles;
 
-    return GestureDetector(
+    return InkWell(
       onTap: () async {
         if (!controller.isUploading.value) {
           controller.resetError(); // Reset error state on click

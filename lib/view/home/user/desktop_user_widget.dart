@@ -223,7 +223,7 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
-        child: GestureDetector(
+        child: InkWell(
           onTap: () {
             userController.updatePermission(userId);
           },

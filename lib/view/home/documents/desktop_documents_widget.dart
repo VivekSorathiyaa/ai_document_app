@@ -296,7 +296,7 @@ class TableDataSource extends DataGridSource {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: GestureDetector(
+            child: InkWell(
               onTap: () async {
                 await CommonMethod.deleteDocumentAndFile(data);
               },
@@ -323,7 +323,7 @@ class TableDataSource extends DataGridSource {
           ),
           customWidth(12),
           Expanded(
-            child: GestureDetector(
+            child: InkWell(
               onTap: () async {
                 await CommonMethod.viewDocument(data.url);
               },

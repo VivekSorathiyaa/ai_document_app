@@ -133,7 +133,7 @@ Widget HistoryMenuTileWidget({
   required VoidCallback onTap,
   required bool isSelect,
 }) {
-  return GestureDetector(
+  return InkWell(
     onTap: onTap,
     child: Padding(
       padding: const EdgeInsets.only(bottom: 9),

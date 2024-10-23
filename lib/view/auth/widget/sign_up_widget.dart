@@ -199,7 +199,7 @@ class SignUpWidget extends StatelessWidget {
                           ),
                           width10,
                           Flexible(
-                            child: GestureDetector(
+                            child: InkWell(
                               onTap: () {
                                 navigateTo(context, LoginView.name);
                               },

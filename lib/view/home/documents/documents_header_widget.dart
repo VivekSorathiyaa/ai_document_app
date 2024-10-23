@@ -3,6 +3,7 @@ import 'package:ai_document_app/utils/app_asset.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/primary_text_button.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -45,7 +46,7 @@ class DocumentsHeaderWidget extends StatelessWidget {
                 children: [
                   Obx(
                     () => documentsController.isUploadWidgetOpen.value
-                        ? GestureDetector(
+                        ? InkWell(
                             onTap: () {
                               documentsController.isUploadWidgetOpen.value =
                                   false;

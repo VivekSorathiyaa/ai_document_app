@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html' as html;
 import 'dart:io' as io;
 import 'dart:math' as math;
 import 'dart:typed_data';
@@ -465,9 +464,9 @@ class CommonMethod {
     } else if (file is io.File) {
       // For mobile applications
       return file.path.split('/').last; // Extract file name from path
-    } else if (file is html.File) {
-      // For web applications
-      return file.name; // Get file name
+      // } else if (file is html.File) {
+      //   // For web applications
+      //   return file.name; // Get file name
     } else {
       return "Unknown"; // Default value if file type is unsupported
     }
@@ -481,9 +480,9 @@ class CommonMethod {
     } else if (file is io.File) {
       // For mobile applications
       return file.lengthSync(); // Get file size
-    } else if (file is html.File) {
-      // For web applications
-      return file.size; // Get file size
+      // } else if (file is html.File) {
+      //   // For web applications
+      //   return file.size; // Get file size
     } else {
       return 0; // Default value if file type is unsupported
     }

@@ -65,7 +65,7 @@ class DrawerWidget extends StatelessWidget {
                   Obx(
                     () => Column(
                       children: menuList.value.map((element) {
-                        return GestureDetector(
+                        return InkWell(
                           onTap: () {
                             homeController.selectedMenuModel.value = element;
                             homeController.selectedMenuModel.refresh();
@@ -273,7 +273,7 @@ class DrawerWidget extends StatelessWidget {
                                 ),
                               ),
                               Flexible(
-                                child: GestureDetector(
+                                child: InkWell(
                                   onTap: () {
                                     CommonMethod.showLogoutDialog(context);
                                   },

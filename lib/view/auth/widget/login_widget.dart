@@ -105,7 +105,7 @@ class LoginWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Obx(
-                          () => GestureDetector(
+                          () => InkWell(
                             onTap: () {
                               controller.isCheck.value =
                                   !controller.isCheck.value;
@@ -144,7 +144,7 @@ class LoginWidget extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          child: GestureDetector(
+                          child: InkWell(
                             onTap: () {
                               navigateTo(context, ForgotPasswordView.name);
                             },
@@ -263,7 +263,7 @@ class LoginWidget extends StatelessWidget {
                         ),
                         width10,
                         Flexible(
-                          child: GestureDetector(
+                          child: InkWell(
                             onTap: () {
                               navigateTo(context, SignupView.name);
                             },

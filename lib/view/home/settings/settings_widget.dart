@@ -43,7 +43,7 @@ class SettingsWidget extends StatelessWidget {
                 children: settingMenuList.value.map((model) {
                   return Padding(
                       padding: const EdgeInsets.all(10),
-                      child: GestureDetector(
+                      child: InkWell(
                         onTap: () {
                           settingsController.refreshSettingMenuModel(model);
                         },

@@ -23,7 +23,7 @@ class CommonMarkdownWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
-double textHeight = 2.0;
+    double textHeight = 2.0;
     Color textColor = primaryWhite;
     Color backgroundColor = isDesktop ? bgContainColor : Colors.transparent;
 
@@ -40,46 +40,55 @@ double textHeight = 2.0;
             shrinkWrap: true,
             styleSheetTheme: MarkdownStyleSheetBaseTheme.platform,
             styleSheet: MarkdownStyleSheet(
-              a: AppTextStyle.linkStyle.copyWith(color: textColor,height: textHeight),
-              p: AppTextStyle.normalRegular14.copyWith(color: textColor,height: textHeight),
+              a: AppTextStyle.linkStyle
+                  .copyWith(color: textColor, height: textHeight),
+              p: AppTextStyle.normalRegular14
+                  .copyWith(color: textColor, height: textHeight),
               pPadding: EdgeInsets.zero,
-              code: AppTextStyle.normalSemiBold12.copyWith(
-                color: primaryBlack
-                  ,height: textHeight
-              ),
-              h1: AppTextStyle.normalBold20.copyWith(color: textColor,height: textHeight),
+              code: AppTextStyle.normalSemiBold12
+                  .copyWith(color: primaryBlack, height: textHeight),
+              h1: AppTextStyle.normalBold20
+                  .copyWith(color: textColor, height: textHeight),
               h1Padding: const EdgeInsets.only(bottom: 12),
-              h2: AppTextStyle.normalBold18.copyWith(color: textColor,height: textHeight),
+              h2: AppTextStyle.normalBold18
+                  .copyWith(color: textColor, height: textHeight),
               h2Padding: const EdgeInsets.only(bottom: 10),
-              h3: AppTextStyle.normalBold16.copyWith(color: textColor,height: textHeight),
+              h3: AppTextStyle.normalBold16
+                  .copyWith(color: textColor, height: textHeight),
               h3Padding: const EdgeInsets.only(bottom: 8),
-              h4: AppTextStyle.normalBold14.copyWith(color: textColor,height: textHeight),
+              h4: AppTextStyle.normalBold14
+                  .copyWith(color: textColor, height: textHeight),
               h4Padding: const EdgeInsets.only(bottom: 6),
-              h5: AppTextStyle.normalBold12.copyWith(color: textColor,height: textHeight),
+              h5: AppTextStyle.normalBold12
+                  .copyWith(color: textColor, height: textHeight),
               h5Padding: const EdgeInsets.only(bottom: 4),
-              h6: AppTextStyle.normalBold10.copyWith(color: textColor,height: textHeight),
+              h6: AppTextStyle.normalBold10
+                  .copyWith(color: textColor, height: textHeight),
               h6Padding: const EdgeInsets.only(bottom: 2),
-              em: AppTextStyle.italicRegular15.copyWith(color: textColor,height: textHeight),
-              strong: AppTextStyle.normalBold14.copyWith(color: textColor,height: textHeight),
+              em: AppTextStyle.italicRegular15
+                  .copyWith(color: textColor, height: textHeight),
+              strong: AppTextStyle.normalBold14
+                  .copyWith(color: textColor, height: textHeight),
               del: AppTextStyle.normalRegular14.copyWith(
-                decoration: TextDecoration.lineThrough,height: textHeight
-              ),
+                  decoration: TextDecoration.lineThrough, height: textHeight),
               blockquote: AppTextStyle.normalRegular14.copyWith(
-                fontStyle: FontStyle.italic,
-                color: primaryBlack,height: textHeight
-              ),
-              img: AppTextStyle.normalRegular14.copyWith(color: textColor,height: textHeight),
-              checkbox: AppTextStyle.normalRegular14.copyWith(color: textColor,height: textHeight),
+                  fontStyle: FontStyle.italic,
+                  color: primaryBlack,
+                  height: textHeight),
+              img: AppTextStyle.normalRegular14
+                  .copyWith(color: textColor, height: textHeight),
+              checkbox: AppTextStyle.normalRegular14
+                  .copyWith(color: textColor, height: textHeight),
               blockSpacing: 8.0,
               listIndent: 20.0,
-              listBullet:
-                  AppTextStyle.normalRegular12.copyWith(color: textColor,height: textHeight),
+              listBullet: AppTextStyle.normalRegular12
+                  .copyWith(color: textColor, height: textHeight),
               tableHead: AppTextStyle.normalBold14.copyWith(
-                fontWeight: FontWeight.bold,
-                color: textColor,height: textHeight
-              ),
-              tableBody:
-                  AppTextStyle.normalRegular14.copyWith(color: textColor,height: textHeight),
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                  height: textHeight),
+              tableBody: AppTextStyle.normalRegular14
+                  .copyWith(color: textColor, height: textHeight),
               tableHeadAlign: TextAlign.center,
               tablePadding: const EdgeInsets.all(4.0),
               tableBorder: TableBorder.all(color: textColor),
@@ -93,7 +102,7 @@ double textHeight = 2.0;
                   TableCellVerticalAlignment.intrinsicHeight,
               blockquotePadding: const EdgeInsets.all(14),
               blockquoteDecoration: BoxDecoration(
-                color: darkDividerColor,
+                color: purpleColor,
                 borderRadius: BorderRadius.circular(14),
               ),
               codeblockPadding: const EdgeInsets.all(14),

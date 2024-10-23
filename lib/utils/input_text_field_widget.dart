@@ -105,7 +105,7 @@ class PasswordWidget extends StatelessWidget {
             textInputAction: textInputAction,
             maxLength: maxLength,
             maxLines: 1,
-            suffixIcon: GestureDetector(
+            suffixIcon: InkWell(
               onTap: () {
                 toggleObscureText();
               },

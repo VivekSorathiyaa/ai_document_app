@@ -1,6 +1,7 @@
 import 'package:ai_document_app/controllers/settings_controller.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -24,7 +25,7 @@ class SettingsHeaderWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           if (selectedMenu != null)
-            GestureDetector(
+            InkWell(
               onTap: () {
                 settingsController.refreshSettingMenuModel(null);
               },

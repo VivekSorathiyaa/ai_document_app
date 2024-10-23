@@ -472,7 +472,7 @@ class PlansPricingView extends StatelessWidget {
           color: bgContainColor),
       child: Row(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () {
               planController.isMonthlySelect.value = true;
             },
@@ -497,7 +497,7 @@ class PlansPricingView extends StatelessWidget {
               ),
             ),
           ),
-          GestureDetector(
+          InkWell(
             onTap: () {
               planController.isMonthlySelect.value = false;
             },
