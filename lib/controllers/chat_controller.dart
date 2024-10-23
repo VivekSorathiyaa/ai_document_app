@@ -26,8 +26,8 @@ class ChatController extends GetxController {
       FirebaseFirestore.instance.collection('documents');
 
   Rxn<ChatModel> currentChatRoom = Rxn<ChatModel>();
-  final TextEditingController chatRoomNameController = TextEditingController();
-  final TextEditingController messageTextController = TextEditingController();
+  TextEditingController chatRoomNameController = TextEditingController();
+  TextEditingController messageTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   var currentIndex = 0.obs;
   // var selectedDocumentsId = <String>[].obs;
@@ -49,7 +49,8 @@ class ChatController extends GetxController {
     SuggestionModel(id: '8', name: "Write summary of book?"),
   ]);
 
-  RxList<ChatModel> selectedChatList = <ChatModel>[].obs;
+  // Rxn<ChatModel> currentChatRoom = Rxn<ChatModel>();
+  // RxList<ChatModel> selectedChat = <ChatModel>[].obs;
   RxList<DocumentModel> selectedDocumentList = <DocumentModel>[].obs;
 
   RxBool loading = false.obs;

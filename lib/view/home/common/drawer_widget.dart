@@ -24,7 +24,7 @@ class DrawerWidget extends StatelessWidget {
     bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
 
     return Obx(() => AnimatedContainer(
-        width: homeController.isDrawerExpand.value ? 300 : 80,
+        width: homeController.isDrawerExpand.value ? 250 : 80,
         margin: EdgeInsets.only(
             right: ResponsiveBreakpoints.of(context).isDesktop ? 16 : 0),
         decoration: BoxDecoration(
@@ -54,7 +54,7 @@ class DrawerWidget extends StatelessWidget {
                     child: Text(
                       'PDF to AI Conversation',
                       style: homeController.isDrawerExpand.value
-                          ? AppTextStyle.normalSemiBold16
+                          ? AppTextStyle.normalSemiBold14
                           : AppTextStyle.normalSemiBold12,
                       maxLines: 1,
                       textAlign: TextAlign.center,
@@ -76,7 +76,7 @@ class DrawerWidget extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 9),
                             child: Container(
-                              height: 50,
+                              height: 40,
                               decoration: BoxDecoration(
                                 gradient:
                                     homeController.selectedMenuModel.value ==
@@ -104,8 +104,8 @@ class DrawerWidget extends StatelessWidget {
                                       flex: 0,
                                       child: SvgPicture.asset(
                                         element.icon,
-                                        width: 20,
-                                        height: 20,
+                                        width: 18,
+                                        height: 18,
                                         color: primaryWhite,
                                         fit: BoxFit.scaleDown,
                                       ),
@@ -118,43 +118,43 @@ class DrawerWidget extends StatelessWidget {
                                               horizontal: 10),
                                           child: Text(
                                             element.name,
-                                            style: AppTextStyle.normalBold16,
+                                            style: AppTextStyle.normalBold14,
                                             maxLines: 1,
                                             textAlign: TextAlign.start,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
-                                    if (homeController.isDrawerExpand.value &&
-                                        element.subTitle != null)
-                                      Expanded(
-                                        flex: 2,
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Container(
-                                            height: 22,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 9),
-                                            decoration: BoxDecoration(
-                                              color: yellowColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(39),
-                                            ),
-                                            child: FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: Text(
-                                                element.subTitle.toString(),
-                                                style: AppTextStyle.normalBold12
-                                                    .copyWith(
-                                                        color: primaryBlack),
-                                                maxLines: 1,
-                                                textAlign: TextAlign.center,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                    // if (homeController.isDrawerExpand.value &&
+                                    //     element.subTitle != null)
+                                    //   Expanded(
+                                    //     flex: 2,
+                                    //     child: Align(
+                                    //       alignment: Alignment.centerLeft,
+                                    //       child: Container(
+                                    //         height: 22,
+                                    //         padding: const EdgeInsets.symmetric(
+                                    //             horizontal: 9),
+                                    //         decoration: BoxDecoration(
+                                    //           color: yellowColor,
+                                    //           borderRadius:
+                                    //               BorderRadius.circular(39),
+                                    //         ),
+                                    //         child: FittedBox(
+                                    //           fit: BoxFit.scaleDown,
+                                    //           child: Text(
+                                    //             element.subTitle.toString(),
+                                    //             style: AppTextStyle.normalBold12
+                                    //                 .copyWith(
+                                    //                     color: primaryBlack),
+                                    //             maxLines: 1,
+                                    //             textAlign: TextAlign.center,
+                                    //             overflow: TextOverflow.ellipsis,
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ),
                                   ],
                                 ),
                               ),
@@ -169,83 +169,108 @@ class DrawerWidget extends StatelessWidget {
                   if (homeController.isDrawerExpand.value)
                     Column(
                       children: [
-                        Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 43),
-                              child: Container(
-                                width: Get.width,
-                                decoration: BoxDecoration(
-                                  color: primaryBlack,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 88),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 23),
-                                      child: Text(
-                                        "Go unlimited with PRO",
-                                        style: AppTextStyle.normalBold18,
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.ellipsis,
+                        if (homeController.isProPlanExpand.value)
+                          Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 43),
+                                child: Container(
+                                  width: Get.width,
+                                  decoration: BoxDecoration(
+                                    color: primaryBlack,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 88),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 23),
+                                        child: Text(
+                                          "Go unlimited with PRO",
+                                          style: AppTextStyle.normalBold16,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 23),
-                                      child: Text(
-                                        "Get your AI Project to another level and start doing more with Horizon AI Template PRO!",
-                                        style: AppTextStyle.normalRegular12
-                                            .copyWith(color: textGreyColor),
-                                        textAlign: TextAlign.center,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
+                                      const SizedBox(height: 4),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 23),
+                                        child: Text(
+                                          "Get your AI Project to another level and start doing more with Horizon AI Template PRO!",
+                                          style: AppTextStyle.normalRegular10
+                                              .copyWith(color: textGreyColor),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: PrimaryTextButton(
-                                        title: 'Get started with PRO',
-                                        onPressed: () {
-                                          navigateTo(
-                                              context, PlansPricingView.name);
-                                        },
-                                        height: 37,
-                                        fontSize: 14,
-                                        borderRadius: BorderRadius.circular(8),
+                                      const SizedBox(height: 6),
+                                      Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: PrimaryTextButton(
+                                          title: 'Get started with PRO',
+                                          onPressed: () {
+                                            navigateTo(
+                                                context, PlansPricingView.name);
+                                          },
+                                          height: 37,
+                                          fontSize: 14,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: -10,
-                              right: 0,
-                              left: 0,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: SvgPicture.asset(
-                                  AppAsset.pro,
-                                  // width: 143,
-                                  height: 127,
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                              Positioned(
+                                top: -10,
+                                right: 0,
+                                left: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: SvgPicture.asset(
+                                    AppAsset.pro,
+                                    height: 124,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                child: InkWell(
+                                  onTap: () {
+                                    homeController.isProPlanExpand.value =
+                                        false;
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(top: 38),
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: orangeColor,
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.close,
+                                        color: primaryWhite,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         const SizedBox(height: 25),
                         const Divider(color: darkDividerColor, height: 0),
                         const SizedBox(height: 20),
                         Container(
                           height: 62,
-                          padding: EdgeInsets.symmetric(horizontal: 14),
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
                           decoration: BoxDecoration(
                             color: primaryBlack,
                             borderRadius: BorderRadius.circular(30),
@@ -256,20 +281,24 @@ class DrawerWidget extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: NetworkImageWidget(
-                                  height: 34,
-                                  width: 34,
+                                  height: 32,
+                                  width: 32,
                                   fit: BoxFit.cover,
                                   borderRadius: BorderRadius.circular(34),
                                 ),
                               ),
                               Expanded(
                                 flex: 3,
-                                child: Text(
-                                  'Adela Parkson',
-                                  style: AppTextStyle.normalBold14,
-                                  textAlign: TextAlign.start,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Text(
+                                    'Adela Parkson',
+                                    style: AppTextStyle.normalBold12,
+                                    textAlign: TextAlign.start,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
                               Flexible(
@@ -304,6 +333,7 @@ class DrawerWidget extends StatelessWidget {
                               ? CupertinoIcons.back
                               : CupertinoIcons.right_chevron,
                           color: primaryWhite,
+                          size: 20,
                         )),
                   ),
                 ],

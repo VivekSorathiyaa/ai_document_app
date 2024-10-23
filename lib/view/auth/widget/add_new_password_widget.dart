@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import '../../../utils/app_text_style.dart';
 import '../../../utils/color.dart';
 import '../../../utils/input_text_field_widget.dart';
 import '../../../utils/primary_text_button.dart';
@@ -29,7 +30,7 @@ class AddNewPasswordWidget extends StatelessWidget {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                maxWidth: 480.0,
+                maxWidth: 460.0,
               ),
               child: GradientBorderWidget(
                 child: Padding(
@@ -45,11 +46,7 @@ class AddNewPasswordWidget extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           'Add New Password',
-                          style: GoogleFonts.notoSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 36,
-                            color: primaryWhite,
-                          ),
+                          style: AppTextStyle.normalSemiBold30,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -59,7 +56,7 @@ class AddNewPasswordWidget extends StatelessWidget {
                             child: Text(
                               'Please enter your new password and continue your wonderful journey',
                               style: GoogleFonts.notoSans(
-                                fontSize: 16,
+                                fontSize: 14,
                                 color: hintGreyColor,
                               ),
                               maxLines: 2,

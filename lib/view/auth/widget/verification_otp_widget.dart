@@ -32,7 +32,7 @@ class VerificationOtpWidget extends StatelessWidget {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                maxWidth: 480.0,
+                maxWidth: 460.0,
               ),
               child: GradientBorderWidget(
                 child: Padding(
@@ -48,11 +48,7 @@ class VerificationOtpWidget extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           'Verification OTP',
-                          style: GoogleFonts.notoSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 36,
-                            color: primaryWhite,
-                          ),
+                          style: AppTextStyle.normalSemiBold30,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -61,7 +57,7 @@ class VerificationOtpWidget extends StatelessWidget {
                         child: Text(
                           'Please enter your OTP code and reset you new password',
                           style: GoogleFonts.notoSans(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: hintGreyColor,
                           ),
                         ),
@@ -89,7 +85,7 @@ class VerificationOtpWidget extends StatelessWidget {
                           ),
                         ),
                         separatorBuilder: (vds) {
-                          return SizedBox(width: 16);
+                          return SizedBox(width: 14);
                         }, // Adds spacing between the pin boxes
                         preFilledWidget: Center(
                           child: Text(
@@ -123,7 +119,7 @@ class VerificationOtpWidget extends StatelessWidget {
                             flex: 2,
                             child: Text(
                               'Resend new code',
-                              style: AppTextStyle.normalRegular16,
+                              style: AppTextStyle.normalRegular14,
                               // maxLines: 1,
                               // overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
@@ -137,7 +133,7 @@ class VerificationOtpWidget extends StatelessWidget {
                               },
                               child: Text(
                                 '00:55',
-                                style: AppTextStyle.normalSemiBold16.copyWith(
+                                style: AppTextStyle.normalSemiBold14.copyWith(
                                   color: purpleColor,
                                 ),
                                 maxLines: 1,

@@ -34,7 +34,7 @@ class LoginWidget extends StatelessWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(
-              maxWidth: 480.0,
+              maxWidth: 460.0,
             ),
             child: GradientBorderWidget(
               child: Padding(
@@ -50,11 +50,7 @@ class LoginWidget extends StatelessWidget {
                       fit: BoxFit.scaleDown,
                       child: Text(
                         'Login',
-                        style: GoogleFonts.notoSans(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 36,
-                          color: primaryWhite,
-                        ),
+                        style: AppTextStyle.normalSemiBold30,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -63,7 +59,7 @@ class LoginWidget extends StatelessWidget {
                       child: Text(
                         'Glad you\'re back!',
                         style: GoogleFonts.notoSans(
-                          fontSize: 16,
+                          fontSize: 14,
                           color: hintGreyColor,
                         ),
                       ),
@@ -99,7 +95,7 @@ class LoginWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -136,7 +132,7 @@ class LoginWidget extends StatelessWidget {
                             'Remember me',
                             style: GoogleFonts.notoSans(
                               color: primaryWhite,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                             textAlign: TextAlign.start,
                             maxLines: 1,
@@ -156,7 +152,7 @@ class LoginWidget extends StatelessWidget {
                                 'Forgot password?',
                                 style: GoogleFonts.notoSans(
                                   color: primaryWhite,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                                 textAlign: TextAlign.end,
                                 maxLines: 1,
@@ -171,7 +167,7 @@ class LoginWidget extends StatelessWidget {
                     Obx(() {
                       if (controller.errorMessage.value.isNotEmpty) {
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.only(bottom: 14),
                           child: Text(
                             controller.errorMessage.value,
                             style: AppTextStyle.normalRegular14
@@ -209,7 +205,7 @@ class LoginWidget extends StatelessWidget {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               'Or',
-                              style: AppTextStyle.normalRegular16,
+                              style: AppTextStyle.normalRegular14,
                             ),
                           ),
                         ),
@@ -255,7 +251,7 @@ class LoginWidget extends StatelessWidget {
                           flex: 2,
                           child: Text(
                             'Don’t have an account?',
-                            style: AppTextStyle.normalRegular16,
+                            style: AppTextStyle.normalRegular14,
                             // maxLines: 1,
                             // overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.end,
@@ -269,7 +265,7 @@ class LoginWidget extends StatelessWidget {
                             },
                             child: Text(
                               'Signup',
-                              style: AppTextStyle.normalSemiBold16.copyWith(
+                              style: AppTextStyle.normalSemiBold14.copyWith(
                                 color: purpleColor,
                                 decoration: TextDecoration.underline,
                                 decorationColor: purpleColor,

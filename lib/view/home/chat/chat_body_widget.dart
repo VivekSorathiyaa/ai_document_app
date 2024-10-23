@@ -4,7 +4,6 @@ import 'package:ai_document_app/utils/app_asset.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
 import 'package:ai_document_app/utils/common_method.dart';
-import 'package:ai_document_app/utils/network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -48,7 +47,7 @@ class ChatBodyWidget extends StatelessWidget {
                         reverse: true,
                         itemCount: messages.length,
                         padding: EdgeInsets.symmetric(
-                            horizontal: isDesktop ? 16 : 0),
+                            horizontal: isDesktop ? 14 : 0),
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
@@ -66,7 +65,8 @@ class ChatBodyWidget extends StatelessWidget {
                                 )
                               : Padding(
                                   padding: EdgeInsets.only(
-                                      bottom: isLastIndex ? 50 : 0, left: 30),
+                                    bottom: isLastIndex ? 40 : 0,
+                                  ),
                                   child: chatController.loading.value &&
                                           isLastIndex
                                       ? Lottie.asset(AppAsset.aiJson)
@@ -136,54 +136,46 @@ class ChatBodyWidget extends StatelessWidget {
   Widget UserWidget(
       {required MessageModel messageData, required bool isDesktop}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        NetworkImageWidget(
-          height: 34,
-          width: 34,
-          borderRadius: BorderRadius.circular(34),
+        InkWell(
+          onTap: () {},
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: SvgPicture.asset(
+              AppAsset.edit,
+              height: 14,
+              width: 14,
+              fit: BoxFit.scaleDown,
+            ),
+          ),
         ),
-        const SizedBox(width: 10),
-        Expanded(
+        Flexible(
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: purpleBorderColor.withOpacity(.8),
-                width: isDesktop ? 1 : 0.5,
-              ),
-              // color: Colors.transparent,
-              // color: purpleBorderColor.withOpacity(.06),
+              color: primaryWhite.withOpacity(.1),
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: isDesktop ? 10 : 8,
-                horizontal: isDesktop ? 16 : 10,
+              padding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 18,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: Text(
                       messageData.text ?? "",
-                      style: isDesktop
-                          ? AppTextStyle.normalRegular16
-                              .copyWith(color: primaryWhite.withOpacity(.9))
-                          : AppTextStyle.normalRegular14
-                              .copyWith(color: primaryWhite.withOpacity(.9)),
+                      style: AppTextStyle.normalRegular14
+                          .copyWith(color: primaryWhite.withOpacity(.9)),
                     ),
                   ),
                   const SizedBox(width: 20),
-                  SvgPicture.asset(
-                    AppAsset.edit,
-                    height: 18,
-                    width: 18,
-                    fit: BoxFit.scaleDown,
-                  ),
                 ],
               ),
             ),
@@ -198,7 +190,7 @@ class ChatBodyWidget extends StatelessWidget {
       required bool isDesktop,
       required bool isLastIndex}) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 50),
+      padding: const EdgeInsets.only(top: 14, bottom: 46),
       child: Column(
         children: [
           Row(
@@ -208,60 +200,81 @@ class ChatBodyWidget extends StatelessWidget {
             children: [
               SvgPicture.asset(
                 AppAsset.aiAvatar,
-                height: 34,
-                width: 34,
+                height: 30,
+                width: 30,
                 fit: BoxFit.scaleDown,
               ),
               customWidth(10),
-              Flexible(
-                child: CommonMarkdownWidget(
-                  data: messageData.text ?? "",
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: CommonMarkdownWidget(
+                            data: messageData.text ?? "",
+                          ),
+                        ),
+                      ],
+                    ),
+                    height20,
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: SvgPicture.asset(
+                              AppAsset.copy,
+                              height: 16,
+                              width: 16,
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: SvgPicture.asset(
+                              AppAsset.refresh,
+                              height: 16,
+                              width: 16,
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: SvgPicture.asset(
+                              AppAsset.like,
+                              height: 16,
+                              width: 16,
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: SvgPicture.asset(
+                              AppAsset.dislike,
+                              height: 16,
+                              width: 16,
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ],
           ),
-          height20,
-          Row(
-            children: [
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: SvgPicture.asset(
-                  AppAsset.copy,
-                  height: 20,
-                  width: 20,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: SvgPicture.asset(
-                  AppAsset.refresh,
-                  height: 20,
-                  width: 20,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: SvgPicture.asset(
-                  AppAsset.like,
-                  height: 20,
-                  width: 20,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: SvgPicture.asset(
-                  AppAsset.dislike,
-                  height: 20,
-                  width: 20,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-            ],
-          )
         ],
       ),
     );

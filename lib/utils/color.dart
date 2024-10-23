@@ -23,6 +23,7 @@ const Color bgContainColor = Color(0xFF292D34);
 const Color greenColor = Color(0xFF49C02B);
 const Color fileGreyColor = Color(0xFFA2A2A2);
 const Color progressGreyColor = Color(0xFFD9D9D9);
+const Color containRedColor = Color(0xFFE64646);
 
 const MaterialColor primaryBlack = MaterialColor(
   _blackPrimaryValue,

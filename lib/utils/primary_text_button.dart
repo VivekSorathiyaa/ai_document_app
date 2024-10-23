@@ -39,7 +39,7 @@ class PrimaryTextButton extends StatelessWidget {
     return Center(
       child: SizedBox(
         width: width ?? MediaQuery.of(context).size.width, // Set default width
-        height: height ?? 50,
+        height: height ?? 42,
         child: Material(
           borderRadius: borderRadius ?? BorderRadius.circular(12),
           color: primaryBlack,
@@ -68,8 +68,8 @@ class PrimaryTextButton extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 8.0),
                           child: SvgPicture.asset(
                             icon!,
-                            height: fontSize ?? 24,
-                            width: fontSize ?? 24,
+                            height: fontSize ?? 22,
+                            width: fontSize ?? 22,
                             fit: BoxFit.scaleDown,
                           ),
                         ),
@@ -79,9 +79,9 @@ class PrimaryTextButton extends StatelessWidget {
                           softWrap: true,
                           textAlign: TextAlign.center,
                           style: textStyle ??
-                              AppTextStyle.normalSemiBold18.copyWith(
+                              AppTextStyle.normalSemiBold16.copyWith(
                                   color: textColor ?? primaryWhite,
-                                  fontSize: fontSize ?? 18),
+                                  fontSize: fontSize ?? 16),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis, // Avoid overflow
                         ),

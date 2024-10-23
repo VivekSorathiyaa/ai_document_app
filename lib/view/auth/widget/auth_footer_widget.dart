@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../utils/app_text_style.dart';
@@ -11,42 +12,51 @@ Widget AuthFooterWidget(context) {
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  'Terms & Conditions',
-                  style: AppTextStyle.normalRegular16.copyWith(
-                    color: hintGreyColor,
-                    decoration: TextDecoration.underline,
-                    decorationColor: hintGreyColor,
+                child: InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'Terms & Conditions',
+                    style: AppTextStyle.normalRegular14.copyWith(
+                      color: hintGreyColor,
+                      decoration: TextDecoration.underline,
+                      decorationColor: hintGreyColor,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                 ),
               ),
               Expanded(
-                child: Text(
-                  'Support',
-                  style: AppTextStyle.normalRegular16.copyWith(
-                    color: hintGreyColor,
-                    decoration: TextDecoration.underline,
-                    decorationColor: hintGreyColor,
+                child: InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'Support',
+                    style: AppTextStyle.normalRegular14.copyWith(
+                      color: hintGreyColor,
+                      decoration: TextDecoration.underline,
+                      decorationColor: hintGreyColor,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                 ),
               ),
               Expanded(
-                child: Text(
-                  'Customer Care',
-                  style: AppTextStyle.normalRegular16.copyWith(
-                    color: hintGreyColor,
-                    decoration: TextDecoration.underline,
-                    decorationColor: hintGreyColor,
+                child: InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'Customer Care',
+                    style: AppTextStyle.normalRegular14.copyWith(
+                      color: hintGreyColor,
+                      decoration: TextDecoration.underline,
+                      decorationColor: hintGreyColor,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                 ),
               ),
             ],

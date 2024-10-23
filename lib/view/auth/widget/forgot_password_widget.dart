@@ -19,8 +19,8 @@ class ForgotPasswordWidget extends StatelessWidget {
   var controller = Get.put(LoginController());
 
   refreshPage() {
-    controller.infoMessage("");
-    controller.errorMessage("");
+    // controller.infoMessage.value = "";
+    // controller.errorMessage.value = "";
   }
 
   @override
@@ -39,7 +39,7 @@ class ForgotPasswordWidget extends StatelessWidget {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                maxWidth: 480.0,
+                maxWidth: 460.0,
               ),
               child: GradientBorderWidget(
                 child: Padding(
@@ -55,11 +55,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           'Forgot Password',
-                          style: GoogleFonts.notoSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 36,
-                            color: primaryWhite,
-                          ),
+                          style: AppTextStyle.normalSemiBold30,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -68,7 +64,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                         child: Text(
                           'Please enter your email',
                           style: GoogleFonts.notoSans(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: hintGreyColor,
                           ),
                         ),
@@ -90,7 +86,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                         if (controller.errorMessage.value.isNotEmpty ||
                             controller.infoMessage.value.isNotEmpty) {
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
+                            padding: const EdgeInsets.only(bottom: 14),
                             child: Text(
                               controller.errorMessage.value.isNotEmpty
                                   ? controller.errorMessage.value
@@ -129,7 +125,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                             flex: 2,
                             child: Text(
                               'Back to',
-                              style: AppTextStyle.normalRegular16,
+                              style: AppTextStyle.normalRegular14,
                               // maxLines: 1,
                               // overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
@@ -143,7 +139,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                               },
                               child: Text(
                                 'Login',
-                                style: AppTextStyle.normalSemiBold16.copyWith(
+                                style: AppTextStyle.normalSemiBold14.copyWith(
                                   color: purpleColor,
                                   decoration: TextDecoration.underline,
                                   decorationColor: purpleColor,

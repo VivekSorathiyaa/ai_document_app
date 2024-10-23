@@ -8,6 +8,7 @@ class HomeController extends GetxController {
 
   RxBool isDrawerExpand = true.obs;
   RxBool isSearchOpen = false.obs;
+  RxBool isProPlanExpand = true.obs;
 }
 
 RxList<MenuModel> menuList = <MenuModel>[

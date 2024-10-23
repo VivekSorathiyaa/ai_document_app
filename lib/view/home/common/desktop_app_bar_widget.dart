@@ -1,13 +1,13 @@
 import 'package:ai_document_app/controllers/chat_controller.dart';
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/color.dart';
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/home_controller.dart';
 import '../../../model/chat_model.dart';
-import '../../../model/document_model.dart';
-import '../../../utils/custom_dropdown_widget.dart';
+// import '../../../utils/custom_dropdown_widget.dart';
 import 'searchbar_widget.dart';
 
 class DesktopAppBarWidget extends StatelessWidget {
@@ -28,46 +28,76 @@ class DesktopAppBarWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Obx(
-                        () => CustomDropdown(
-                          items: chatController.chatRoomList.value,
-                          selectedValues: chatController
-                                  .selectedChatList.value.isNotEmpty
-                              ? [chatController.selectedChatList.value.first]
-                              : [],
-                          hintText: 'History',
-                          onChanged: (newValues) {
-                            chatController.selectedChatList.value =
-                                newValues.cast<ChatModel>();
-                            chatController.setCurrentChatRoomId(
-                                chatController.selectedChatList.value.first);
-                          },
-                          displayItem: (item) => item.name,
-                          selectionMode: SelectionMode.single,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 27),
-                    Expanded(
-                      child: Obx(
                         () {
-                          return CustomDropdown(
-                            items: chatController.documentsList.value,
-                            selectedValues:
-                                chatController.selectedDocumentList.value,
-                            hintText: 'Select PDF to get answer',
-                            onChanged: (newValues) {
-                              chatController.selectedDocumentList.assignAll(
-                                  newValues
-                                      .cast<DocumentModel>()); // Use assignAll
-                              chatController
-                                  .updateSelectedDocumentsInFirestore();
+                          // Ensure that the initialItem is in the list
+                          ChatModel? initialItem =
+                              chatController.currentChatRoom.value != null &&
+                                      chatController.chatRoomList.contains(
+                                          chatController.currentChatRoom.value)
+                                  ? chatController.currentChatRoom.value
+                                  : null;
+
+                          return CustomDropdown<ChatModel>.search(
+                            hintText: 'History',
+                            items: chatController.chatRoomList.value,
+
+                            decoration: CustomDropdownDecoration(
+                              closedFillColor: primaryBlack,
+                            ),
+
+                            initialItem:
+                                initialItem, // Safely set the initialItem
+                            overlayHeight: 342,
+                            onChanged: (value) {
+                              chatController.currentChatRoom.value = value;
                             },
-                            displayItem: (item) => item.name,
-                            selectionMode: SelectionMode.multi,
                           );
                         },
                       ),
                     ),
+
+                    // Expanded(
+                    //   child: Obx(
+                    //     () => CustomDropdown(
+                    //       items: chatController.chatRoomList.value,
+                    //       selectedValues: chatController
+                    //               .selectedChatList.value.isNotEmpty
+                    //           ? [chatController.selectedChatList.value.first]
+                    //           : [],
+                    //       hintText: 'History',
+                    //       onChanged: (newValues) {
+                    //         chatController.selectedChatList.value =
+                    //             newValues.cast<ChatModel>();
+                    //         chatController.setCurrentChatRoomId(
+                    //             chatController.selectedChatList.value.first);
+                    //       },
+                    //       displayItem: (item) => item.name,
+                    //       selectionMode: SelectionMode.single,
+                    //     ),
+                    //   ),
+                    // ),
+                    const SizedBox(width: 27),
+                    // Expanded(
+                    //   child: Obx(
+                    //     () {
+                    //       return CustomDropdown(
+                    //         items: chatController.documentsList.value,
+                    //         selectedValues:
+                    //             chatController.selectedDocumentList.value,
+                    //         hintText: 'Select PDF to get answer',
+                    //         onChanged: (newValues) {
+                    //           chatController.selectedDocumentList.assignAll(
+                    //               newValues
+                    //                   .cast<DocumentModel>()); // Use assignAll
+                    //           chatController
+                    //               .updateSelectedDocumentsInFirestore();
+                    //         },
+                    //         displayItem: (item) => item.name,
+                    //         selectionMode: SelectionMode.multi,
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                     const SizedBox(width: 27),
                     Expanded(child: SearchbarWidget())
                   ],

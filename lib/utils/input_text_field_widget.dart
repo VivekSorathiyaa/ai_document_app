@@ -92,7 +92,7 @@ class PasswordWidget extends StatelessWidget {
             child: Text(
               labelText ?? "",
               style:
-                  AppTextStyle.normalRegular16.copyWith(color: tableTextColor),
+                  AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
             ),
           ),
         Obx(() => textFormField(
@@ -222,7 +222,7 @@ class TextFormFieldWidget extends StatelessWidget {
             child: Text(
               labelText ?? "",
               style:
-                  AppTextStyle.normalRegular16.copyWith(color: tableTextColor),
+                  AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
             ),
           ),
         textFormField(
@@ -330,7 +330,7 @@ TextFormField textFormField({
     textAlign: textAlign,
     cursorColor: cursorColor ?? primaryWhite,
     cursorHeight: 20,
-    style: textStyle ?? AppTextStyle.normalRegular16,
+    style: textStyle ?? AppTextStyle.normalRegular14,
     decoration: InputDecoration(
       prefixIcon: prefixIcon,
       contentPadding: contentPadding ??

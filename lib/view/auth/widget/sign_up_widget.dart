@@ -36,7 +36,7 @@ class SignUpWidget extends StatelessWidget {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                maxWidth: 480.0,
+                maxWidth: 460.0,
               ),
               child: GradientBorderWidget(
                 child: Padding(
@@ -52,11 +52,7 @@ class SignUpWidget extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           'Signup',
-                          style: GoogleFonts.notoSans(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 36,
-                            color: primaryWhite,
-                          ),
+                          style: AppTextStyle.normalSemiBold30,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -65,7 +61,7 @@ class SignUpWidget extends StatelessWidget {
                         child: Text(
                           'Just some details to get you in!',
                           style: GoogleFonts.notoSans(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: hintGreyColor,
                           ),
                         ),
@@ -108,7 +104,7 @@ class SignUpWidget extends StatelessWidget {
                       Obx(() {
                         if (controller.errorMessage.value.isNotEmpty) {
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
+                            padding: const EdgeInsets.only(bottom: 14),
                             child: Text(
                               controller.errorMessage.value,
                               style: AppTextStyle.normalRegular14
@@ -147,7 +143,7 @@ class SignUpWidget extends StatelessWidget {
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 'Or',
-                                style: AppTextStyle.normalRegular16,
+                                style: AppTextStyle.normalRegular14,
                               ),
                             ),
                           ),
@@ -193,7 +189,7 @@ class SignUpWidget extends StatelessWidget {
                             flex: 2,
                             child: Text(
                               'Already Registered?',
-                              style: AppTextStyle.normalRegular16,
+                              style: AppTextStyle.normalRegular14,
                               textAlign: TextAlign.end,
                             ),
                           ),
@@ -205,7 +201,7 @@ class SignUpWidget extends StatelessWidget {
                               },
                               child: Text(
                                 'Login',
-                                style: AppTextStyle.normalSemiBold16.copyWith(
+                                style: AppTextStyle.normalSemiBold14.copyWith(
                                   color: purpleColor,
                                   decoration: TextDecoration.underline,
                                   decorationColor: purpleColor,

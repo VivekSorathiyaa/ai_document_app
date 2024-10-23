@@ -100,12 +100,11 @@ class MobileAppBarWidget extends StatelessWidget
                     return HistoryMenuTileWidget(
                       model: element,
                       onTap: () {
-                        chatController.selectedChatList.value = [element];
-                        chatController.selectedChatList.refresh();
+                        // chatController.selectedChatList.value = [element];
+                        // chatController.selectedChatList.refresh();
                         Get.back(); // Close dialog after selection
                       },
-                      isSelect: chatController.selectedChatList.value
-                          .contains(element),
+                      isSelect: chatController.currentChatRoom.value == element,
                     );
                   }).toList(),
                 ),

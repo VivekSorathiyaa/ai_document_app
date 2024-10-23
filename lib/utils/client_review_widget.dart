@@ -67,7 +67,7 @@ class _ClientReviewWidgetState extends State<ClientReviewWidget> {
 
   Widget _buildReviewListView(ScrollController controller) {
     return SizedBox(
-      height: 128,
+      height: 110,
       child: ListView.builder(
         controller: controller,
         scrollDirection: Axis.horizontal,
@@ -120,7 +120,7 @@ Widget ReviewTile(context, review) {
   return Padding(
     padding: const EdgeInsets.only(left: 15),
     child: Container(
-      width: _responsiveWidth(context, 303), // Adjust width responsively
+      width: _responsiveWidth(context, 300), // Adjust width responsively
       decoration: BoxDecoration(
         color: primaryWhite,
         borderRadius: BorderRadius.circular(8),
@@ -128,7 +128,7 @@ Widget ReviewTile(context, review) {
       child: Row(
         children: [
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Column(
               children: [
                 SizedBox(
@@ -136,21 +136,20 @@ Widget ReviewTile(context, review) {
                         _responsiveHeight(context, 10)), // Responsive spacer
                 NetworkImageWidget(
                   imageUrl: review['image'],
-                  width: _responsiveWidth(context, 60), // Responsive image size
-                  height: _responsiveHeight(context, 60),
+                  width: _responsiveWidth(context, 40), // Responsive image size
+                  height: _responsiveHeight(context, 40),
                   fit: BoxFit.cover,
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(40),
                 ),
                 SizedBox(
-                    height:
-                        _responsiveHeight(context, 10)), // Responsive spacer
+                    height: _responsiveHeight(context, 8)), // Responsive spacer
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: List.generate(5, (index) {
                     return const Icon(
                       Icons.star,
                       color: blueColor,
-                      size: 10,
+                      size: 8,
                     );
                   }),
                 ),
@@ -158,32 +157,32 @@ Widget ReviewTile(context, review) {
             ),
           ),
           Expanded(
-            flex: 7,
+            flex: 8,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
                       "Our happy customer",
                       style: GoogleFonts.manrope(
-                        fontSize: _responsiveFontSize(context, 16),
+                        fontSize: _responsiveFontSize(context, 14),
                         color: primaryBlack,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
                       Flexible(
                         child: Text(
                           review['review'],
                           style: GoogleFonts.manrope(
-                            fontSize: _responsiveFontSize(context, 10),
+                            fontSize: _responsiveFontSize(context, 8),
                             color: greyColor,
                           ),
                           maxLines: 3,
@@ -197,7 +196,7 @@ Widget ReviewTile(context, review) {
                     child: Text(
                       review['name'],
                       style: GoogleFonts.manrope(
-                        fontSize: _responsiveFontSize(context, 10),
+                        fontSize: _responsiveFontSize(context, 8),
                         color: primaryBlack,
                         fontWeight: FontWeight.bold,
                       ),
