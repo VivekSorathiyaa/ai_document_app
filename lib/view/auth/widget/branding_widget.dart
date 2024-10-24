@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -57,7 +57,7 @@ class BrandingWidget extends StatelessWidget {
                             horizontal: 58.0, vertical: 30),
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
-                          child: Text(
+                          child: SelectableText(
                             'From Documents to AI\nConversation',
                             style: GoogleFonts.notoSans(
                               color: primaryWhite,

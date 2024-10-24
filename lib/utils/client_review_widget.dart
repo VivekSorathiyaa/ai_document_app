@@ -166,7 +166,7 @@ Widget ReviewTile(context, review) {
                   const SizedBox(height: 4),
                   FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text(
+                    child: SelectableText(
                       "Our happy customer",
                       style: GoogleFonts.manrope(
                         fontSize: _responsiveFontSize(context, 14),
@@ -179,7 +179,7 @@ Widget ReviewTile(context, review) {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(
+                        child: SelectableText(
                           review['review'],
                           style: GoogleFonts.manrope(
                             fontSize: _responsiveFontSize(context, 8),
@@ -193,7 +193,7 @@ Widget ReviewTile(context, review) {
                   const SizedBox(height: 10),
                   FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text(
+                    child: SelectableText(
                       review['name'],
                       style: GoogleFonts.manrope(
                         fontSize: _responsiveFontSize(context, 8),

@@ -48,7 +48,7 @@ class LoginWidget extends StatelessWidget {
                   children: [
                     FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text(
+                      child: SelectableText(
                         'Login',
                         style: AppTextStyle.normalSemiBold30,
                       ),
@@ -56,7 +56,7 @@ class LoginWidget extends StatelessWidget {
                     const SizedBox(height: 8),
                     FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text(
+                      child: SelectableText(
                         'Glad you\'re back!',
                         style: GoogleFonts.notoSans(
                           fontSize: 14,
@@ -128,7 +128,7 @@ class LoginWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Text(
+                          child: SelectableText(
                             'Remember me',
                             style: GoogleFonts.notoSans(
                               color: primaryWhite,
@@ -136,7 +136,6 @@ class LoginWidget extends StatelessWidget {
                             ),
                             textAlign: TextAlign.start,
                             maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Expanded(
@@ -148,7 +147,7 @@ class LoginWidget extends StatelessWidget {
                               shaderCallback: (bounds) => const LinearGradient(
                                 colors: <Color>[orangeColor, purpleColor],
                               ).createShader(bounds),
-                              child: Text(
+                              child: SelectableText(
                                 'Forgot password?',
                                 style: GoogleFonts.notoSans(
                                   color: primaryWhite,
@@ -156,7 +155,6 @@ class LoginWidget extends StatelessWidget {
                                 ),
                                 textAlign: TextAlign.end,
                                 maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),
@@ -168,7 +166,7 @@ class LoginWidget extends StatelessWidget {
                       if (controller.errorMessage.value.isNotEmpty) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 14),
-                          child: Text(
+                          child: SelectableText(
                             controller.errorMessage.value,
                             style: AppTextStyle.normalRegular14
                                 .copyWith(color: orangeColor),
@@ -203,7 +201,7 @@ class LoginWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 14),
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text(
+                            child: SelectableText(
                               'Or',
                               style: AppTextStyle.normalRegular14,
                             ),
@@ -249,11 +247,11 @@ class LoginWidget extends StatelessWidget {
                       children: [
                         Flexible(
                           flex: 2,
-                          child: Text(
+                          child: SelectableText(
                             'Don’t have an account?',
                             style: AppTextStyle.normalRegular14,
                             // maxLines: 1,
-                            // overflow: TextOverflow.ellipsis,
+                            //
                             textAlign: TextAlign.end,
                           ),
                         ),
@@ -263,7 +261,7 @@ class LoginWidget extends StatelessWidget {
                             onTap: () {
                               navigateTo(context, SignupView.name);
                             },
-                            child: Text(
+                            child: SelectableText(
                               'Signup',
                               style: AppTextStyle.normalSemiBold14.copyWith(
                                 color: purpleColor,
@@ -271,7 +269,6 @@ class LoginWidget extends StatelessWidget {
                                 decorationColor: purpleColor,
                               ),
                               maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.start,
                             ),
                           ),

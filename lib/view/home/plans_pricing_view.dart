@@ -87,13 +87,12 @@ class PlansPricingView extends StatelessWidget {
           ),
           customWidth(isDesktop ? 16 : 12),
           Expanded(
-            child: Text(
+            child: SelectableText(
               'PDF to AI Conversation',
               style: AppTextStyle.normalSemiBold16
                   .copyWith(fontSize: isDesktop ? 16 : 14),
               textAlign: TextAlign.start,
               maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
           customWidth(isDesktop ? 16 : 12),
@@ -278,10 +277,9 @@ class PlansPricingView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 18.0, vertical: 7),
-                      child: Text(
+                      child: SelectableText(
                         "MOST POPULAR",
                         style: AppTextStyle.normalBold10,
-                        overflow: TextOverflow.clip,
                         maxLines: 1,
                       ),
                     ),
@@ -299,24 +297,22 @@ class PlansPricingView extends StatelessWidget {
                     plan.isPopular ? primaryWhite : purpleColor,
                   ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
                       .createShader(bounds),
-                  child: Text(
+                  child: SelectableText(
                     '\$${plan.price}',
                     style: AppTextStyle.normalSemiBold36.copyWith(height: 1.2),
                     textAlign: TextAlign.center,
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
               customWidth(14),
               Flexible(
-                child: Text(
+                child: SelectableText(
                   '/${plan.isMonthly ? "month" : "yearly"}',
                   style: AppTextStyle.normalRegular17
                       .copyWith(color: tableTextColor),
                   textAlign: TextAlign.center,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -332,12 +328,11 @@ class PlansPricingView extends StatelessWidget {
                     plan.isPopular ? primaryWhite : purpleColor,
                   ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
                       .createShader(bounds),
-                  child: Text(
+                  child: SelectableText(
                     plan.name,
                     style: AppTextStyle.normalSemiBold28,
                     textAlign: TextAlign.center,
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -347,7 +342,7 @@ class PlansPricingView extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text(
+                child: SelectableText(
                   plan.description,
                   style: AppTextStyle.normalRegular15,
                   maxLines: 2,
@@ -372,11 +367,10 @@ class PlansPricingView extends StatelessWidget {
                           ),
                     width10,
                     Expanded(
-                      child: Text(
+                      child: SelectableText(
                         element,
                         style: AppTextStyle.normalRegular15,
                         maxLines: 1,
-                        overflow: TextOverflow.clip,
                       ),
                     )
                   ],
@@ -407,11 +401,10 @@ class PlansPricingView extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Text(
+              child: SelectableText(
                 'Plans & Pricing',
                 style: AppTextStyle.normalSemiBold40
                     .copyWith(fontSize: isDesktop ? 40 : 24),
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -456,11 +449,10 @@ class PlansPricingView extends StatelessWidget {
   }
 
   Widget _buildPlanInfo(isDesktop) {
-    return Text(
+    return SelectableText(
       "Whether your time-saving automation needs are large or small, we’re here to help you scale.",
       style: AppTextStyle.normalRegular18
           .copyWith(color: tableTextColor, fontSize: isDesktop ? 18 : 14),
-      overflow: TextOverflow.clip,
     );
   }
 
@@ -486,7 +478,7 @@ class PlansPricingView extends StatelessWidget {
                         ? purpleColor
                         : bgContainColor),
                 child: Center(
-                  child: Text(
+                  child: SelectableText(
                     "MONTHLY",
                     style: AppTextStyle.normalRegular12.copyWith(
                         color: planController.isMonthlySelect.value
@@ -511,7 +503,7 @@ class PlansPricingView extends StatelessWidget {
                         ? purpleColor
                         : bgContainColor),
                 child: Center(
-                  child: Text(
+                  child: SelectableText(
                     "YEARLY",
                     style: AppTextStyle.normalRegular12.copyWith(
                         color: !planController.isMonthlySelect.value

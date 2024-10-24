@@ -1,6 +1,7 @@
 import 'package:ai_document_app/utils/app_text_style.dart';
 import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'color.dart';
 
@@ -26,12 +27,11 @@ class ActiveSessionWidget extends StatelessWidget {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(
+                        child: SelectableText(
                           "2018 Macbook Pro 15-inch",
                           style: AppTextStyle.normalBold16
                               .copyWith(color: tableTextColor),
                           maxLines: 1,
-                          overflow: TextOverflow.clip,
                         ),
                       ),
                       width08,
@@ -52,7 +52,7 @@ class ActiveSessionWidget extends StatelessWidget {
                                     shape: BoxShape.circle, color: greenColor),
                               ),
                               width05,
-                              Text(
+                              SelectableText(
                                 "Active Now",
                                 style: AppTextStyle.normalSemiBold12
                                     .copyWith(color: primaryBlack),
@@ -67,12 +67,11 @@ class ActiveSessionWidget extends StatelessWidget {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(
+                        child: SelectableText(
                           "Melbourne, Australia • 22 Jan at 10:40am",
                           style: AppTextStyle.normalRegular14
                               .copyWith(color: tableTextColor),
                           maxLines: 1,
-                          overflow: TextOverflow.clip,
                         ),
                       ),
                     ],

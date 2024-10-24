@@ -84,14 +84,13 @@ class CustomDropdown extends StatelessWidget {
                   return Row(
                     children: [
                       Expanded(
-                        child: Text(
+                        child: SelectableText(
                           displayItem != null
                               ? displayItem!(item)
                               : item.toString(),
                           style: isDesktop
                               ? AppTextStyle.normalRegular16
                               : AppTextStyle.normalRegular14,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       if (isSelected &&
@@ -117,12 +116,11 @@ class CustomDropdown extends StatelessWidget {
             hint: Row(
               children: [
                 Expanded(
-                  child: Text(
+                  child: SelectableText(
                     buttonLabel,
                     style: isDesktop
                         ? AppTextStyle.normalRegular16
                         : AppTextStyle.normalRegular14,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
@@ -221,11 +219,10 @@ class AccessDropdown extends StatelessWidget {
           items: accessLevels.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(
+              child: SelectableText(
                 value,
                 style: AppTextStyle.normalRegular14
                     .copyWith(color: tableTextColor),
-                overflow: TextOverflow.clip,
                 textAlign: TextAlign.start,
                 maxLines: 1,
               ),

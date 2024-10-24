@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:ai_document_app/utils/input_text_field_widget.dart';
+import 'package:ai_document_app/utils/primary_text_button.dart';
+import 'package:ai_document_app/utils/static_decoration.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,20 +19,15 @@ import '../utils/app_text_style.dart';
 import '../utils/color.dart';
 import '../utils/common_method.dart';
 
-// @JS('extractTextFromPDF')
-// external dynamic extractTextFromPDF(String pdfUrl);
-
 class ChatController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final CollectionReference collectionDocuments =
       FirebaseFirestore.instance.collection('documents');
-
   Rxn<ChatModel> currentChatRoom = Rxn<ChatModel>();
   TextEditingController chatRoomNameController = TextEditingController();
   TextEditingController messageTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   var currentIndex = 0.obs;
-  // var selectedDocumentsId = <String>[].obs;
   var extractedTextList = <String>[].obs;
   var messagesList = <MessageModel>[].obs;
   RxList<ChatModel> chatRoomList = <ChatModel>[].obs;
@@ -49,25 +46,28 @@ class ChatController extends GetxController {
     SuggestionModel(id: '8', name: "Write summary of book?"),
   ]);
 
-  // Rxn<ChatModel> currentChatRoom = Rxn<ChatModel>();
-  // RxList<ChatModel> selectedChat = <ChatModel>[].obs;
   RxList<DocumentModel> selectedDocumentList = <DocumentModel>[].obs;
-
   RxBool loading = false.obs;
 
   void listenToChatRooms() {
+    final userEmail = CommonMethod.auth.currentUser?.email;
+    if (userEmail == null || userEmail.isEmpty) {
+      print("No user email found for chat room listener.");
+      return;
+    }
     FirebaseFirestore.instance
         .collection('chat_rooms')
-        .where('participants',
-            arrayContains: CommonMethod.auth.currentUser?.email)
+        .where('participants', arrayContains: userEmail)
         .snapshots()
         .listen((snapshot) {
-      // Convert the documents into ChatModel instances
-      List<ChatModel> chatRooms =
-          snapshot.docs.map((doc) => ChatModel.fromFirestore(doc)).toList();
-
-      // Assign the converted list to your chatRoomList
-      chatRoomList.assignAll(chatRooms);
+      final List<ChatModel> chatRooms = snapshot.docs
+          .map((doc) => ChatModel.fromFirestore(doc))
+          .where((chatRoom) => chatRoom != null)
+          .toList();
+      if (chatRoomList.length != chatRooms.length ||
+          !chatRoomList.every((room) => chatRooms.contains(room))) {
+        chatRoomList.assignAll(chatRooms);
+      }
     });
   }
 
@@ -84,8 +84,6 @@ class ChatController extends GetxController {
           // Get the list of document IDs, ensuring they are unique
           final List<dynamic> documents = data?['selected_documents'] ?? [];
           List<String> documentIds = List<String>.from(documents.toSet());
-
-          log("-----documents------$documentIds");
 
           // Fetch all documents at once using a batched get request
           if (documentIds.isNotEmpty) {
@@ -115,34 +113,51 @@ class ChatController extends GetxController {
   }
 
   void fetchDocuments() {
+    final userEmail = CommonMethod.auth.currentUser?.email;
+
+    if (userEmail == null || userEmail.isEmpty) {
+      print("No user email found for fetching documents.");
+      return;
+    }
+
     FirebaseFirestore.instance
         .collection('documents')
-        .where('uploaded_by', isEqualTo: CommonMethod.auth.currentUser?.email)
+        .where('uploaded_by', isEqualTo: userEmail)
+        // Fetch only the necessary fields for performance
         .orderBy('timestamp', descending: true)
+        // Add a limit to fetch only a specific number of documents (for pagination if needed)
+        //.limit(20)
         .snapshots()
         .listen((snapshot) {
-      documentsList.assignAll(snapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      // Map Firestore documents to DocumentModel efficiently
+      final List<DocumentModel> fetchedDocuments = snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
         return DocumentModel(
           id: doc.id,
           name: data['name'] ?? '',
           url: data['url'] ?? '',
           status: data['upload_status'] ?? 'Unknown',
           uploadedBy: data['uploaded_by'] ?? '',
-          size: data['size']?.toDouble() ?? 0.0,
-          date: data['timestamp']?.toDate().toString() ??
-              '', // Adjust date format as needed
-          actions: 'Action ${doc.id}', // Or set this based on your needs
+          size: (data['size'] as num?)?.toDouble() ?? 0.0,
+          date: data['timestamp']?.toDate().toString() ?? '',
+          actions: 'Action ${doc.id}', // Customize this action field as needed
         );
-      }).toList());
+      }).toList();
 
-      documentsList.refresh();
-      listenToSelectedDocuments();
+      // Update documentsList only if there are changes
+      if (documentsList.length != fetchedDocuments.length ||
+          !documentsList.every((doc) => fetchedDocuments.contains(doc))) {
+        documentsList.assignAll(fetchedDocuments);
+      }
+
+      listenToSelectedDocuments(); // Only if needed
     });
   }
 
   void fetchMessages(String chatRoomId) {
+    print("-----chatRoomId-----$chatRoomId");
     if (chatRoomId.isNotEmpty) {
+      messagesList.value.clear();
       firestore
           .collection('chat_rooms')
           .doc(chatRoomId)
@@ -150,25 +165,14 @@ class ChatController extends GetxController {
           .orderBy('timestamp', descending: true)
           .snapshots()
           .listen((snapshot) {
-        // Convert the documents into MessageModel instances
         List<MessageModel> messages = snapshot.docs
             .map((doc) =>
                 MessageModel.fromMap(doc.data() as Map<String, dynamic>))
             .toList();
-
-        // Assign the converted list to your messagesList
         messagesList.assignAll(messages);
         messagesList.refresh(); // Refresh to notify listeners about the changes
       });
     }
-  }
-
-  void setCurrentChatRoomId(ChatModel model) {
-    currentChatRoom.value = model;
-    currentChatRoom.refresh();
-    fetchMessages(currentChatRoom.value?.id ??
-        ""); // Fetch messages whenever the current chat room ID is set
-    refreshPage();
   }
 
   List<String> getSelectedDocumentIds() {
@@ -186,8 +190,6 @@ class ChatController extends GetxController {
       // Fetch the document to see if it exists
       DocumentSnapshot snapshot = await chatRoomRef.get();
       if (snapshot.exists) {
-        // Document exists, proceed with the update
-        // Get the selected document IDs and remove duplicates
         List<String> uniqueDocumentIds =
             getSelectedDocumentIds().toSet().toList();
 
@@ -206,10 +208,10 @@ class ChatController extends GetxController {
   }
 
   Future<void> refreshPage() async {
+    getCurrentChatRoom();
     listenToChatRooms();
     fetchDocuments();
     fetchApiKey();
-    initializeChatRoom();
   }
 
   Future<void> fetchApiKey() async {
@@ -247,48 +249,63 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> sendMessage(
-      {required String message,
-      required String chatRoomId,
-      required String userId}) async {
+  Future<void> sendMessage({
+    required String message,
+    required String chatRoomId,
+    required String userId,
+  }) async {
+    print("---message---->$message");
+    print("----chatRoomId--->$chatRoomId");
+    print("----userId--->$userId");
     if (message.trim().isEmpty) {
       return;
     }
 
     try {
-      await firestore
+      // Prepare to send user message
+      DocumentReference userMessageRef = firestore
           .collection('chat_rooms')
           .doc(chatRoomId)
           .collection('messages')
-          .add({
+          .doc(); // Generate a new document reference for the user message
+
+      // Set the user message immediately
+      await userMessageRef.set({
         'text': message,
         'senderId': userId,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      final botMessage = await geminiGenerateBotResponse(message);
+      // Generate bot response if loading is false
+      if (!loading.value) {
+        final botMessage = await geminiGenerateBotResponse(message);
+        if (botMessage != null) {
+          // Prepare bot message
+          DocumentReference botMessageRef = firestore
+              .collection('chat_rooms')
+              .doc(chatRoomId)
+              .collection('messages')
+              .doc(); // Generate a new document reference for the bot message
 
-      if (botMessage != null && loading.value == false) {
-        await firestore
-            .collection('chat_rooms')
-            .doc(chatRoomId)
-            .collection('messages')
-            .add({
-          'text': botMessage,
-          'senderId': 'Bot',
-          'timestamp': FieldValue.serverTimestamp(),
-        });
+          // Set the bot message
+          await botMessageRef.set({
+            'text': botMessage,
+            'senderId': 'Bot',
+            'timestamp': FieldValue.serverTimestamp(),
+          });
+        }
+      }
+
+      // Scroll only if needed
+      if (scrollController.hasClients) {
         scrollController.animateTo(
           scrollController.position.minScrollExtent,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
-      } else {
-        // CommonMethod.getXSnackBar(
-        //     "Error", 'Failed to get response from the bot.', redColor);
       }
     } catch (e) {
-      CommonMethod.getXSnackBar("Error", 'Error sending message.');
+      CommonMethod.getXSnackBar("Error", 'Error sending message: $e');
     }
   }
 
@@ -303,7 +320,7 @@ class ChatController extends GetxController {
       }
       String extractedText = extractedTextList.value.join("\n");
       storedExtractedText = extractedText;
-      log("----storedExtractedText----${storedExtractedText}");
+      // log("----storedExtractedText----${storedExtractedText}");
       customMessage = message;
       final response = await http.post(
         Uri.parse('https://api.openai.com/v1/chat/completions'),
@@ -360,7 +377,7 @@ class ChatController extends GetxController {
 
       String extractedText = extractedTextList.value.join("\n");
       storedExtractedText = extractedText;
-      log("----storedExtractedText----${storedExtractedText}");
+      // log("----storedExtractedText----${storedExtractedText}");
 
       final requestBody = {
         'contents': [
@@ -406,203 +423,151 @@ class ChatController extends GetxController {
     }
   }
 
-  void showEditChatRoomNameDialog(DocumentSnapshot chatRoom) {
-    chatRoomNameController.text = chatRoom['name'];
-
-    Get.defaultDialog(
-      title: 'Edit Conversation Name',
-      titlePadding: EdgeInsets.all(20),
-      titleStyle: AppTextStyle.normalBold20.copyWith(color: primaryBlack),
-      content: Padding(
-        padding: const EdgeInsets.all(20),
-        child: TextFormFieldWidget(
-          controller: chatRoomNameController,
-          hintText: 'Enter new name',
-          labelText: 'Name',
-        ),
-      ),
-      confirm: ElevatedButton(
-        onPressed: () async {
-          if (chatRoomNameController.text.isNotEmpty) {
-            await CommonMethod.updateChatRoomName(
-                chatRoom.id, chatRoomNameController.text);
-            Get.back(); // Close the dialog
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryBlack,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
-        ),
-        child: Text(
-          'Save',
-          style: AppTextStyle.normalBold16.copyWith(color: primaryWhite),
-        ),
-      ),
-      cancel: TextButton(
-        onPressed: () {
-          Get.back(); // Close the dialog
-        },
-        child: Text(
-          'Cancel',
-          style: AppTextStyle.normalBold16.copyWith(color: primaryBlack),
-        ),
-      ),
-      barrierDismissible:
-          false, // Prevent closing the dialog by tapping outside
-      radius: 12, // Rounded corners for the dialog
-      backgroundColor: Colors.white,
-    );
-  }
-
-  void showCreateChatRoomDialog() {
-    Get.defaultDialog(
-      title: 'Create New Conversation',
-      titlePadding: EdgeInsets.all(20),
-
-      titleStyle: AppTextStyle.normalBold20.copyWith(color: primaryBlack),
-      content: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: TextFormFieldWidget(
+  void showCreateChatRoomDialog(BuildContext context) {
+    CommonMethod.showSimpleDialog(
+        title: 'Create New Chat',
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            TextFormFieldWidget(
               controller: chatRoomNameController,
-              hintText: 'Enter conversation name',
-              labelText: 'Name',
+              hintText: 'Enter Chat Name',
+              filledColor: primaryBlack,
             ),
-          ),
-        ],
-      ),
-      confirm: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryBlack,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
+            const SizedBox(height: 40),
+            SizedBox(
+              width: 300,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: PrimaryTextButton(
+                      title: "Cancel",
+                      gradientColors: const [bgBlackColor, bgBlackColor],
+                      onPressed: () {
+                        Get.back();
+                      },
+                    ),
+                  ),
+                  width10,
+                  Expanded(
+                    child: PrimaryTextButton(
+                      title: "Create",
+                      onPressed: () async {
+                        if (chatRoomNameController.text.isNotEmpty) {
+                          Get.back();
+                          ChatModel model = await CommonMethod.createChatRoom(
+                              chatRoomNameController.text);
+                          print("-----------setCurrentChatRoomI-----1");
+                          setCurrentChatRoomId(model);
+                          chatRoomNameController.clear();
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
-        onPressed: () async {
-          if (chatRoomNameController.text.isNotEmpty) {
-            ChatModel model =
-                await CommonMethod.createChatRoom(chatRoomNameController.text);
-            Get.back();
-            setCurrentChatRoomId(model);
-            chatRoomNameController.clear();
-          }
-        },
-        child: Text(
-          "Create",
-          style: AppTextStyle.normalBold16.copyWith(color: primaryWhite),
-        ),
-      ),
-      cancel: TextButton(
-        onPressed: () {
-          Get.back(); // Close the dialog
-        },
-        child: Text(
-          'Cancel',
-          style: AppTextStyle.normalBold16.copyWith(color: primaryBlack),
-        ),
-      ),
-      barrierDismissible:
-          false, // Prevent closing the dialog by tapping outside
-      radius: 12, // Rounded corners for the dialog
-      backgroundColor: Colors.white,
-    );
+        context: context);
   }
 
-  Future<void> showDeleteChatRoomDialog(DocumentSnapshot chatRoom) async {
-    Get.defaultDialog(
-      title: 'Delete Conversation',
-      titlePadding: EdgeInsets.all(20),
-      titleStyle: AppTextStyle.normalBold20.copyWith(color: primaryBlack),
-      content: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Text(
-          'Are you sure you want to delete this conversation?',
-          style: AppTextStyle.normalBold16.copyWith(color: primaryBlack),
+  void showEditChatDialog(BuildContext context, ChatModel chatModel) {
+    chatRoomNameController.text = chatModel.name ?? "";
+    CommonMethod.showSimpleDialog(
+        title: 'Edit Conversation Name',
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            TextFormFieldWidget(
+              controller: chatRoomNameController,
+              hintText: 'Enter new name',
+              filledColor: primaryBlack,
+            ),
+            const SizedBox(height: 40),
+            SizedBox(
+              width: 300,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: PrimaryTextButton(
+                      title: "Cancel",
+                      gradientColors: const [bgBlackColor, bgBlackColor],
+                      onPressed: () {
+                        Get.back();
+                      },
+                    ),
+                  ),
+                  width10,
+                  Expanded(
+                    child: PrimaryTextButton(
+                      title: "Create",
+                      onPressed: () async {
+                        if (chatRoomNameController.text.isNotEmpty) {
+                          Get.back();
+                          if (chatRoomNameController.text.isNotEmpty) {
+                            await CommonMethod.updateChatRoomName(
+                                chatModel.id ?? "",
+                                chatRoomNameController.text);
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
-      ),
-      confirm: ElevatedButton(
-        onPressed: () async {
-          await CommonMethod.deleteChatRoom(chatRoom.id);
-          Get.back(); // Close the dialog after deletion
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryBlack,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
-        ),
-        child: Text(
-          'Delete',
-          style: AppTextStyle.normalBold16.copyWith(color: primaryWhite),
-        ),
-      ),
-      cancel: TextButton(
-        onPressed: () {
-          Get.back(); // Close the dialog
-        },
-        child: Text(
-          'Cancel',
-          style: AppTextStyle.normalBold16.copyWith(color: primaryBlack),
-        ),
-      ),
-      barrierDismissible:
-          false, // Prevent closing the dialog by tapping outside
-      radius: 12, // Rounded corners for the dialog
-      backgroundColor: Colors.white,
-    );
+        context: context);
   }
 
-  Future<void> initializeChatRoom() async {
-    // Fetch chat rooms where the current user is a participant
-    QuerySnapshot chatRoomsSnapshot = await firestore
-        .collection('chat_rooms')
-        .where('participants',
-            arrayContains: CommonMethod.auth.currentUser?.email)
-        .get();
-
-    if (chatRoomsSnapshot.docs.isNotEmpty) {
-      // If currentChatRoom is not set, assign the first chat room
-      currentChatRoom.value ??=
-          ChatModel.fromFirestore(chatRoomsSnapshot.docs.first);
-    } else {
-      ChatModel newChatRoom =
-          await CommonMethod.createChatRoom('New Conversation');
-      currentChatRoom.value = newChatRoom; // Set the current chat room
-    }
-    // Fetch messages for the current chat room
-    fetchMessages(currentChatRoom.value?.id ?? '');
-    update();
+  Future<void> showDeleteChatDialog(
+      BuildContext context, ChatModel chatModel) async {
+    CommonMethod.showSimpleDialog(
+        title: 'Delete Conversation',
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 300,
+              child: SelectableText(
+                'Are you sure you want to delete this conversation?',
+                style: AppTextStyle.normalBold16.copyWith(color: primaryWhite),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 40),
+            SizedBox(
+              width: 300,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: PrimaryTextButton(
+                      title: "Cancel",
+                      gradientColors: const [bgBlackColor, bgBlackColor],
+                      onPressed: () {
+                        Get.back();
+                      },
+                    ),
+                  ),
+                  width10,
+                  Expanded(
+                    child: PrimaryTextButton(
+                      title: "Delete",
+                      onPressed: () async {
+                        await CommonMethod.deleteChatRoom(chatModel.id ?? "");
+                        Get.back();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        context: context);
   }
-
-  // Future<void> initializeChatRoom() async {
-  //   QuerySnapshot chatRoomsSnapshot = await firestore
-  //       .collection('chat_rooms')
-  //       .where('participants',
-  //           arrayContains: CommonMethod.auth.currentUser?.email)
-  //       .get();
-  //
-  //   if (chatRoomsSnapshot.docs.isNotEmpty) {
-  //     if (currentChatRoom.value == null) {
-  //       currentChatRoom.value = chatRoomsSnapshot.docs.first;
-  //       currentChatRoomName.value = chatRoomsSnapshot.docs.first['name'];
-  //     }
-  //   } else {
-  //     String newChatRoomId =
-  //         await CommonMethod.createChatRoom('New Conversation');
-  //
-  //     currentChatRoomId.value = newChatRoomId;
-  //     currentChatRoomName.value = 'New Conversation';
-  //   }
-  //   fetchMessages(currentChatRoomId.value.toString());
-  //   clearSelectedDocuments();
-  //   update();
-  // }
 
   Future<List<String>> getDocumentsByIdList() async {
     List<DocumentSnapshot<Object?>> documents = [];
@@ -636,23 +601,105 @@ class ChatController extends GetxController {
     return extractedTextList;
   }
 
-  Future<DocumentSnapshot?> getDocumentById(String documentId) async {
+  Future<void> setCurrentChatRoomId(ChatModel model) async {
+    String userEmail = CommonMethod.auth.currentUser?.email ?? "";
+
+    // Check if the user is authenticated
+    if (userEmail.isEmpty) {
+      print("Error: User is not authenticated.");
+      CommonMethod.getXSnackBar("Error", 'User is not authenticated.');
+      return; // Early exit if the user is not authenticated
+    }
+
+    // Check if the model is null
+    if (model == null || model.id == null) {
+      print("Error: Chat model or Chat ID is null.");
+      CommonMethod.getXSnackBar("Error", 'Chat model or Chat ID is null.');
+      return; // Early exit if the model or its ID is null
+    }
+
     try {
-      DocumentSnapshot snapshot =
-          await collectionDocuments.doc(documentId).get();
-      if (snapshot.exists) {
-        return snapshot;
+      // Set the current chat room value and fetch messages
+      currentChatRoom.value = model;
+      currentChatRoom.refresh();
+      fetchMessages(model.id!); // Use '!' to assert that model.id is not null
+
+      DocumentReference userRef =
+          firestore.collection('current_chat').doc(userEmail);
+      DocumentSnapshot userChatSnapshot = await userRef.get();
+
+      // Update or create the user document based on its existence
+      if (userChatSnapshot.exists) {
+        await userRef.update({
+          'currentChatRoomId': model.id,
+        });
+        print("Current chat room ID updated successfully: ${model.id}");
       } else {
-        print('Document does not exist');
-        return null;
+        await userRef.set({
+          'currentChatRoomId': model.id,
+        });
+        print("Current chat room document created with ID: ${model.id}");
       }
     } catch (e) {
-      print('Error fetching document: $e');
+      // Handle errors during Firestore operations
+      print("Failed to set current chat room ID: $e");
+      CommonMethod.getXSnackBar(
+          "Error", 'Failed to set current chat room ID: $e');
+    }
+  }
+
+  Future getCurrentChatRoom() async {
+    try {
+      if (currentChatRoom.value != null) {
+        return;
+      }
+      final userEmail = CommonMethod.auth.currentUser?.email ?? "";
+      if (userEmail.isEmpty) {
+        print("No user email found.");
+        return null;
+      }
+
+      final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await firestore.collection('current_chat').doc(userEmail).get();
+      final data = userSnapshot.data();
+
+      if (data != null && data['currentChatRoomId'] != null) {
+        final String currentChatRoomId = data['currentChatRoomId'];
+        ChatModel? model = await getChatModelById(currentChatRoomId);
+        if (model != null) {
+          setCurrentChatRoomId(model);
+        }
+
+        return;
+      } else {
+        print("No current chat room found. Creating a new chat room.");
+        if (currentChatRoom.value == null) {
+          ChatModel? model = await CommonMethod.createChatRoom('New Chat');
+          if (model != null) {
+            setCurrentChatRoomId(model);
+          }
+          return;
+        }
+      }
+    } catch (e) {
+      print("Error retrieving current chat room ID: $e");
       return null;
     }
   }
 
-  void setCurrentIndex(int index) {
-    currentIndex.value = index;
+  Future<ChatModel?> getChatModelById(String chatId) async {
+    try {
+      DocumentSnapshot chatSnapshot =
+          await firestore.collection('chat_rooms').doc(chatId).get();
+
+      if (chatSnapshot.exists && chatSnapshot.data() != null) {
+        return ChatModel.fromFirestore(chatSnapshot);
+      } else {
+        return await CommonMethod.createChatRoom('New Chat');
+      }
+    } catch (e) {
+      print("---Error retrieving chat room by ID: $e");
+      return null;
+    }
   }
 }

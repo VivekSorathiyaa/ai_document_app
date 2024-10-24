@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../model/user_model.dart';
+import '../../../utils/access_dropdown_widget.dart';
 import '../../../utils/app_asset.dart';
-import '../../../utils/custom_dropdown_widget.dart';
 import '../../../utils/static_decoration.dart';
 
 class DesktopUserWidget extends StatelessWidget {
@@ -31,7 +31,7 @@ class DesktopUserWidget extends StatelessWidget {
           columns: <GridColumn>[
             GridColumn(
               columnName: 'id', // ID column
-              label: const Text(
+              label: const SelectableText(
                   'User ID'), // You can set this to any title you want
               width: 0, // Set width to 0 to hide the column
             ),
@@ -97,10 +97,9 @@ class DesktopUserWidget extends StatelessWidget {
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: Text(
+                  child: SelectableText(
                     title,
                     style: AppTextStyle.normalBold14,
-                    overflow: TextOverflow.clip, // Use ellipsis for overflow
                     textAlign: TextAlign.center,
                     maxLines: 1,
                   ),
@@ -184,10 +183,9 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
-        child: Text(
+        child: SelectableText(
           cell.value,
           style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
-          overflow: TextOverflow.clip, // Use ellipsis for overflow
           textAlign: TextAlign.center,
           maxLines: 1,
         ),
@@ -203,11 +201,10 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
-        child: Text(
+        child: SelectableText(
           cell.value,
           style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
           maxLines: 1,
-          overflow: TextOverflow.clip,
           textAlign: TextAlign.center,
         ),
       ),
@@ -238,11 +235,10 @@ class TableDataSource extends DataGridSource {
               padding:
                   const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
               child: Center(
-                child: Text(
+                child: SelectableText(
                   cell.value,
                   style: AppTextStyle.normalRegular14
                       .copyWith(color: tableTextColor),
-                  overflow: TextOverflow.clip,
                   textAlign: TextAlign.center,
                   maxLines: 1,
                 ),

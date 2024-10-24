@@ -115,12 +115,11 @@ class CommonFileDropzone extends StatelessWidget {
                                   Row(
                                     children: [
                                       Flexible(
-                                        child: Text(
+                                        child: SelectableText(
                                           file.name,
                                           style: AppTextStyle.normalRegular16
                                               .copyWith(color: tableTextColor),
                                           maxLines: 1,
-                                          overflow: TextOverflow.clip,
                                         ),
                                       ),
                                     ],
@@ -128,13 +127,12 @@ class CommonFileDropzone extends StatelessWidget {
                                   Row(
                                     children: [
                                       Flexible(
-                                        child: Text(
+                                        child: SelectableText(
                                           "${CommonMethod.getFileSizeInMB(file)} MB",
                                           style: AppTextStyle.normalRegular12
                                               .copyWith(
                                                   color: tableButtonColor),
                                           maxLines: 1,
-                                          overflow: TextOverflow.clip,
                                         ),
                                       ),
                                     ],
@@ -292,12 +290,12 @@ class CommonFileDropzone extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
           const SizedBox(height: 8),
-          Text(
+          SelectableText(
             'Drop Your File Here',
             style: AppTextStyle.normalRegular16,
           ),
           const SizedBox(height: 8),
-          Text(
+          SelectableText(
             'OR',
             style: AppTextStyle.normalRegular14,
           ),
@@ -316,7 +314,7 @@ class CommonFileDropzone extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          SelectableText(
             controller.isError.value
                 ? controller.errorMessage.value
                 : 'Maximum File Size: $maxSizeInMB MB',

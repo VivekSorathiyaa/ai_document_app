@@ -48,7 +48,7 @@ class FilterDialog extends StatelessWidget {
                   SvgPicture.asset(AppAsset.filter),
                   width15,
                   Expanded(
-                    child: Text(
+                    child: SelectableText(
                       title,
                       style: AppTextStyle.normalBold16
                           .copyWith(color: primaryWhite),
@@ -71,7 +71,7 @@ class FilterDialog extends StatelessWidget {
                   Expanded(
                     child: TextButton(
                       onPressed: () => Get.back(), // Close the dialog
-                      child: Text('Cancel',
+                      child: SelectableText('Cancel',
                           style: AppTextStyle.normalBold16
                               .copyWith(color: primaryWhite)),
                     ),

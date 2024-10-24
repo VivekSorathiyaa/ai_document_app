@@ -35,14 +35,14 @@ class UserHeaderWidget extends StatelessWidget {
                   bottom: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
                       ? 20
                       : 0),
-              child: Text(
+              child: SelectableText(
                 "All Users",
                 style: AppTextStyle.normalSemiBold18.copyWith(
                     fontSize:
                         ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
                             ? 14
                             : 18),
-                overflow: TextOverflow.ellipsis, // Handle overflow gracefully
+                // Handle overflow gracefully
               ),
             ),
           ),

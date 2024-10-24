@@ -28,7 +28,7 @@ class DocumentFooterWidget extends StatelessWidget {
       if (documentDataList.isEmpty) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 46, horizontal: 24),
-          child: Text(
+          child: SelectableText(
             "No results found",
             style: AppTextStyle.normalRegular18,
           ),
@@ -52,11 +52,15 @@ class DocumentFooterWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
+              child: SelectableText(
                 "Showing $startItem to $endItem of $totalResults results",
                 style: AppTextStyle.normalRegular18,
                 maxLines: 1,
-                overflow: TextOverflow.fade,
+                toolbarOptions: const ToolbarOptions(
+                  copy: true,
+                  selectAll: true,
+                  cut: true,
+                ),
               ),
             ),
             Row(
@@ -85,7 +89,7 @@ class DocumentFooterWidget extends StatelessWidget {
                         ),
                         customWidth(6),
                         Center(
-                          child: Text(
+                          child: SelectableText(
                             'Previous',
                             style: AppTextStyle.normalBold16,
                           ),
@@ -112,7 +116,7 @@ class DocumentFooterWidget extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Text(
+                        SelectableText(
                           'Next',
                           style: AppTextStyle.normalBold16,
                         ),

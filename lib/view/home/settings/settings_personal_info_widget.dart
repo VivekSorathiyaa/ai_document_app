@@ -50,7 +50,7 @@ Widget _buildNameWidget(BuildContext context) {
         children: [
           if (isDesktop)
             Expanded(
-              child: Text(
+              child: SelectableText(
                 "Name",
                 style: AppTextStyle.normalRegular16
                     .copyWith(color: tableTextColor),
@@ -86,7 +86,7 @@ Widget _buildEmailWidget(BuildContext context) {
         children: [
           if (isDesktop)
             Expanded(
-              child: Text(
+              child: SelectableText(
                 "Email address",
                 style: AppTextStyle.normalRegular16
                     .copyWith(color: tableTextColor),
@@ -122,7 +122,7 @@ Widget _buildRoleWidget(BuildContext context) {
         children: [
           if (isDesktop)
             Expanded(
-              child: Text(
+              child: SelectableText(
                 "Role",
                 style: AppTextStyle.normalRegular16
                     .copyWith(color: tableTextColor),
@@ -151,7 +151,7 @@ _photoLableWidget(bool isFromProfile) {
         Row(
           children: [
             Flexible(
-              child: Text(
+              child: SelectableText(
                 isFromProfile ? "Your photo" : "Uploaded PDFs",
                 style:
                     AppTextStyle.normalBold16.copyWith(color: tableTextColor),
@@ -169,7 +169,7 @@ _photoLableWidget(bool isFromProfile) {
         Row(
           children: [
             Expanded(
-              child: Text(
+              child: SelectableText(
                 isFromProfile
                     ? "This will be displayed on your profile."
                     : "Share a few snippets of your PDFs.",
@@ -240,7 +240,7 @@ Widget _buildCountryWidget(BuildContext context) {
         children: [
           if (isDesktop)
             Expanded(
-              child: Text(
+              child: SelectableText(
                 "Country",
                 style: AppTextStyle.normalRegular16
                     .copyWith(color: tableTextColor),
@@ -252,7 +252,7 @@ Widget _buildCountryWidget(BuildContext context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (!isDesktop)
-                  Text(
+                  SelectableText(
                     "Country",
                     style: AppTextStyle.normalRegular16
                         .copyWith(color: tableTextColor),
@@ -310,10 +310,9 @@ Widget _buildDropdownItemWithLongText(Country country) => Padding(
             width: 8.0,
           ),
           Expanded(
-              child: Text(
+              child: SelectableText(
             country.name,
             style: AppTextStyle.normalRegular16.copyWith(color: hintGreyColor),
-            overflow: TextOverflow.clip,
             maxLines: 1,
           )),
         ],

@@ -22,7 +22,7 @@ class ChatModel {
 
     return ChatModel(
       id: doc.id,
-      name: data['name'] as String?,
+      name: _capitalize(data['name'] as String?), // Capitalize the name
       participants: (data['participants'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -36,6 +36,21 @@ class ChatModel {
       createdAt: data['createdAt'] as Timestamp?,
     );
   }
+
+  // Helper function to capitalize the first letter of the name
+  static String? _capitalize(String? text) {
+    if (text == null || text.isEmpty) return text; // Return if null or empty
+    return text[0].toUpperCase() +
+        text.substring(1); // Capitalize the first character
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) || (other is ChatModel && other.id == id);
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 class MessageModel {

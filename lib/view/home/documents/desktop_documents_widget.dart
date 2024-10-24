@@ -95,11 +95,9 @@ class DesktopDocumentsWidget extends StatelessWidget {
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
-                  child: Text(
+                  child: SelectableText(
                     title,
                     style: AppTextStyle.normalBold14,
-                    overflow:
-                        TextOverflow.ellipsis, // Use ellipsis for overflow
                     textAlign: TextAlign.center,
                     maxLines: 1,
                   ),
@@ -188,10 +186,9 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
-        child: Text(
+        child: SelectableText(
           cell.value,
           style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
-          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
@@ -214,11 +211,10 @@ class TableDataSource extends DataGridSource {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
             child: Center(
-              child: Text(
+              child: SelectableText(
                 cell.value,
                 style: AppTextStyle.normalRegular14
                     .copyWith(color: tableTextColor),
-                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.start,
               ),
             ),
@@ -236,10 +232,9 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
-        child: Text(
+        child: SelectableText(
           cell.value,
           style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
-          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
@@ -253,7 +248,7 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
-        child: Text(
+        child: SelectableText(
           '${cell.value}',
           style: AppTextStyle.normalRegular12.copyWith(color: tableTextColor),
         ),
@@ -269,11 +264,10 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
-        child: Text(
+        child: SelectableText(
           cell.value,
           style: AppTextStyle.normalRegular12.copyWith(color: tableTextColor),
           maxLines: 1,
-          overflow: TextOverflow.visible,
         ),
       ),
     );
@@ -357,10 +351,9 @@ class TableDataSource extends DataGridSource {
         border: Border.all(color: tableButtonColor, width: 0.5),
       ),
       child: Center(
-        child: Text(
+        child: SelectableText(
           cell.value.toString(),
           style: AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
-          overflow: TextOverflow.fade,
         ),
       ),
     );

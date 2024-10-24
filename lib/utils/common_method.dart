@@ -58,7 +58,6 @@ class CommonMethod {
 
   static Future<void> showSimpleDialog({
     String? title,
-    bool? hideContent,
     Widget? titleWidget,
     Widget? iconWidget,
     required Widget child,
@@ -71,12 +70,20 @@ class CommonMethod {
       builder: (BuildContext context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
         child: AlertDialog(
+          title: title != null
+              ? Center(
+                  child: Text(
+                    title,
+                    style: AppTextStyle.normalSemiBold20,
+                  ),
+                )
+              : null,
+          titlePadding: const EdgeInsets.all(12),
           insetPadding: const EdgeInsets.symmetric(horizontal: 15),
 // contentPadding: EdgeInsets.zero,
           backgroundColor: bgContainColor,
           clipBehavior: Clip.antiAliasWithSaveLayer,
-          contentPadding: EdgeInsets.symmetric(
-              horizontal: hideContent != null && hideContent ? 0 : 15),
+          contentPadding: EdgeInsets.symmetric(horizontal: 15),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(15.0))),
 
@@ -85,11 +92,7 @@ class CommonMethod {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: hideContent != null && hideContent ? 0 : 20),
-                  child: child,
-                ),
+                child,
               ],
             ),
           ),
@@ -122,7 +125,7 @@ class CommonMethod {
                 color: Colors.white,
               ),
               const SizedBox(height: 20),
-              Text(
+              SelectableText(
                 title,
                 style: const TextStyle(
                   fontSize: 18,
@@ -132,7 +135,7 @@ class CommonMethod {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 15),
-              Text(
+              SelectableText(
                 message,
                 style: const TextStyle(
                   fontSize: 14,
@@ -145,7 +148,7 @@ class CommonMethod {
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
+              child: const SelectableText(
                 "OK",
                 style: TextStyle(color: Colors.white), // OK button color
               ),
@@ -182,7 +185,7 @@ class CommonMethod {
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
+            child: SelectableText(
               'Are you sure you want to log out?',
               style: AppTextStyle.normalBold20.copyWith(
                 color: greyColor, // Light text color for dark background
@@ -199,9 +202,7 @@ class CommonMethod {
               children: [
                 Expanded(
                   child: PrimaryTextButton(
-                    height: 40,
                     title: "Cancel",
-                    fontSize: 16,
                     gradientColors: [bgBlackColor, bgBlackColor],
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -211,9 +212,7 @@ class CommonMethod {
                 const SizedBox(width: 10),
                 Expanded(
                   child: PrimaryTextButton(
-                    height: 40,
                     title: "Logout",
-                    fontSize: 16,
                     onPressed: () {
                       performLogout(context);
                       Navigator.of(context).pop();

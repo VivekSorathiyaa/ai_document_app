@@ -80,7 +80,7 @@ Widget _buildPasswordWidget(BuildContext context) {
         children: [
           if (isDesktop)
             Expanded(
-              child: Text(
+              child: SelectableText(
                 "Password",
                 style: AppTextStyle.normalRegular16
                     .copyWith(color: tableTextColor),
@@ -129,7 +129,7 @@ _sessionLableWidget() {
         Row(
           children: [
             Flexible(
-              child: Text(
+              child: SelectableText(
                 "Where you’re logged in",
                 style:
                     AppTextStyle.normalBold16.copyWith(color: tableTextColor),

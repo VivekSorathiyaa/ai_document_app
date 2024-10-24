@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -14,7 +13,7 @@ Widget AuthFooterWidget(context) {
               Expanded(
                 child: InkWell(
                   onTap: () {},
-                  child: Text(
+                  child: SelectableText(
                     'Terms & Conditions',
                     style: AppTextStyle.normalRegular14.copyWith(
                       color: hintGreyColor,
@@ -22,7 +21,6 @@ Widget AuthFooterWidget(context) {
                       decorationColor: hintGreyColor,
                     ),
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -30,7 +28,7 @@ Widget AuthFooterWidget(context) {
               Expanded(
                 child: InkWell(
                   onTap: () {},
-                  child: Text(
+                  child: SelectableText(
                     'Support',
                     style: AppTextStyle.normalRegular14.copyWith(
                       color: hintGreyColor,
@@ -38,7 +36,6 @@ Widget AuthFooterWidget(context) {
                       decorationColor: hintGreyColor,
                     ),
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -46,7 +43,7 @@ Widget AuthFooterWidget(context) {
               Expanded(
                 child: InkWell(
                   onTap: () {},
-                  child: Text(
+                  child: SelectableText(
                     'Customer Care',
                     style: AppTextStyle.normalRegular14.copyWith(
                       color: hintGreyColor,
@@ -54,7 +51,6 @@ Widget AuthFooterWidget(context) {
                       decorationColor: hintGreyColor,
                     ),
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
                 ),

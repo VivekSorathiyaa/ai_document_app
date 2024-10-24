@@ -78,20 +78,18 @@ class SettingsWidget extends StatelessWidget {
                               const SizedBox(
                                   height:
                                       17), // Replaced with SizedBox for spacing
-                              Text(
+                              SelectableText(
                                 model.title,
                                 style: AppTextStyle.normalBold18
                                     .copyWith(color: primaryWhite),
                                 maxLines: 1,
-                                overflow: TextOverflow.clip,
                               ),
                               const SizedBox(height: 17),
-                              Text(
+                              SelectableText(
                                 model.subTitle,
                                 style: AppTextStyle.normalRegular14
                                     .copyWith(color: tableTextColor),
                                 maxLines: 2,
-                                overflow: TextOverflow.clip,
                               ),
                             ],
                           ),

@@ -94,7 +94,7 @@ class SignUpController extends GetxController {
             ),
           ),
           const SizedBox(height: 20),
-          Text(
+          SelectableText(
             'Verification email sent to:',
             style: AppTextStyle.normalBold16.copyWith(
               color: orangeColor,
@@ -103,7 +103,7 @@ class SignUpController extends GetxController {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
-          Text(
+          SelectableText(
             emailController.text,
             style: AppTextStyle.normalBold16,
             textAlign: TextAlign.center,

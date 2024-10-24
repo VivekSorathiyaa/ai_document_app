@@ -63,15 +63,13 @@ class DocumentsHeaderWidget extends StatelessWidget {
                         : const SizedBox.shrink(),
                   ),
                   Expanded(
-                    child: Text(
+                    child: SelectableText(
                       "Uploaded PDFs",
                       style: AppTextStyle.normalSemiBold18.copyWith(
                           fontSize: ResponsiveBreakpoints.of(context)
                                   .smallerThan(DESKTOP)
                               ? 14
                               : 16),
-                      overflow:
-                          TextOverflow.ellipsis, // Handle overflow gracefully
                     ),
                   ),
                 ],

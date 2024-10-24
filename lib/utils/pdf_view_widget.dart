@@ -12,7 +12,7 @@
 //     return Scaffold(
 //       backgroundColor: Colors.grey,
 //       appBar: AppBar(
-//         title: const Text('Pdfx example'),
+//         title: const SelectableText('Pdfx example'),
 //         actions: <Widget>[
 //           IconButton(
 //             icon: const Icon(Icons.navigate_before),
@@ -24,7 +24,7 @@
 //             builder: (controller) {
 //               return Container(
 //                 alignment: Alignment.center,
-//                 child: Text(
+//                 child: SelectableText(
 //                   '${controller.currentPage}/${controller.totalPages}',
 //                   style: const TextStyle(fontSize: 22),
 //                 ),
@@ -54,7 +54,7 @@
 //                   const Center(child: CircularProgressIndicator()),
 //               pageLoaderBuilder: (_) =>
 //                   const Center(child: CircularProgressIndicator()),
-//               errorBuilder: (_, error) => Center(child: Text(error.toString())),
+//               errorBuilder: (_, error) => Center(child: SelectableText(error.toString())),
 //             ),
 //             controller: controller.pdfControllerPinch,
 //           );

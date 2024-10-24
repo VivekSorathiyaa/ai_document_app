@@ -51,7 +51,7 @@ class DrawerWidget extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 11, bottom: 20),
-                    child: Text(
+                    child: SelectableText(
                       'PDF to AI Conversation',
                       style: homeController.isDrawerExpand.value
                           ? AppTextStyle.normalSemiBold14
@@ -116,12 +116,11 @@ class DrawerWidget extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 10),
-                                          child: Text(
+                                          child: SelectableText(
                                             element.name,
                                             style: AppTextStyle.normalBold14,
                                             maxLines: 1,
                                             textAlign: TextAlign.start,
-                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
@@ -142,14 +141,14 @@ class DrawerWidget extends StatelessWidget {
                                     //         ),
                                     //         child: FittedBox(
                                     //           fit: BoxFit.scaleDown,
-                                    //           child: Text(
+                                    //           child: SelectableText(
                                     //             element.subTitle.toString(),
                                     //             style: AppTextStyle.normalBold12
                                     //                 .copyWith(
                                     //                     color: primaryBlack),
                                     //             maxLines: 1,
                                     //             textAlign: TextAlign.center,
-                                    //             overflow: TextOverflow.ellipsis,
+                                    //
                                     //           ),
                                     //         ),
                                     //       ),
@@ -186,25 +185,23 @@ class DrawerWidget extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 23),
-                                        child: Text(
+                                        child: SelectableText(
                                           "Go unlimited with PRO",
                                           style: AppTextStyle.normalBold16,
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 23),
-                                        child: Text(
+                                        child: SelectableText(
                                           "Get your AI Project to another level and start doing more with Horizon AI Template PRO!",
                                           style: AppTextStyle.normalRegular10
                                               .copyWith(color: textGreyColor),
                                           textAlign: TextAlign.center,
                                           maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       const SizedBox(height: 6),
@@ -292,12 +289,11 @@ class DrawerWidget extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
-                                  child: Text(
+                                  child: SelectableText(
                                     'Adela Parkson',
                                     style: AppTextStyle.normalBold12,
                                     textAlign: TextAlign.start,
                                     maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),

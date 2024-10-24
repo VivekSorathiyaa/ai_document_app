@@ -99,7 +99,7 @@ class ChatFooterWidget extends StatelessWidget {
                                     fit: BoxFit.scaleDown,
                                   ),
                                   width10,
-                                  Text(element.name,
+                                  SelectableText(element.name,
                                       style: AppTextStyle.normalRegular12),
                                 ],
                               ),

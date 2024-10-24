@@ -16,7 +16,7 @@ class CommonDialog {
       AlertDialog(
         elevation: 8,
         backgroundColor: bgBlackColor,
-        title: Text(
+        title: SelectableText(
           title,
           style: AppTextStyle.normalBold16,
           textAlign: TextAlign.center,

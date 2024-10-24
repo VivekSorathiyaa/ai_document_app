@@ -89,7 +89,7 @@ class PasswordWidget extends StatelessWidget {
         if (labelText != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: Text(
+            child: SelectableText(
               labelText ?? "",
               style:
                   AppTextStyle.normalRegular14.copyWith(color: tableTextColor),
@@ -219,7 +219,7 @@ class TextFormFieldWidget extends StatelessWidget {
         if (labelText != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: Text(
+            child: SelectableText(
               labelText ?? "",
               style:
                   AppTextStyle.normalRegular14.copyWith(color: tableTextColor),

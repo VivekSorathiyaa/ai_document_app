@@ -44,10 +44,9 @@ class SettingsHeaderWidget extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
+                        child: SelectableText(
                           title,
                           style: AppTextStyle.normalSemiBold18,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -58,12 +57,11 @@ class SettingsHeaderWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(
+                            child: SelectableText(
                               subTitle,
                               style: AppTextStyle.normalRegular14
                                   .copyWith(color: tableTextColor),
                               maxLines: 2,
-                              overflow: TextOverflow.clip,
                             ),
                           ),
                         ],

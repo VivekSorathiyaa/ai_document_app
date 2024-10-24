@@ -42,40 +42,43 @@ class ChatBodyWidget extends StatelessWidget {
                       if (messages.isEmpty) {
                         return const SizedBox();
                       }
-                      return ListView.builder(
-                        controller: chatController.scrollController,
-                        reverse: true,
-                        itemCount: messages.length,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: isDesktop ? 14 : 0),
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final messageData = messages[index];
-                          final isSender = messageData.senderId ==
-                              CommonMethod.auth.currentUser?.email;
-                          final isLastIndex = (index == 0);
-                          return isSender
-                              ? Padding(
-                                  padding: EdgeInsets.only(
-                                      top: index == 0 ? 20 : 10),
-                                  child: UserWidget(
-                                      messageData: messageData,
-                                      isDesktop: isDesktop),
-                                )
-                              : Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: isLastIndex ? 40 : 0,
-                                  ),
-                                  child: chatController.loading.value &&
-                                          isLastIndex
-                                      ? Lottie.asset(AppAsset.aiJson)
-                                      : AiBotWidget(
-                                          isLastIndex: isLastIndex,
-                                          messageData: messageData,
-                                          isDesktop: isDesktop),
-                                );
-                        },
+                      return Align(
+                        alignment: Alignment.bottomRight,
+                        child: ListView.builder(
+                          controller: chatController.scrollController,
+                          reverse: true,
+                          itemCount: messages.length,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: isDesktop ? 14 : 0),
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final messageData = messages[index];
+                            final isSender = messageData.senderId ==
+                                CommonMethod.auth.currentUser?.email;
+                            final isLastIndex = (index == 0);
+                            return isSender
+                                ? Padding(
+                                    padding: EdgeInsets.only(
+                                        top: index == 0 ? 20 : 10),
+                                    child: UserWidget(
+                                        messageData: messageData,
+                                        isDesktop: isDesktop),
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: isLastIndex ? 40 : 0,
+                                    ),
+                                    child: chatController.loading.value &&
+                                            isLastIndex
+                                        ? Lottie.asset(AppAsset.aiJson)
+                                        : AiBotWidget(
+                                            isLastIndex: isLastIndex,
+                                            messageData: messageData,
+                                            isDesktop: isDesktop),
+                                  );
+                          },
+                        ),
                       );
                     },
                   ),
@@ -169,7 +172,7 @@ class ChatBodyWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(
-                    child: Text(
+                    child: SelectableText(
                       messageData.text ?? "",
                       style: AppTextStyle.normalRegular14
                           .copyWith(color: primaryWhite.withOpacity(.9)),

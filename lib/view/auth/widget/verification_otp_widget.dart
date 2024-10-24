@@ -46,7 +46,7 @@ class VerificationOtpWidget extends StatelessWidget {
                     children: [
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: SelectableText(
                           'Verification OTP',
                           style: AppTextStyle.normalSemiBold30,
                         ),
@@ -54,7 +54,7 @@ class VerificationOtpWidget extends StatelessWidget {
                       const SizedBox(height: 8),
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: SelectableText(
                           'Please enter your OTP code and reset you new password',
                           style: GoogleFonts.notoSans(
                             fontSize: 14,
@@ -88,7 +88,7 @@ class VerificationOtpWidget extends StatelessWidget {
                           return SizedBox(width: 14);
                         }, // Adds spacing between the pin boxes
                         preFilledWidget: Center(
-                          child: Text(
+                          child: SelectableText(
                             "0",
                             style: AppTextStyle.normalRegular24.copyWith(
                               color: primaryWhite.withOpacity(.2),
@@ -117,11 +117,11 @@ class VerificationOtpWidget extends StatelessWidget {
                         children: [
                           Flexible(
                             flex: 2,
-                            child: Text(
+                            child: SelectableText(
                               'Resend new code',
                               style: AppTextStyle.normalRegular14,
                               // maxLines: 1,
-                              // overflow: TextOverflow.ellipsis,
+                              //
                               textAlign: TextAlign.end,
                             ),
                           ),
@@ -131,13 +131,12 @@ class VerificationOtpWidget extends StatelessWidget {
                               onTap: () {
                                 navigateAndRemove(context, LoginView.name);
                               },
-                              child: Text(
+                              child: SelectableText(
                                 '00:55',
                                 style: AppTextStyle.normalSemiBold14.copyWith(
                                   color: purpleColor,
                                 ),
                                 maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.start,
                               ),
                             ),

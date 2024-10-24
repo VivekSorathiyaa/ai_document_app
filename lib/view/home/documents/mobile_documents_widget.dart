@@ -139,14 +139,13 @@ class MobileDocumentsWidget extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Text(
+                    child: SelectableText(
                       document.name,
                       style: AppTextStyle.normalSemiBold14.copyWith(
                         color: Colors.white,
                         fontSize: 14,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -183,14 +182,13 @@ class MobileDocumentsWidget extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Expanded(
-          child: Text(
+          child: SelectableText(
             text,
             style: AppTextStyle.normalRegular14.copyWith(
               color: Colors.white70,
               fontSize: 12,
             ),
             maxLines: 1,
-            overflow: TextOverflow.visible,
           ),
         ),
       ],

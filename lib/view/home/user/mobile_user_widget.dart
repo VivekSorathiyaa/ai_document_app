@@ -8,8 +8,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import '../../../utils/access_dropdown_widget.dart';
 import '../../../utils/app_asset.dart';
-import '../../../utils/custom_dropdown_widget.dart';
 
 class MobileUserWidget extends StatelessWidget {
   final UserController userController;
@@ -116,13 +116,12 @@ class MobileUserWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(
+        SelectableText(
           user.name,
           style: AppTextStyle.normalSemiBold14.copyWith(
             color: Colors.white,
             fontSize: 14,
           ),
-          overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 10),
         Row(
@@ -144,11 +143,10 @@ class MobileUserWidget extends StatelessWidget {
                   border: Border.all(color: darkDividerColor, width: 0.5),
                 ),
                 child: Center(
-                  child: Text(
+                  child: SelectableText(
                     user.permissions,
                     style: AppTextStyle.normalRegular14
                         .copyWith(color: tableTextColor),
-                    overflow: TextOverflow.clip,
                     textAlign: TextAlign.start,
                     maxLines: 1,
                   ),
@@ -194,7 +192,7 @@ class MobileUserWidget extends StatelessWidget {
           color: Colors.white70,
         ),
         const SizedBox(width: 4),
-        Text(
+        SelectableText(
           text,
           style: AppTextStyle.normalRegular14.copyWith(
             color: Colors.white70,

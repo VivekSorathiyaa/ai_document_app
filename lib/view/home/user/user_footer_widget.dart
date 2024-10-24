@@ -30,11 +30,10 @@ class UserFooterWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
+              child: SelectableText(
                 "Showing $startItem to $endItem of ${userController.userDataList.value.length} results",
                 style: AppTextStyle.normalRegular18,
                 maxLines: 1,
-                overflow: TextOverflow.fade,
               ),
             ),
             Row(
@@ -62,7 +61,7 @@ class UserFooterWidget extends StatelessWidget {
                         ),
                         customWidth(6),
                         Center(
-                          child: Text(
+                          child: SelectableText(
                             'Previous',
                             style: AppTextStyle.normalBold16,
                           ),
@@ -71,7 +70,7 @@ class UserFooterWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Text(
+                // SelectableText(
                 //   'Page ${currentPage + 1} of $totalPages',
                 //   style: AppTextStyle.normalSemiBold14,
                 // ),
@@ -92,7 +91,7 @@ class UserFooterWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8)),
                     child: Row(
                       children: [
-                        Text(
+                        SelectableText(
                           'Next',
                           style: AppTextStyle.normalBold16,
                         ),

@@ -44,7 +44,7 @@ class AddNewPasswordWidget extends StatelessWidget {
                     children: [
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: SelectableText(
                           'Add New Password',
                           style: AppTextStyle.normalSemiBold30,
                         ),
@@ -53,7 +53,7 @@ class AddNewPasswordWidget extends StatelessWidget {
                       Row(
                         children: [
                           Flexible(
-                            child: Text(
+                            child: SelectableText(
                               'Please enter your new password and continue your wonderful journey',
                               style: GoogleFonts.notoSans(
                                 fontSize: 14,

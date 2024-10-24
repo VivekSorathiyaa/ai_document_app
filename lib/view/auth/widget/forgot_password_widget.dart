@@ -53,7 +53,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                     children: [
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: SelectableText(
                           'Forgot Password',
                           style: AppTextStyle.normalSemiBold30,
                         ),
@@ -61,7 +61,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                       const SizedBox(height: 8),
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: SelectableText(
                           'Please enter your email',
                           style: GoogleFonts.notoSans(
                             fontSize: 14,
@@ -87,7 +87,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                             controller.infoMessage.value.isNotEmpty) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 14),
-                            child: Text(
+                            child: SelectableText(
                               controller.errorMessage.value.isNotEmpty
                                   ? controller.errorMessage.value
                                   : controller.infoMessage.value,
@@ -123,11 +123,11 @@ class ForgotPasswordWidget extends StatelessWidget {
                         children: [
                           Flexible(
                             flex: 2,
-                            child: Text(
+                            child: SelectableText(
                               'Back to',
                               style: AppTextStyle.normalRegular14,
                               // maxLines: 1,
-                              // overflow: TextOverflow.ellipsis,
+                              //
                               textAlign: TextAlign.end,
                             ),
                           ),
@@ -137,7 +137,7 @@ class ForgotPasswordWidget extends StatelessWidget {
                               onTap: () {
                                 navigateAndRemove(context, LoginView.name);
                               },
-                              child: Text(
+                              child: SelectableText(
                                 'Login',
                                 style: AppTextStyle.normalSemiBold14.copyWith(
                                   color: purpleColor,
@@ -145,7 +145,6 @@ class ForgotPasswordWidget extends StatelessWidget {
                                   decorationColor: purpleColor,
                                 ),
                                 maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.start,
                               ),
                             ),

@@ -26,7 +26,7 @@ class MobileAppBarWidget extends StatelessWidget
       title: Obx(
         () => homeController.isSearchOpen.value
             ? SearchbarWidget()
-            : Text(
+            : SelectableText(
                 homeController.selectedMenuModel.value.name,
                 style: AppTextStyle.normalBold18,
               ),
@@ -89,7 +89,7 @@ class MobileAppBarWidget extends StatelessWidget
             () {
               if (chatController.chatRoomList.value.isEmpty) {
                 return Center(
-                    child: Text(
+                    child: SelectableText(
                   'No history available',
                   style: AppTextStyle.normalBold18,
                 ));
@@ -154,12 +154,11 @@ Widget HistoryMenuTileWidget({
             children: [
               const SizedBox(width: 10),
               Expanded(
-                child: Text(
+                child: SelectableText(
                   model.name ?? "",
                   style: AppTextStyle.normalBold16,
                   maxLines: 1,
                   textAlign: TextAlign.start,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               const SizedBox(width: 10),

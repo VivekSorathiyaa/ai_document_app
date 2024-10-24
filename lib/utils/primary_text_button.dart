@@ -68,8 +68,8 @@ class PrimaryTextButton extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 8.0),
                           child: SvgPicture.asset(
                             icon!,
-                            height: fontSize ?? 22,
-                            width: fontSize ?? 22,
+                            height: fontSize ?? 20,
+                            width: fontSize ?? 20,
                             fit: BoxFit.scaleDown,
                           ),
                         ),
@@ -79,9 +79,9 @@ class PrimaryTextButton extends StatelessWidget {
                           softWrap: true,
                           textAlign: TextAlign.center,
                           style: textStyle ??
-                              AppTextStyle.normalSemiBold16.copyWith(
+                              AppTextStyle.normalSemiBold14.copyWith(
                                   color: textColor ?? primaryWhite,
-                                  fontSize: fontSize ?? 16),
+                                  fontSize: fontSize ?? 14),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis, // Avoid overflow
                         ),

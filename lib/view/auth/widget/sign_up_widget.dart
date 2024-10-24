@@ -50,7 +50,7 @@ class SignUpWidget extends StatelessWidget {
                     children: [
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: SelectableText(
                           'Signup',
                           style: AppTextStyle.normalSemiBold30,
                         ),
@@ -58,7 +58,7 @@ class SignUpWidget extends StatelessWidget {
                       const SizedBox(height: 8),
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: SelectableText(
                           'Just some details to get you in!',
                           style: GoogleFonts.notoSans(
                             fontSize: 14,
@@ -105,7 +105,7 @@ class SignUpWidget extends StatelessWidget {
                         if (controller.errorMessage.value.isNotEmpty) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 14),
-                            child: Text(
+                            child: SelectableText(
                               controller.errorMessage.value,
                               style: AppTextStyle.normalRegular14
                                   .copyWith(color: orangeColor),
@@ -141,7 +141,7 @@ class SignUpWidget extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 14),
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
-                              child: Text(
+                              child: SelectableText(
                                 'Or',
                                 style: AppTextStyle.normalRegular14,
                               ),
@@ -187,7 +187,7 @@ class SignUpWidget extends StatelessWidget {
                         children: [
                           Flexible(
                             flex: 2,
-                            child: Text(
+                            child: SelectableText(
                               'Already Registered?',
                               style: AppTextStyle.normalRegular14,
                               textAlign: TextAlign.end,
@@ -199,7 +199,7 @@ class SignUpWidget extends StatelessWidget {
                               onTap: () {
                                 navigateTo(context, LoginView.name);
                               },
-                              child: Text(
+                              child: SelectableText(
                                 'Login',
                                 style: AppTextStyle.normalSemiBold14.copyWith(
                                   color: purpleColor,
@@ -207,7 +207,6 @@ class SignUpWidget extends StatelessWidget {
                                   decorationColor: purpleColor,
                                 ),
                                 maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.start,
                               ),
                             ),
